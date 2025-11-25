@@ -93,11 +93,15 @@
             border-radius: 6px;
             background: #e0e0e0;
             outline: none;
-            opacity: 0.8;
+            opacity: 0.9;
             transition: opacity 0.2s;
             -webkit-appearance: none;
             appearance: none;
-            pointer-events: none;
+            cursor: pointer;
+        }
+
+        .param-slider:hover {
+            opacity: 1;
         }
 
         .param-slider::-webkit-slider-thumb {
@@ -107,7 +111,7 @@
             height: 20px;
             border-radius: 50%;
             background: #667eea;
-            cursor: default;
+            cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
@@ -116,7 +120,7 @@
             height: 20px;
             border-radius: 50%;
             background: #667eea;
-            cursor: default;
+            cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             border: none;
         }
@@ -408,6 +412,9 @@
                     </div>
                 </div>
                 <div class="template-name" id="templateName">Normal</div>
+                <div style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #667eea; display: none;" id="customIndicator">
+                    <em>Custom parameters - adjust sliders below</em>
+                </div>
             </div>
             <div class="parameter-sliders-section">
                 <h3>Timing Parameters</h3>
@@ -416,7 +423,7 @@
                         <span>--max-rtt-timeout</span>
                         <span class="param-slider-value" id="paramMaxRttValue">1000ms</span>
                     </div>
-                    <input type="range" min="50" max="5000" value="1000" class="param-slider" id="paramMaxRtt" readonly>
+                    <input type="range" min="50" max="5000" value="1000" class="param-slider" id="paramMaxRtt">
                     <div class="param-slider-min-max">
                         <span>50ms</span>
                         <span>5000ms</span>
@@ -427,7 +434,7 @@
                         <span>--min-rtt-timeout</span>
                         <span class="param-slider-value" id="paramMinRttValue">100ms</span>
                     </div>
-                    <input type="range" min="50" max="5000" value="100" class="param-slider" id="paramMinRtt" readonly>
+                    <input type="range" min="50" max="5000" value="100" class="param-slider" id="paramMinRtt">
                     <div class="param-slider-min-max">
                         <span>50ms</span>
                         <span>5000ms</span>
@@ -438,7 +445,7 @@
                         <span>--initial-rtt-timeout</span>
                         <span class="param-slider-value" id="paramInitialRttValue">500ms</span>
                     </div>
-                    <input type="range" min="50" max="5000" value="500" class="param-slider" id="paramInitialRtt" readonly>
+                    <input type="range" min="50" max="5000" value="500" class="param-slider" id="paramInitialRtt">
                     <div class="param-slider-min-max">
                         <span>50ms</span>
                         <span>5000ms</span>
@@ -449,7 +456,7 @@
                         <span>--max-retries</span>
                         <span class="param-slider-value" id="paramMaxRetriesValue">10</span>
                     </div>
-                    <input type="range" min="0" max="10" value="10" class="param-slider" id="paramMaxRetries" readonly>
+                    <input type="range" min="0" max="10" value="10" class="param-slider" id="paramMaxRetries">
                     <div class="param-slider-min-max">
                         <span>0</span>
                         <span>10</span>
@@ -460,7 +467,7 @@
                         <span>--max-scan-delay</span>
                         <span class="param-slider-value" id="paramMaxScanDelayValue">Adaptive</span>
                     </div>
-                    <input type="range" min="0" max="300000" value="0" class="param-slider" id="paramMaxScanDelay" readonly>
+                    <input type="range" min="0" max="300000" value="0" class="param-slider" id="paramMaxScanDelay">
                     <div class="param-slider-min-max">
                         <span>0ms (adaptive)</span>
                         <span>300000ms (5min)</span>
@@ -471,7 +478,7 @@
                         <span>Parallelism</span>
                         <span class="param-slider-value" id="paramParallelismValue">~100</span>
                     </div>
-                    <input type="range" min="0" max="300" value="100" class="param-slider" id="paramParallelism" readonly>
+                    <input type="range" min="0" max="300" value="100" class="param-slider" id="paramParallelism">
                     <div class="param-slider-min-max">
                         <span>0 (Serial)</span>
                         <span>300+</span>
@@ -720,8 +727,15 @@
         const paramMaxScanDelayValue = document.getElementById('paramMaxScanDelayValue');
         const paramParallelism = document.getElementById('paramParallelism');
         const paramParallelismValue = document.getElementById('paramParallelismValue');
+        const customIndicator = document.getElementById('customIndicator');
+        
+        let isCustomMode = false;
+        let currentTemplate = 3;
 
         function updateMetrics(value) {
+            currentTemplate = value;
+            isCustomMode = false;
+            customIndicator.style.display = 'none';
             const data = timingData[value];
 
             // Update template name
@@ -938,6 +952,201 @@
             const commandText = commandDisplay.textContent.trim().replace(/^\$\s*/, '');
             copyToClipboard(commandText, copyGranularButton);
         });
+
+        // Function to calculate metrics from current parameter values
+        function calculateMetricsFromParams() {
+            const maxRtt = parseInt(paramMaxRtt.value);
+            const minRtt = parseInt(paramMinRtt.value);
+            const initialRtt = parseInt(paramInitialRtt.value);
+            const retries = parseInt(paramMaxRetries.value);
+            const maxScanDelay = parseInt(paramMaxScanDelay.value);
+            const parallelism = parseInt(paramParallelism.value);
+
+            // Calculate detection level (stealth) - lower timeouts, higher delays = more stealth
+            let detectionLevel = 50; // base
+            if (maxRtt > 4000) detectionLevel += 30;
+            else if (maxRtt > 2000) detectionLevel += 20;
+            else if (maxRtt > 1000) detectionLevel += 10;
+            
+            if (maxScanDelay > 100000) detectionLevel += 20;
+            else if (maxScanDelay > 10000) detectionLevel += 15;
+            else if (maxScanDelay > 0) detectionLevel += 5;
+            
+            if (parallelism === 0) detectionLevel += 20;
+            else if (parallelism < 50) detectionLevel += 10;
+            else if (parallelism > 200) detectionLevel -= 15;
+            
+            detectionLevel = Math.max(0, Math.min(100, detectionLevel));
+
+            // Calculate speed - lower timeouts, lower delays, higher parallelism = faster
+            let speed = 50; // base
+            if (maxRtt < 500) speed += 30;
+            else if (maxRtt < 1000) speed += 15;
+            else if (maxRtt > 2000) speed -= 20;
+            
+            if (maxScanDelay === 0) speed += 15;
+            else if (maxScanDelay < 100) speed += 10;
+            else if (maxScanDelay > 10000) speed -= 30;
+            
+            if (parallelism === 0) speed -= 30;
+            else if (parallelism > 200) speed += 20;
+            else if (parallelism > 100) speed += 10;
+            
+            if (retries < 5) speed += 10;
+            else if (retries > 8) speed -= 5;
+            
+            speed = Math.max(0, Math.min(100, speed));
+
+            return {
+                detectionLevel,
+                speed,
+                knocks: retries,
+                parallelism
+            };
+        }
+
+        // Function to update all displays from current parameter values
+        function updateFromParams() {
+            isCustomMode = true;
+            customIndicator.style.display = 'block';
+            const maxRtt = parseInt(paramMaxRtt.value);
+            const minRtt = parseInt(paramMinRtt.value);
+            const initialRtt = parseInt(paramInitialRtt.value);
+            const retries = parseInt(paramMaxRetries.value);
+            const maxScanDelay = parseInt(paramMaxScanDelay.value);
+            const parallelism = parseInt(paramParallelism.value);
+
+            // Update parameter value displays
+            paramMaxRttValue.textContent = maxRtt + 'ms';
+            paramMinRttValue.textContent = minRtt + 'ms';
+            paramInitialRttValue.textContent = initialRtt + 'ms';
+            paramMaxRetriesValue.textContent = retries;
+            
+            if (maxScanDelay === 0) {
+                paramMaxScanDelayValue.textContent = 'Adaptive';
+            } else if (maxScanDelay >= 1000) {
+                paramMaxScanDelayValue.textContent = (maxScanDelay / 1000) + 's';
+            } else {
+                paramMaxScanDelayValue.textContent = maxScanDelay + 'ms';
+            }
+            
+            paramParallelismValue.textContent = parallelism === 0 ? 'Serial' : '~' + parallelism;
+
+            // Calculate and update metrics
+            const metrics = calculateMetricsFromParams();
+
+            // Update detection level
+            let detectionText = 'Moderate';
+            if (metrics.detectionLevel > 70) detectionText = 'Very Stealth';
+            else if (metrics.detectionLevel > 50) detectionText = 'Stealth';
+            else if (metrics.detectionLevel > 30) detectionText = 'Low Stealth';
+            else detectionText = 'No Stealth';
+
+            detectionLevel.textContent = detectionText;
+            detectionLevel.className = 'metric-value detection-level ' + 
+                (metrics.detectionLevel > 70 ? '' : metrics.detectionLevel > 30 ? 'medium' : 'low');
+            detectionBar.style.width = metrics.detectionLevel + '%';
+            detectionBar.style.background = metrics.detectionLevel > 70 ? 
+                'linear-gradient(90deg, #27ae60, #2ecc71)' : 
+                metrics.detectionLevel > 30 ? 
+                'linear-gradient(90deg, #f39c12, #e67e22)' : 
+                'linear-gradient(90deg, #e74c3c, #c0392b)';
+
+            // Update speed
+            let speedText = 'Normal';
+            if (metrics.speed > 85) speedText = 'Maximum';
+            else if (metrics.speed > 70) speedText = 'Fast';
+            else if (metrics.speed < 20) speedText = 'Extremely Slow';
+            else if (metrics.speed < 35) speedText = 'Very Slow';
+            else if (metrics.speed < 50) speedText = 'Slow';
+
+            speedValue.textContent = speedText;
+            speedBar.style.width = metrics.speed + '%';
+            speedBar.style.background = metrics.speed < 30 ? 
+                'linear-gradient(90deg, #3498db, #2980b9)' : 
+                metrics.speed < 70 ? 
+                'linear-gradient(90deg, #2ecc71, #27ae60)' : 
+                'linear-gradient(90deg, #f39c12, #e67e22)';
+
+            // Update knocks
+            knocksValue.textContent = metrics.knocks + ' retries';
+            const knocksPercent = (metrics.knocks / 10) * 100;
+            knocksBar.style.width = knocksPercent + '%';
+            knocksBar.textContent = metrics.knocks + ' retries';
+
+            // Update parallelism
+            const parallelismText = parallelism === 0 ? 'Serial (1 at a time)' : 
+                                   parallelism < 50 ? 'Very Low (~' + parallelism + ')' :
+                                   parallelism < 100 ? 'Low (~' + parallelism + ')' :
+                                   parallelism < 200 ? 'Dynamic (~' + parallelism + ')' :
+                                   parallelism < 250 ? 'High (~' + parallelism + ')' :
+                                   'Maximum (~' + parallelism + '+)';
+            
+            parallelismValue.textContent = parallelismText;
+            const parallelismPercent = (parallelism / 300) * 100;
+            parallelismBar.style.width = parallelismPercent + '%';
+            if (parallelism === 0) {
+                parallelismBar.textContent = 'Serial';
+            } else {
+                parallelismBar.textContent = '~' + parallelism + ' probes';
+            }
+
+            // Update timing arguments display
+            const maxScanDelayText = maxScanDelay === 0 ? '0 (adaptive)' : 
+                                   maxScanDelay >= 1000 ? (maxScanDelay / 1000) + 's' : 
+                                   maxScanDelay + 'ms';
+
+            timingArgs.innerHTML = `
+                <div class="arg-item">
+                    <span class="arg-label">--max-rtt-timeout</span>
+                    <span class="arg-value">${maxRtt}ms</span>
+                </div>
+                <div class="arg-item">
+                    <span class="arg-label">--min-rtt-timeout</span>
+                    <span class="arg-value">${minRtt}ms</span>
+                </div>
+                <div class="arg-item">
+                    <span class="arg-label">--initial-rtt-timeout</span>
+                    <span class="arg-value">${initialRtt}ms</span>
+                </div>
+                <div class="arg-item">
+                    <span class="arg-label">--max-retries</span>
+                    <span class="arg-value">${retries}</span>
+                </div>
+                <div class="arg-item">
+                    <span class="arg-label">--max-scan-delay</span>
+                    <span class="arg-value">${maxScanDelayText}</span>
+                </div>
+            `;
+
+            // Build and update granular command
+            let cmd = 'nmap';
+            
+            cmd += ` --max-rtt-timeout ${maxRtt}ms`;
+            cmd += ` --min-rtt-timeout ${minRtt}ms`;
+            cmd += ` --initial-rtt-timeout ${initialRtt}ms`;
+            cmd += ` --max-retries ${retries}`;
+            
+            if (maxScanDelay > 0) {
+                if (maxScanDelay >= 1000) {
+                    cmd += ` --max-scan-delay ${maxScanDelay / 1000}s`;
+                } else {
+                    cmd += ` --max-scan-delay ${maxScanDelay}ms`;
+                }
+            }
+            
+            cmd += ' target';
+            
+            granularNmapCommand.textContent = cmd;
+        }
+
+        // Add event listeners to parameter sliders
+        paramMaxRtt.addEventListener('input', updateFromParams);
+        paramMinRtt.addEventListener('input', updateFromParams);
+        paramInitialRtt.addEventListener('input', updateFromParams);
+        paramMaxRetries.addEventListener('input', updateFromParams);
+        paramMaxScanDelay.addEventListener('input', updateFromParams);
+        paramParallelism.addEventListener('input', updateFromParams);
 
         slider.addEventListener('input', (e) => {
             updateMetrics(parseInt(e.target.value));
