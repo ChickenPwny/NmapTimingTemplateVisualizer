@@ -133,6 +133,22 @@
             margin-top: 5px;
         }
 
+        .param-description {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 10px;
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        .param-slider-item {
+            position: relative;
+        }
+
+        .param-slider-item:hover .param-description {
+            color: #333;
+        }
+
         @media (max-width: 968px) {
             .timing-selector {
                 grid-template-columns: 1fr;
@@ -423,10 +439,15 @@
                         <span>--max-rtt-timeout</span>
                         <span class="param-slider-value" id="paramMaxRttValue">1000ms</span>
                     </div>
-                    <input type="range" min="50" max="5000" value="1000" class="param-slider" id="paramMaxRtt">
+                    <input type="range" min="50" max="5000" value="1000" class="param-slider" id="paramMaxRtt"
+                           aria-label="Maximum round trip timeout in milliseconds" 
+                           title="Maximum time to wait for probe response before retransmitting or giving up">
                     <div class="param-slider-min-max">
                         <span>50ms</span>
                         <span>5000ms</span>
+                    </div>
+                    <div class="param-description">
+                        Maximum time Nmap waits for a probe response. Higher values handle slow networks better but increase scan time. Lower values (300-1250ms) speed up scans on fast networks. T0-T2 use 5min-10s, T3-T4 use 1000-1250ms, T5 uses 300ms.
                     </div>
                 </div>
                 <div class="param-slider-item">
@@ -434,10 +455,15 @@
                         <span>--min-rtt-timeout</span>
                         <span class="param-slider-value" id="paramMinRttValue">100ms</span>
                     </div>
-                    <input type="range" min="50" max="5000" value="100" class="param-slider" id="paramMinRtt">
+                    <input type="range" min="50" max="5000" value="100" class="param-slider" id="paramMinRtt"
+                           aria-label="Minimum round trip timeout in milliseconds"
+                           title="Minimum round trip time timeout used as lower bound">
                     <div class="param-slider-min-max">
                         <span>50ms</span>
                         <span>5000ms</span>
+                    </div>
+                    <div class="param-description">
+                        Lower bound for round trip timeout calculations. Rarely adjusted manually. T0-T4 use 100ms, T5 uses 50ms. Only useful for extremely unreliable networks.
                     </div>
                 </div>
                 <div class="param-slider-item">
@@ -445,10 +471,15 @@
                         <span>--initial-rtt-timeout</span>
                         <span class="param-slider-value" id="paramInitialRttValue">500ms</span>
                     </div>
-                    <input type="range" min="50" max="5000" value="500" class="param-slider" id="paramInitialRtt">
+                    <input type="range" min="50" max="5000" value="500" class="param-slider" id="paramInitialRtt"
+                           aria-label="Initial round trip timeout in milliseconds"
+                           title="Starting round trip timeout for first probes before adapting">
                     <div class="param-slider-min-max">
                         <span>50ms</span>
                         <span>5000ms</span>
+                    </div>
+                    <div class="param-description">
+                        Starting timeout value for first probes before Nmap adapts based on responses. T0 uses 5min, T1 uses 15s, T2-T3 use 1s, T4 uses 500ms, T5 uses 250ms. Lower values speed up initial scans.
                     </div>
                 </div>
                 <div class="param-slider-item">
@@ -456,10 +487,15 @@
                         <span>--max-retries</span>
                         <span class="param-slider-value" id="paramMaxRetriesValue">10</span>
                     </div>
-                    <input type="range" min="0" max="10" value="10" class="param-slider" id="paramMaxRetries">
+                    <input type="range" min="0" max="10" value="10" class="param-slider" id="paramMaxRetries"
+                           aria-label="Maximum number of probe retransmissions"
+                           title="Maximum retransmissions before giving up on a port">
                     <div class="param-slider-min-max">
                         <span>0</span>
                         <span>10</span>
+                    </div>
+                    <div class="param-description">
+                        Maximum probe retransmissions before giving up. Higher values improve accuracy on unreliable networks but slow scans. T0-T3 use 10 retries, T4 uses 6, T5 uses 2. Set to 0 for fastest scans but lower accuracy.
                     </div>
                 </div>
                 <div class="param-slider-item">
@@ -467,10 +503,15 @@
                         <span>--max-scan-delay</span>
                         <span class="param-slider-value" id="paramMaxScanDelayValue">Adaptive</span>
                     </div>
-                    <input type="range" min="0" max="300000" value="0" class="param-slider" id="paramMaxScanDelay">
+                    <input type="range" min="0" max="300000" value="0" class="param-slider" id="paramMaxScanDelay"
+                           aria-label="Maximum delay between probes in milliseconds"
+                           title="Largest delay allowed between probes to avoid rate limiting">
                     <div class="param-slider-min-max">
                         <span>0ms (adaptive)</span>
                         <span>300000ms (5min)</span>
+                    </div>
+                    <div class="param-description">
+                        Maximum delay between probes. Set to 0 for adaptive behavior (T3-T5). T0-T2 use delays of 5min-400ms for stealth. T4 caps at 10ms, T5 at 5ms. Higher delays avoid rate limiting and IDS detection but slow scans dramatically.
                     </div>
                 </div>
                 <div class="param-slider-item">
@@ -478,10 +519,15 @@
                         <span>Parallelism</span>
                         <span class="param-slider-value" id="paramParallelismValue">~100</span>
                     </div>
-                    <input type="range" min="0" max="300" value="100" class="param-slider" id="paramParallelism">
+                    <input type="range" min="0" max="300" value="100" class="param-slider" id="paramParallelism"
+                           aria-label="Number of concurrent probes per host group"
+                           title="Total concurrent probes outstanding for a host group">
                     <div class="param-slider-min-max">
                         <span>0 (Serial)</span>
                         <span>300+</span>
+                    </div>
+                    <div class="param-description">
+                        Number of concurrent probes sent simultaneously. 0 = serial (one at a time, T0-T2 behavior). T3-T5 use dynamic parallelism (typically 100-300+). Higher values speed scans but may overwhelm targets or trigger rate limiting.
                     </div>
                 </div>
             </div>
@@ -493,8 +539,13 @@
                     Detection Level (Stealth)
                     <span class="metric-value" id="detectionLevel">Moderate</span>
                 </div>
-                <div class="bar-container">
+                <div class="bar-container" 
+                     title="Higher = More stealthy. Based on timeouts, delays, and parallelism. T0-T1 maximize stealth, T5 prioritizes speed over stealth."
+                     aria-label="Detection level bar showing stealth level from 0 to 100 percent">
                     <div class="bar-fill" id="detectionBar" style="width: 50%; background: linear-gradient(90deg, #27ae60, #f39c12);"></div>
+                </div>
+                <div class="param-description">
+                    Measures scan stealthiness. Higher values use longer timeouts and delays to avoid IDS detection. T0-T1 (Paranoid/Sneaky) maximize stealth. Lower values prioritize speed but are more detectable.
                 </div>
             </div>
 
@@ -503,8 +554,13 @@
                     Scan Speed
                     <span class="metric-value" id="speedValue">Normal</span>
                 </div>
-                <div class="bar-container">
+                <div class="bar-container"
+                     title="Relative scan speed. Higher = faster scans. Affected by RTT timeouts, delays, retries, and parallelism."
+                     aria-label="Scan speed bar showing relative speed from 0 to 100 percent">
                     <div class="bar-fill" id="speedBar" style="width: 50%; background: linear-gradient(90deg, #3498db, #2ecc71);"></div>
+                </div>
+                <div class="param-description">
+                    Relative scanning speed compared across templates. T0 is extremely slow (5min delays), T5 is maximum speed (minimal delays, low retries). Speed increases with lower timeouts, fewer retries, higher parallelism, and minimal delays.
                 </div>
             </div>
 
@@ -513,8 +569,13 @@
                     Port Knocks (Probes per Port)
                     <span class="metric-value" id="knocksValue">10</span>
                 </div>
-                <div class="bar-container">
+                <div class="bar-container"
+                     title="Number of probe attempts per port before giving up. Equal to max-retries setting."
+                     aria-label="Port knocks bar showing number of retries from 0 to 10">
                     <div class="bar-fill" id="knocksBar" style="width: 50%; background: linear-gradient(90deg, #9b59b6, #e74c3c);"></div>
+                </div>
+                <div class="param-description">
+                    Number of probe retransmissions per port. Maps directly to --max-retries. T0-T3 use 10 retries for accuracy, T4 uses 6, T5 uses 2. More retries improve accuracy but increase scan time, especially on filtered or rate-limited ports.
                 </div>
             </div>
 
@@ -523,8 +584,13 @@
                     Parallelism (Concurrent Probes)
                     <span class="metric-value" id="parallelismValue">Dynamic</span>
                 </div>
-                <div class="bar-container">
+                <div class="bar-container"
+                     title="Number of probes sent simultaneously. 0 = serial (T0-T2), higher = more parallel (T3-T5)."
+                     aria-label="Parallelism bar showing concurrent probes from 0 to 300">
                     <div class="bar-fill" id="parallelismBar" style="width: 50%; background: linear-gradient(90deg, #16a085, #3498db);"></div>
+                </div>
+                <div class="param-description">
+                    Number of concurrent probes sent at once. T0-T2 use serial scanning (parallelism = 1) for maximum stealth. T3-T5 use dynamic parallelism (typically 100-300+) for speed. Higher parallelism speeds scans but may overwhelm targets or trigger security controls.
                 </div>
             </div>
         </div>
