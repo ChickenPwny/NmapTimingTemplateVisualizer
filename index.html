@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nmap Timing Template Visualizer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .timing-selector {
+            margin-bottom: 50px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .timing-template-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .parameter-sliders-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .parameter-sliders-section h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .param-slider-item {
+            margin-bottom: 25px;
+        }
+
+        .param-slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .param-slider-value {
+            color: #667eea;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+
+        .param-slider {
+            width: 100%;
+            height: 12px;
+            border-radius: 6px;
+            background: #e0e0e0;
+            outline: none;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+            pointer-events: none;
+        }
+
+        .param-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: default;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .param-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: default;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            border: none;
+        }
+
+        .param-slider-min-max {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75em;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 968px) {
+            .timing-selector {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .slider-container {
+            position: relative;
+            margin: 30px 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 20px;
+            border-radius: 10px;
+            background: linear-gradient(to right, 
+                #e74c3c 0%, 
+                #f39c12 16.66%, 
+                #f1c40f 33.33%, 
+                #27ae60 50%, 
+                #3498db 66.66%, 
+                #9b59b6 100%);
+            outline: none;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .slider:hover {
+            opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            border: 3px solid #667eea;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            border: 3px solid #667eea;
+        }
+
+        .template-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .template-name {
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .metrics-container {
+            display: grid;
+            gap: 30px;
+        }
+
+        .metric-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .metric-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #667eea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .metric-value {
+            font-size: 0.9em;
+            color: #666;
+            font-weight: normal;
+        }
+
+        .bar-container {
+            height: 40px;
+            background: #e0e0e0;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.3s ease, background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .timing-args {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .timing-args h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .arg-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .arg-item:last-child {
+            border-bottom: none;
+        }
+
+        .arg-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .arg-value {
+            color: #667eea;
+        }
+
+        .detection-level {
+            color: #e74c3c;
+        }
+
+        .detection-level.medium {
+            color: #f39c12;
+        }
+
+        .detection-level.low {
+            color: #27ae60;
+        }
+
+        .command-display {
+            margin-top: 30px;
+            padding: 20px;
+            background: #2d2d2d;
+            border-radius: 8px;
+            color: #f8f8f2;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            overflow-x: auto;
+            border-left: 4px solid #667eea;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .command-display-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .command-display .prompt {
+            color: #50fa7b;
+        }
+
+        .command-display .command {
+            color: #bd93f9;
+        }
+
+        .command-display .args {
+            color: #f1fa8c;
+        }
+
+        .copy-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: background 0.2s, transform 0.1s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .copy-button:hover {
+            background: #5568d3;
+        }
+
+        .copy-button:active {
+            transform: scale(0.95);
+        }
+
+        .copy-button.copied {
+            background: #27ae60;
+        }
+
+        .granular-command-display {
+            margin-top: 20px;
+            padding: 20px;
+            background: #2d2d2d;
+            border-radius: 8px;
+            color: #f8f8f2;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            overflow-x: auto;
+            border-left: 4px solid #27ae60;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .granular-command-display-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .granular-command-display #granularNmapCommand {
+            color: #f1fa8c;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Nmap Timing Template Visualizer</h1>
+        <p class="subtitle">Interactive visualization of Nmap timing parameters and performance metrics</p>
+
+        <div class="timing-selector">
+            <div class="timing-template-section">
+                <div class="slider-container">
+                    <input type="range" min="0" max="5" value="3" class="slider" id="timingSlider">
+                    <div class="template-labels">
+                        <span>0<br>Paranoid</span>
+                        <span>1<br>Sneaky</span>
+                        <span>2<br>Polite</span>
+                        <span>3<br>Normal</span>
+                        <span>4<br>Aggressive</span>
+                        <span>5<br>Insane</span>
+                    </div>
+                </div>
+                <div class="template-name" id="templateName">Normal</div>
+            </div>
+            <div class="parameter-sliders-section">
+                <h3>Timing Parameters</h3>
+                <div class="param-slider-item">
+                    <div class="param-slider-label">
+                        <span>--max-rtt-timeout</span>
+                        <span class="param-slider-value" id="paramMaxRttValue">1000ms</span>
+                    </div>
+                    <input type="range" min="50" max="5000" value="1000" class="param-slider" id="paramMaxRtt" readonly>
+                    <div class="param-slider-min-max">
+                        <span>50ms</span>
+                        <span>5000ms</span>
+                    </div>
+                </div>
+                <div class="param-slider-item">
+                    <div class="param-slider-label">
+                        <span>--min-rtt-timeout</span>
+                        <span class="param-slider-value" id="paramMinRttValue">100ms</span>
+                    </div>
+                    <input type="range" min="50" max="5000" value="100" class="param-slider" id="paramMinRtt" readonly>
+                    <div class="param-slider-min-max">
+                        <span>50ms</span>
+                        <span>5000ms</span>
+                    </div>
+                </div>
+                <div class="param-slider-item">
+                    <div class="param-slider-label">
+                        <span>--initial-rtt-timeout</span>
+                        <span class="param-slider-value" id="paramInitialRttValue">500ms</span>
+                    </div>
+                    <input type="range" min="50" max="5000" value="500" class="param-slider" id="paramInitialRtt" readonly>
+                    <div class="param-slider-min-max">
+                        <span>50ms</span>
+                        <span>5000ms</span>
+                    </div>
+                </div>
+                <div class="param-slider-item">
+                    <div class="param-slider-label">
+                        <span>--max-retries</span>
+                        <span class="param-slider-value" id="paramMaxRetriesValue">10</span>
+                    </div>
+                    <input type="range" min="0" max="10" value="10" class="param-slider" id="paramMaxRetries" readonly>
+                    <div class="param-slider-min-max">
+                        <span>0</span>
+                        <span>10</span>
+                    </div>
+                </div>
+                <div class="param-slider-item">
+                    <div class="param-slider-label">
+                        <span>--max-scan-delay</span>
+                        <span class="param-slider-value" id="paramMaxScanDelayValue">Adaptive</span>
+                    </div>
+                    <input type="range" min="0" max="300000" value="0" class="param-slider" id="paramMaxScanDelay" readonly>
+                    <div class="param-slider-min-max">
+                        <span>0ms (adaptive)</span>
+                        <span>300000ms (5min)</span>
+                    </div>
+                </div>
+                <div class="param-slider-item">
+                    <div class="param-slider-label">
+                        <span>Parallelism</span>
+                        <span class="param-slider-value" id="paramParallelismValue">~100</span>
+                    </div>
+                    <input type="range" min="0" max="300" value="100" class="param-slider" id="paramParallelism" readonly>
+                    <div class="param-slider-min-max">
+                        <span>0 (Serial)</span>
+                        <span>300+</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="metrics-container">
+            <div class="metric-card">
+                <div class="metric-title">
+                    Detection Level (Stealth)
+                    <span class="metric-value" id="detectionLevel">Moderate</span>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" id="detectionBar" style="width: 50%; background: linear-gradient(90deg, #27ae60, #f39c12);"></div>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-title">
+                    Scan Speed
+                    <span class="metric-value" id="speedValue">Normal</span>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" id="speedBar" style="width: 50%; background: linear-gradient(90deg, #3498db, #2ecc71);"></div>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-title">
+                    Port Knocks (Probes per Port)
+                    <span class="metric-value" id="knocksValue">10</span>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" id="knocksBar" style="width: 50%; background: linear-gradient(90deg, #9b59b6, #e74c3c);"></div>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-title">
+                    Parallelism (Concurrent Probes)
+                    <span class="metric-value" id="parallelismValue">Dynamic</span>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" id="parallelismBar" style="width: 50%; background: linear-gradient(90deg, #16a085, #3498db);"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timing-args">
+            <h3>Timing Arguments</h3>
+            <div id="timingArgs"></div>
+        </div>
+
+        <div class="command-display">
+            <div class="command-display-content">
+                <span class="prompt">$</span> <span class="command">nmap</span> <span class="args" id="nmapCommand">-T3 target</span>
+            </div>
+            <button class="copy-button" id="copyNmapButton" data-command="simple">Copy</button>
+        </div>
+
+        <div class="granular-command-display">
+            <div class="granular-command-display-content">
+                <span class="prompt">$</span> <span id="granularNmapCommand">nmap -T3 target</span>
+            </div>
+            <button class="copy-button" id="copyGranularButton" data-command="granular">Copy</button>
+        </div>
+
+    </div>
+
+    <script>
+        const timingData = {
+            0: { // Paranoid
+                name: 'Paranoid',
+                detectionLevel: 100,
+                detectionText: 'Very Stealth',
+                speed: 5,
+                speedText: 'Extremely Slow',
+                knocks: 10,
+                knocksText: '10 retries',
+                parallelism: 0,
+                parallelismText: 'Serial (1 at a time)',
+                maxRttTimeout: '5000ms',
+                maxRttTimeoutMs: 5000,
+                minRttTimeout: '5000ms',
+                minRttTimeoutMs: 5000,
+                initialRttTimeout: '5000ms',
+                initialRttTimeoutMs: 5000,
+                maxRetries: 10,
+                scanDelay: '300s (5min)',
+                maxScanDelay: '300s',
+                maxScanDelayMs: 300000,
+                hostTimeout: '0 (none)',
+                scriptTimeout: '0 (none)',
+                command: '-T0'
+            },
+            1: { // Sneaky
+                name: 'Sneaky',
+                detectionLevel: 95,
+                detectionText: 'Very Stealth',
+                speed: 8,
+                speedText: 'Very Slow',
+                knocks: 10,
+                knocksText: '10 retries',
+                parallelism: 10,
+                parallelismText: 'Very Low (~10)',
+                maxRttTimeout: '1500ms',
+                maxRttTimeoutMs: 1500,
+                minRttTimeout: '1500ms',
+                minRttTimeoutMs: 1500,
+                initialRttTimeout: '1500ms',
+                initialRttTimeoutMs: 1500,
+                maxRetries: 10,
+                scanDelay: '15s',
+                maxScanDelay: '15s',
+                maxScanDelayMs: 15000,
+                hostTimeout: '0 (none)',
+                scriptTimeout: '0 (none)',
+                command: '-T1'
+            },
+            2: { // Polite
+                name: 'Polite',
+                detectionLevel: 75,
+                detectionText: 'Stealth',
+                speed: 15,
+                speedText: 'Slow',
+                knocks: 10,
+                knocksText: '10 retries',
+                parallelism: 50,
+                parallelismText: 'Low (~50)',
+                maxRttTimeout: '1000ms',
+                maxRttTimeoutMs: 1000,
+                minRttTimeout: '400ms',
+                minRttTimeoutMs: 400,
+                initialRttTimeout: '400ms',
+                initialRttTimeoutMs: 400,
+                maxRetries: 10,
+                scanDelay: '400ms',
+                maxScanDelay: '400ms',
+                maxScanDelayMs: 400,
+                hostTimeout: '0 (none)',
+                scriptTimeout: '0 (none)',
+                command: '-T2'
+            },
+            3: { // Normal
+                name: 'Normal',
+                detectionLevel: 50,
+                detectionText: 'Moderate',
+                speed: 50,
+                speedText: 'Normal',
+                knocks: 10,
+                knocksText: '10 retries',
+                parallelism: 100,
+                parallelismText: 'Dynamic (~100)',
+                maxRttTimeout: '1000ms',
+                maxRttTimeoutMs: 1000,
+                minRttTimeout: '100ms',
+                minRttTimeoutMs: 100,
+                initialRttTimeout: '500ms',
+                initialRttTimeoutMs: 500,
+                maxRetries: 10,
+                scanDelay: '0 (adaptive)',
+                maxScanDelay: '0 (adaptive)',
+                maxScanDelayMs: 0,
+                hostTimeout: '0 (none)',
+                scriptTimeout: '0 (none)',
+                command: '-T3'
+            },
+            4: { // Aggressive
+                name: 'Aggressive',
+                detectionLevel: 25,
+                detectionText: 'Low Stealth',
+                speed: 85,
+                speedText: 'Fast',
+                knocks: 6,
+                knocksText: '6 retries',
+                parallelism: 200,
+                parallelismText: 'High (~200)',
+                maxRttTimeout: '1250ms',
+                maxRttTimeoutMs: 1250,
+                minRttTimeout: '100ms',
+                minRttTimeoutMs: 100,
+                initialRttTimeout: '500ms',
+                initialRttTimeoutMs: 500,
+                maxRetries: 6,
+                scanDelay: '0 (adaptive)',
+                maxScanDelay: '10ms',
+                maxScanDelayMs: 10,
+                hostTimeout: '0 (none)',
+                scriptTimeout: '0 (none)',
+                command: '-T4'
+            },
+            5: { // Insane
+                name: 'Insane',
+                detectionLevel: 5,
+                detectionText: 'No Stealth',
+                speed: 100,
+                speedText: 'Maximum',
+                knocks: 2,
+                knocksText: '2 retries',
+                parallelism: 300,
+                parallelismText: 'Maximum (~300+)',
+                maxRttTimeout: '300ms',
+                maxRttTimeoutMs: 300,
+                minRttTimeout: '50ms',
+                minRttTimeoutMs: 50,
+                initialRttTimeout: '250ms',
+                initialRttTimeoutMs: 250,
+                maxRetries: 2,
+                scanDelay: '0 (adaptive)',
+                maxScanDelay: '5ms',
+                maxScanDelayMs: 5,
+                hostTimeout: '15m',
+                scriptTimeout: '10m',
+                command: '-T5'
+            }
+        };
+
+        const slider = document.getElementById('timingSlider');
+        const templateName = document.getElementById('templateName');
+        const detectionLevel = document.getElementById('detectionLevel');
+        const detectionBar = document.getElementById('detectionBar');
+        const speedValue = document.getElementById('speedValue');
+        const speedBar = document.getElementById('speedBar');
+        const knocksValue = document.getElementById('knocksValue');
+        const knocksBar = document.getElementById('knocksBar');
+        const parallelismValue = document.getElementById('parallelismValue');
+        const parallelismBar = document.getElementById('parallelismBar');
+        const timingArgs = document.getElementById('timingArgs');
+        const nmapCommand = document.getElementById('nmapCommand');
+        const granularNmapCommand = document.getElementById('granularNmapCommand');
+        const copyNmapButton = document.getElementById('copyNmapButton');
+        const copyGranularButton = document.getElementById('copyGranularButton');
+
+        // Parameter slider elements
+        const paramMaxRtt = document.getElementById('paramMaxRtt');
+        const paramMaxRttValue = document.getElementById('paramMaxRttValue');
+        const paramMinRtt = document.getElementById('paramMinRtt');
+        const paramMinRttValue = document.getElementById('paramMinRttValue');
+        const paramInitialRtt = document.getElementById('paramInitialRtt');
+        const paramInitialRttValue = document.getElementById('paramInitialRttValue');
+        const paramMaxRetries = document.getElementById('paramMaxRetries');
+        const paramMaxRetriesValue = document.getElementById('paramMaxRetriesValue');
+        const paramMaxScanDelay = document.getElementById('paramMaxScanDelay');
+        const paramMaxScanDelayValue = document.getElementById('paramMaxScanDelayValue');
+        const paramParallelism = document.getElementById('paramParallelism');
+        const paramParallelismValue = document.getElementById('paramParallelismValue');
+
+        function updateMetrics(value) {
+            const data = timingData[value];
+
+            // Update template name
+            templateName.textContent = data.name;
+
+            // Update detection level
+            detectionLevel.textContent = data.detectionText;
+            detectionLevel.className = 'metric-value detection-level ' + 
+                (data.detectionLevel > 70 ? '' : data.detectionLevel > 30 ? 'medium' : 'low');
+            detectionBar.style.width = data.detectionLevel + '%';
+            detectionBar.style.background = data.detectionLevel > 70 ? 
+                'linear-gradient(90deg, #27ae60, #2ecc71)' : 
+                data.detectionLevel > 30 ? 
+                'linear-gradient(90deg, #f39c12, #e67e22)' : 
+                'linear-gradient(90deg, #e74c3c, #c0392b)';
+
+            // Update speed
+            speedValue.textContent = data.speedText;
+            speedBar.style.width = data.speed + '%';
+            speedBar.style.background = data.speed < 30 ? 
+                'linear-gradient(90deg, #3498db, #2980b9)' : 
+                data.speed < 70 ? 
+                'linear-gradient(90deg, #2ecc71, #27ae60)' : 
+                'linear-gradient(90deg, #f39c12, #e67e22)';
+
+            // Update knocks
+            knocksValue.textContent = data.knocksText;
+            const knocksPercent = (data.knocks / 10) * 100;
+            knocksBar.style.width = knocksPercent + '%';
+            knocksBar.textContent = data.knocks + ' retries';
+
+            // Update parallelism
+            parallelismValue.textContent = data.parallelismText;
+            const parallelismPercent = (data.parallelism / 300) * 100;
+            parallelismBar.style.width = parallelismPercent + '%';
+            if (data.parallelism === 0) {
+                parallelismBar.textContent = 'Serial';
+            } else {
+                parallelismBar.textContent = '~' + data.parallelism + ' probes';
+            }
+
+            // Update timing arguments
+            timingArgs.innerHTML = `
+                <div class="arg-item">
+                    <span class="arg-label">--max-rtt-timeout</span>
+                    <span class="arg-value">${data.maxRttTimeout}</span>
+                </div>
+                <div class="arg-item">
+                    <span class="arg-label">--min-rtt-timeout</span>
+                    <span class="arg-value">${data.minRttTimeout}</span>
+                </div>
+                <div class="arg-item">
+                    <span class="arg-label">--initial-rtt-timeout</span>
+                    <span class="arg-value">${data.initialRttTimeout}</span>
+                </div>
+                <div class="arg-item">
+                    <span class="arg-label">--max-retries</span>
+                    <span class="arg-value">${data.maxRetries}</span>
+                </div>
+                <div class="arg-item">
+                    <span class="arg-label">--scan-delay</span>
+                    <span class="arg-value">${data.scanDelay}</span>
+                </div>
+                <div class="arg-item">
+                    <span class="arg-label">--max-scan-delay</span>
+                    <span class="arg-value">${data.maxScanDelay}</span>
+                </div>
+                <div class="arg-item">
+                    <span class="arg-label">--host-timeout</span>
+                    <span class="arg-value">${data.hostTimeout}</span>
+                </div>
+                <div class="arg-item">
+                    <span class="arg-label">--script-timeout</span>
+                    <span class="arg-value">${data.scriptTimeout}</span>
+                </div>
+            `;
+
+            // Update command
+            nmapCommand.textContent = `${data.command} target`;
+
+            // Update parameter sliders
+            paramMaxRtt.value = data.maxRttTimeoutMs;
+            paramMaxRttValue.textContent = data.maxRttTimeout;
+            
+            paramMinRtt.value = data.minRttTimeoutMs;
+            paramMinRttValue.textContent = data.minRttTimeout;
+            
+            paramInitialRtt.value = data.initialRttTimeoutMs;
+            paramInitialRttValue.textContent = data.initialRttTimeout;
+            
+            paramMaxRetries.value = data.maxRetries;
+            paramMaxRetriesValue.textContent = data.maxRetries;
+            
+            paramMaxScanDelay.value = data.maxScanDelayMs;
+            if (data.maxScanDelayMs === 0) {
+                paramMaxScanDelayValue.textContent = 'Adaptive';
+            } else if (data.maxScanDelayMs >= 1000) {
+                paramMaxScanDelayValue.textContent = (data.maxScanDelayMs / 1000) + 's';
+            } else {
+                paramMaxScanDelayValue.textContent = data.maxScanDelayMs + 'ms';
+            }
+            
+            paramParallelism.value = data.parallelism;
+            paramParallelismValue.textContent = data.parallelism === 0 ? 'Serial' : '~' + data.parallelism;
+
+            // Update granular command
+            const granularCmd = buildGranularCommand(data);
+            granularNmapCommand.textContent = granularCmd;
+        }
+
+        function buildGranularCommand(data) {
+            let cmd = 'nmap';
+            
+            // Helper to clean value (remove parenthetical comments)
+            const cleanValue = (value) => {
+                if (typeof value === 'string') {
+                    // Remove anything in parentheses and trim
+                    return value.replace(/\s*\([^)]*\)/g, '').trim();
+                }
+                return value;
+            };
+            
+            // Helper to check if value should be skipped
+            const shouldSkip = (value) => {
+                const clean = cleanValue(value);
+                return clean === '0' || clean === 'none' || clean === 'adaptive' || clean === '';
+            };
+            
+            // Add timing arguments
+            if (!shouldSkip(data.maxRttTimeout)) {
+                cmd += ` --max-rtt-timeout ${cleanValue(data.maxRttTimeout)}`;
+            }
+            
+            if (!shouldSkip(data.minRttTimeout)) {
+                cmd += ` --min-rtt-timeout ${cleanValue(data.minRttTimeout)}`;
+            }
+            
+            if (!shouldSkip(data.initialRttTimeout)) {
+                cmd += ` --initial-rtt-timeout ${cleanValue(data.initialRttTimeout)}`;
+            }
+            
+            cmd += ` --max-retries ${data.maxRetries}`;
+            
+            // Only add scan-delay if it's not adaptive/0
+            if (!shouldSkip(data.scanDelay)) {
+                cmd += ` --scan-delay ${cleanValue(data.scanDelay)}`;
+            }
+            
+            // Only add max-scan-delay if it's not adaptive/0
+            if (!shouldSkip(data.maxScanDelay)) {
+                cmd += ` --max-scan-delay ${cleanValue(data.maxScanDelay)}`;
+            }
+            
+            // Add host-timeout if set
+            if (!shouldSkip(data.hostTimeout)) {
+                cmd += ` --host-timeout ${cleanValue(data.hostTimeout)}`;
+            }
+            
+            // Add script-timeout if set
+            if (!shouldSkip(data.scriptTimeout)) {
+                cmd += ` --script-timeout ${cleanValue(data.scriptTimeout)}`;
+            }
+            
+            cmd += ' target';
+            
+            return cmd;
+        }
+
+        // Copy button functionality
+        function copyToClipboard(text, button) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.position = 'fixed';
+                textArea.style.opacity = '0';
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.classList.add('copied');
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    console.error('Fallback copy failed:', err);
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+
+        copyNmapButton.addEventListener('click', () => {
+            // Get the full command text from the display
+            const commandDisplay = copyNmapButton.previousElementSibling;
+            const commandText = commandDisplay.textContent.trim().replace(/^\$\s*/, '');
+            copyToClipboard(commandText, copyNmapButton);
+        });
+
+        copyGranularButton.addEventListener('click', () => {
+            // Get the full command text from the display
+            const commandDisplay = copyGranularButton.previousElementSibling;
+            const commandText = commandDisplay.textContent.trim().replace(/^\$\s*/, '');
+            copyToClipboard(commandText, copyGranularButton);
+        });
+
+        slider.addEventListener('input', (e) => {
+            updateMetrics(parseInt(e.target.value));
+        });
+
+        // Initialize with default value
+        updateMetrics(3);
+    </script>
+</body>
+</html>
