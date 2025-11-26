@@ -15,7 +15,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 30px;
             color: #333;
         }
 
@@ -25,28 +25,28 @@
             background: white;
             border-radius: 15px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            padding: 40px;
+            padding: 50px;
         }
 
         h1 {
             text-align: center;
             color: #667eea;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             font-size: 2.5em;
         }
 
         .subtitle {
             text-align: center;
             color: #666;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
             font-size: 1.1em;
         }
 
         .timing-selector {
-            margin-bottom: 50px;
+            margin-bottom: 60px;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            gap: 40px;
         }
 
         .timing-template-section {
@@ -57,18 +57,18 @@
         .parameter-sliders-section {
             background: #f8f9fa;
             border-radius: 10px;
-            padding: 25px;
+            padding: 30px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .parameter-sliders-section h3 {
             color: #667eea;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             font-size: 1.3em;
         }
 
         .param-slider-item {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         .param-slider-label {
@@ -157,7 +157,7 @@
 
         .slider-container {
             position: relative;
-            margin: 30px 0;
+            margin: 35px 0;
         }
 
         .slider {
@@ -216,8 +216,8 @@
             text-align: center;
             font-size: 1.8em;
             font-weight: bold;
-            margin: 20px 0;
-            padding: 15px;
+            margin: 25px 0 20px 0;
+            padding: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border-radius: 10px;
@@ -225,22 +225,47 @@
             letter-spacing: 2px;
         }
 
+        .template-description {
+            text-align: center;
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.7;
+            margin: 0 20px 20px 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .fine-grained-description {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.7;
+            margin: 0 20px 25px 20px;
+            padding: 20px;
+            background: #f0f4ff;
+            border-radius: 8px;
+            border-left: 4px solid #764ba2;
+        }
+
         .metrics-container {
             display: grid;
-            gap: 30px;
+            gap: 35px;
+            margin-bottom: 40px;
         }
 
         .metric-card {
             background: #f8f9fa;
             border-radius: 10px;
-            padding: 25px;
+            padding: 30px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .metric-title {
             font-size: 1.2em;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             color: #667eea;
             display: flex;
             justify-content: space-between;
@@ -276,20 +301,21 @@
         }
 
         .timing-args {
-            margin-top: 20px;
-            padding: 20px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            padding: 25px;
             background: #fff;
             border-radius: 8px;
             border-left: 4px solid #667eea;
         }
 
         .timing-args h3 {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             color: #667eea;
         }
 
         .arg-item {
-            padding: 8px 0;
+            padding: 10px 0;
             border-bottom: 1px solid #eee;
             display: flex;
             justify-content: space-between;
@@ -323,8 +349,9 @@
         }
 
         .command-display {
-            margin-top: 30px;
-            padding: 20px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            padding: 25px;
             background: #2d2d2d;
             border-radius: 8px;
             color: #f8f8f2;
@@ -383,8 +410,9 @@
         }
 
         .granular-command-display {
-            margin-top: 20px;
-            padding: 20px;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            padding: 25px;
             background: #2d2d2d;
             border-radius: 8px;
             color: #f8f8f2;
@@ -405,6 +433,39 @@
 
         .granular-command-display #granularNmapCommand {
             color: #f1fa8c;
+        }
+
+        .footer {
+            margin-top: 60px;
+            padding-top: 40px;
+            padding-bottom: 20px;
+            border-top: 2px solid #e0e0e0;
+            text-align: center;
+        }
+
+        .footer h4 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 0.9em;
+        }
+
+        .footer-links a {
+            color: #667eea;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #764ba2;
+            text-decoration: underline;
         }
 
     </style>
@@ -428,6 +489,12 @@
                     </div>
                 </div>
                 <div class="template-name" id="templateName">Normal</div>
+                <div class="template-description" id="templateDescription">
+                    Nmap offers six timing templates (0-5) that let you specify how aggressive you wish to be, while leaving Nmap to pick the exact timing values. The templates are: <strong>Paranoid (0)</strong> and <strong>Sneaky (1)</strong> for IDS evasion, <strong>Polite (2)</strong> which slows scans significantly, <strong>Normal (3)</strong> as the default, <strong>Aggressive (4)</strong> recommended for modern reliable networks, and <strong>Insane (5)</strong> for maximum speed. Templates can be combined with fine-grained controls, where granular options override template values for specific parameters.
+                </div>
+                <div class="fine-grained-description">
+                    <strong>Fine-Grained Timing Controls:</strong> Nmap provides many fine-grained options for controlling scan speed and behavior. Key controls include: <strong>hostgroup size</strong> (--min-hostgroup, --max-hostgroup), <strong>parallelism</strong> (--min-parallelism, --max-parallelism), <strong>probe timeouts</strong> (--min-rtt-timeout, --max-rtt-timeout, --initial-rtt-timeout), <strong>retransmissions</strong> (--max-retries), <strong>scan delays</strong> (--scan-delay, --max-scan-delay), and <strong>rate limiting</strong> (--min-rate, --max-rate). Nmap uses adaptive algorithms including congestion control, RTT estimation, and exponential backoff to dynamically adjust scan speed based on network conditions, ensuring both accuracy and efficiency.
+                </div>
                 <div style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #667eea; display: none;" id="customIndicator">
                     <em>Custom parameters - adjust sliders below</em>
                 </div>
@@ -613,6 +680,14 @@
             </div>
             <button class="copy-button" id="copyGranularButton" data-command="granular">Copy</button>
         </div>
+
+        <footer class="footer">
+            <h4>Sources</h4>
+            <div class="footer-links">
+                <a href="https://nmap.org/book/performance-timing-templates.html" target="_blank" rel="noopener noreferrer">Nmap Timing Templates</a>
+                <a href="https://nmap.org/book/man-performance.html" target="_blank" rel="noopener noreferrer">Nmap Performance Documentation</a>
+            </div>
+        </footer>
 
     </div>
 
