@@ -42,16 +42,72 @@
             font-size: 1.1em;
         }
 
-        .timing-selector {
-            margin-bottom: 60px;
+        .main-content-wrapper {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 450px;
             gap: 40px;
+            margin-bottom: 60px;
+            align-items: start;
+        }
+
+        @media (max-width: 1400px) {
+            .main-content-wrapper {
+                grid-template-columns: 1fr 400px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .main-content-wrapper {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar-panel {
+                position: static;
+                max-height: none;
+            }
         }
 
         .timing-template-section {
             display: flex;
             flex-direction: column;
+            min-width: 0;
+        }
+
+        .udp-mode .timing-template-section .fine-grained-description {
+            display: none;
+        }
+
+        .sidebar-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            position: sticky;
+            top: 20px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+
+        .parameter-sliders-section {
+            position: relative;
+        }
+
+        .fine-grained-container-standalone {
+            display: none;
+        }
+
+        .fine-grained-container-standalone.active {
+            display: block;
+        }
+
+        .fine-grained-container-standalone .fine-grained-description {
+            margin: 0;
+            max-height: none;
+            overflow-y: visible;
+        }
+
+        .fine-grained-description-column .fine-grained-description {
+            height: 100%;
+            margin: 0;
         }
 
         .parameter-sliders-section {
@@ -226,7 +282,7 @@
         }
 
         .template-description {
-            text-align: center;
+            text-align: left;
             color: #666;
             font-size: 0.95em;
             line-height: 1.7;
@@ -237,8 +293,12 @@
             border-left: 4px solid #667eea;
         }
 
-        .fine-grained-description {
+        .template-description > p:first-child {
             text-align: center;
+        }
+
+        .fine-grained-description {
+            text-align: left;
             color: #666;
             font-size: 0.9em;
             line-height: 1.7;
@@ -247,6 +307,71 @@
             background: #f0f4ff;
             border-radius: 8px;
             border-left: 4px solid #764ba2;
+        }
+
+        .fine-grained-description > strong:first-child {
+            display: block;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .template-description table,
+        .fine-grained-description table {
+            width: 100%;
+            margin: 15px auto;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+
+        .template-description table th,
+        .fine-grained-description table th {
+            background: #667eea;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .template-description table td,
+        .fine-grained-description table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .template-description table tr:last-child td,
+        .fine-grained-description table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .template-description table tr:nth-child(even),
+        .fine-grained-description table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .template-description ul,
+        .fine-grained-description ul {
+            text-align: left;
+            margin: 15px 20px;
+            padding-left: 20px;
+        }
+
+        .template-description li,
+        .fine-grained-description li {
+            margin-bottom: 10px;
+        }
+
+        .icmp-definition {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            text-align: left;
+        }
+
+        .icmp-definition strong {
+            color: #856404;
         }
 
         .metrics-container {
@@ -468,14 +593,56 @@
             text-decoration: underline;
         }
 
+        .protocol-header {
+            max-width: 1200px;
+            margin: 0 auto 30px auto;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .protocol-toggle {
+            font-size: 3.5em;
+            font-weight: bold;
+            color: #667eea;
+            cursor: pointer;
+            padding: 20px 40px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            user-select: none;
+        }
+
+        .protocol-toggle:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+            color: #764ba2;
+        }
+
+        .protocol-toggle.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+        }
+
+
     </style>
 </head>
 <body>
+    <div class="protocol-header">
+        <div class="protocol-toggle active" id="tcpToggle" data-protocol="tcp">TCP</div>
+        <div class="protocol-toggle" id="udpToggle" data-protocol="udp">UDP</div>
+    </div>
+
     <div class="container">
         <h1>Nmap Timing Template Visualizer</h1>
         <p class="subtitle">Interactive visualization of Nmap timing parameters and performance metrics</p>
 
-        <div class="timing-selector">
+        <div class="main-content-wrapper">
             <div class="timing-template-section">
                 <div class="slider-container">
                     <input type="range" min="0" max="5" value="3" class="slider" id="timingSlider">
@@ -492,14 +659,16 @@
                 <div class="template-description" id="templateDescription">
                     Nmap's timing templates (0-5) provide a simple way to control scan aggressiveness without manually configuring dozens of parameters. Each template sets multiple timing values simultaneously: <strong>Paranoid (T0)</strong> and <strong>Sneaky (T1)</strong> serialize scans and add long delays (5 minutes to 15 seconds between probes) to evade IDS detection—ideal for stealth but extremely slow. <strong>Polite (T2)</strong> adds 400ms delays to reduce bandwidth and target load, but scans can take 10x longer than default. <strong>Normal (T3)</strong> is the balanced default with adaptive timing. <strong>Aggressive (T4)</strong> caps TCP scan delays at 10ms and reduces retries to 6, assuming fast reliable networks—recommended for modern infrastructure. <strong>Insane (T5)</strong> minimizes all timeouts (300ms max RTT, 5ms TCP delay, only 2 retries) for maximum speed, sacrificing some accuracy. Templates can be combined with fine-grained controls; granular options override template defaults for specific parameters.
                 </div>
-                <div class="fine-grained-description">
-                    <strong>Fine-Grained Timing Controls:</strong> Beyond templates, Nmap offers precise control over scan behavior. <strong>Hostgroup size</strong> (--min-hostgroup, --max-hostgroup) determines how many hosts are scanned concurrently—larger groups are faster but delay results. <strong>Parallelism</strong> (--min-parallelism, --max-parallelism) controls concurrent probes per host—higher values speed scans but may overwhelm targets or trigger rate limiting. <strong>Probe timeouts</strong> (--min-rtt-timeout, --max-rtt-timeout, --initial-rtt-timeout) define how long Nmap waits for responses—lower values speed up scans on fast networks but cause false negatives on slow links. <strong>Retransmissions</strong> (--max-retries) determine persistence—more retries improve accuracy on unreliable networks but slow scans. <strong>Scan delays</strong> (--scan-delay, --max-scan-delay) insert pauses between probes to avoid rate limiting—critical for UDP scans where Linux kernels limit ICMP errors to 1/second. <strong>Rate limiting</strong> (--min-rate, --max-rate) directly controls packets per second. Nmap's adaptive algorithms (congestion control, RTT estimation, exponential backoff) dynamically adjust these parameters based on detected network conditions, packet loss, and latency—ensuring optimal balance between speed and accuracy without manual tuning.
+                <div class="fine-grained-description" id="fineGrainedDescriptionMain">
+                    <strong>Fine-Grained Timing Controls:</strong> Beyond templates, Nmap offers precise control over scan behavior. <strong>Hostgroup size</strong> (--min-hostgroup, --max-hostgroup) determines how many hosts are scanned concurrently—larger groups are faster but delay results. <strong>Parallelism</strong> (--min-parallelism, --max-parallelism) controls concurrent probes per host—higher values speed scans but may overwhelm targets or trigger rate limiting. <strong>Probe timeouts</strong> (--min-rtt-timeout, --max-rtt-timeout, --initial-rtt-timeout) define how long Nmap waits for responses—lower values speed up scans on fast networks but cause false negatives on slow links. <strong>Retransmissions</strong> (--max-retries) determine persistence—more retries improve accuracy on unreliable networks but slow scans. <strong>Scan delays</strong> (--scan-delay, --max-scan-delay) insert pauses between probes to avoid rate limiting—TCP can use very low delays (5ms with T5). <strong>Rate limiting</strong> (--min-rate, --max-rate) directly controls packets per second. Nmap's adaptive algorithms (congestion control, RTT estimation, exponential backoff) dynamically adjust these parameters based on detected network conditions, packet loss, and latency—ensuring optimal balance between speed and accuracy without manual tuning.
                 </div>
                 <div style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #667eea; display: none;" id="customIndicator">
                     <em>Custom parameters - adjust sliders below</em>
                 </div>
             </div>
-            <div class="parameter-sliders-section">
+            
+            <div class="sidebar-panel">
+                <div class="parameter-sliders-section">
                 <h3>Timing Parameters</h3>
                 <div class="param-slider-item">
                     <div class="param-slider-label">
@@ -561,7 +730,7 @@
                         <span>0</span>
                         <span>10</span>
                     </div>
-                    <div class="param-description">
+                    <div class="param-description" id="maxRetriesDesc">
                         Maximum probe retransmissions before giving up. Higher values improve accuracy on unreliable networks but slow scans. T0-T3 use 10 retries, T4 uses 6, T5 uses 2. Set to 0 for fastest scans but lower accuracy.
                     </div>
                 </div>
@@ -577,7 +746,7 @@
                         <span>0ms (adaptive)</span>
                         <span>300000ms (5min)</span>
                     </div>
-                    <div class="param-description">
+                    <div class="param-description" id="maxScanDelayDesc">
                         Maximum delay between probes. Set to 0 for adaptive behavior (T3-T5). T0-T2 use delays of 5min-400ms for stealth. T4 caps at 10ms, T5 at 5ms. Higher delays avoid rate limiting and IDS detection but slow scans dramatically.
                     </div>
                 </div>
@@ -593,8 +762,15 @@
                         <span>0 (Serial)</span>
                         <span>300+</span>
                     </div>
-                    <div class="param-description">
+                    <div class="param-description" id="parallelismDesc">
                         Number of concurrent probes sent simultaneously. 0 = serial (one at a time, T0-T2 behavior). T3-T5 use dynamic parallelism (typically 100-300+). Higher values speed scans but may overwhelm targets or trigger rate limiting.
+                    </div>
+                </div>
+                </div>
+                
+                <div class="fine-grained-container-standalone" id="fineGrainedContainerStandalone">
+                    <div class="fine-grained-description" id="fineGrainedDescriptionStandalone">
+                        <!-- Content will be populated by JavaScript -->
                     </div>
                 </div>
             </div>
@@ -692,6 +868,11 @@
     </div>
 
     <script>
+        // Protocol toggle functionality
+        const tcpToggle = document.getElementById('tcpToggle');
+        const udpToggle = document.getElementById('udpToggle');
+        let currentProtocol = 'tcp'; // Track current protocol mode
+
         const timingData = {
             0: { // Paranoid
                 name: 'Paranoid',
@@ -873,6 +1054,223 @@
         let isCustomMode = false;
         let currentTemplate = 3;
 
+        // Function to update descriptions based on protocol
+        function updateProtocolDescriptions() {
+            const mainContentWrapper = document.querySelector('.main-content-wrapper');
+            const templateDesc = document.getElementById('templateDescription');
+            const fineGrainedDesc = document.getElementById('fineGrainedDescriptionMain');
+            const fineGrainedContainerStandalone = document.getElementById('fineGrainedContainerStandalone');
+            const fineGrainedDescStandalone = document.getElementById('fineGrainedDescriptionStandalone');
+            const maxScanDelayDesc = document.getElementById('maxScanDelayDesc');
+            const maxRetriesDesc = document.getElementById('maxRetriesDesc');
+            const parallelismDesc = document.getElementById('parallelismDesc');
+            
+            if (currentProtocol === 'udp') {
+                // Hide fine-grained description in left column for UDP
+                if (mainContentWrapper) {
+                    mainContentWrapper.classList.add('udp-mode');
+                }
+                
+                // Show standalone container for UDP
+                if (fineGrainedContainerStandalone) {
+                    fineGrainedContainerStandalone.classList.add('active');
+                }
+                
+                templateDesc.innerHTML = `
+                    <p>Nmap's timing templates (0-5) provide a simple way to control scan aggressiveness for UDP scanning. UDP presents unique challenges that make it fundamentally slower than TCP scanning.</p>
+                    
+                    <div class="icmp-definition">
+                        <strong>ICMP Rate Limiting (Critical for UDP):</strong> When a UDP port is closed, the target typically responds with an <strong>ICMP Port Unreachable</strong> message (Type 3, Code 3). However, Linux kernels (and many other systems) implement <strong>kernel rate limiting</strong> that restricts these ICMP error messages to approximately <strong>1 per second per host</strong>. This is the single greatest inhibitor of UDP scanning speed—a 65,536-port scan against a single rate-limited host would take over 18 hours. Understanding this limitation is essential for effective UDP scanning.
+                    </div>
+                    
+                    <p><strong>Template Quick Reference:</strong></p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Template</th>
+                                <th>Primary Goal</th>
+                                <th>UDP Delay</th>
+                                <th>Max Retries</th>
+                                <th>Use Case</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>T0 (Paranoid)</strong></td>
+                                <td>Maximum stealth</td>
+                                <td>5 min</td>
+                                <td>10</td>
+                                <td>IDS evasion, extremely slow</td>
+                            </tr>
+                            <tr>
+                                <td><strong>T1 (Sneaky)</strong></td>
+                                <td>High stealth</td>
+                                <td>15 sec</td>
+                                <td>10</td>
+                                <td>IDS evasion, very slow</td>
+                            </tr>
+                            <tr>
+                                <td><strong>T2 (Polite)</strong></td>
+                                <td>Reduce target load</td>
+                                <td>400ms</td>
+                                <td>10</td>
+                                <td>Bandwidth conservation, 10x slower</td>
+                            </tr>
+                            <tr>
+                                <td><strong>T3 (Normal)</strong></td>
+                                <td>Balance/Adaptive</td>
+                                <td>1 sec (adaptive)</td>
+                                <td>10</td>
+                                <td>Recommended for UDP due to rate limiting</td>
+                            </tr>
+                            <tr>
+                                <td><strong>T4 (Aggressive)</strong></td>
+                                <td>Speed (with limits)</td>
+                                <td>1 sec max</td>
+                                <td>6</td>
+                                <td>Faster, but still limited by ICMP rate</td>
+                            </tr>
+                            <tr>
+                                <td><strong>T5 (Insane)</strong></td>
+                                <td>Maximum speed</td>
+                                <td>1 sec max</td>
+                                <td>2</td>
+                                <td>Fastest, but 10-100x slower than TCP</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <p><strong>Detailed Template Breakdown:</strong> <strong>Paranoid (T0)</strong> and <strong>Sneaky (T1)</strong> serialize scans and add long delays (5 minutes to 15 seconds between probes) to evade IDS detection—ideal for stealth but extremely slow. <strong>Polite (T2)</strong> adds 400ms delays to reduce bandwidth and target load, but UDP scans can take 10x longer than TCP. <strong>Normal (T3)</strong> is the balanced default with adaptive timing—often recommended for UDP due to rate limiting. <strong>Aggressive (T4)</strong> caps UDP scan delays at 1 second (unlike TCP's 10ms) and reduces retries to 6, but UDP scans are still much slower than TCP due to ICMP rate limiting. <strong>Insane (T5)</strong> minimizes timeouts (300ms max RTT, 1 second UDP delay, only 2 retries) but UDP scans remain 10-100x slower than TCP. Templates can be combined with fine-grained controls; granular options override template defaults for specific parameters.</p>
+                `;
+                
+                fineGrainedDesc.innerHTML = `
+                    <strong>Fine-Grained Timing Controls for UDP:</strong> UDP scanning requires fundamentally different strategies than TCP. Each control parameter has unique implications for UDP:
+                    
+                    <ul>
+                        <li><strong>Hostgroup Size</strong> (<code>--min-hostgroup</code>, <code>--max-hostgroup</code>)
+                            <ul>
+                                <li><strong>Educational Value:</strong> This is the most critical parameter for UDP. Scanning N hosts simultaneously allows the scanner to receive up to N ICMP errors per second (one from each host), effectively bypassing the single-host 1/second kernel limit on the target side. For example, scanning 100 hosts allows receiving 100 ICMP errors/second instead of just 1/second from a single host—a 100x improvement in throughput.</li>
+                            </ul>
+                        </li>
+                        
+                        <li><strong>Parallelism</strong> (<code>--min-parallelism</code>, <code>--max-parallelism</code>)
+                            <ul>
+                                <li>Must be balanced carefully for UDP—too high overwhelms rate-limited targets, but UDP benefits from moderate parallelism (50-100). Unlike TCP which can handle 200-300+ concurrent probes, UDP requires more conservative parallelism to avoid triggering ICMP rate limits.</li>
+                            </ul>
+                        </li>
+                        
+                        <li><strong>Probe Timeouts</strong> (<code>--min-rtt-timeout</code>, <code>--max-rtt-timeout</code>, <code>--initial-rtt-timeout</code>)
+                            <ul>
+                                <li>Less effective for UDP than TCP due to the <strong>open|filtered ambiguity problem</strong>: An <strong>open</strong> UDP port often returns no reply (the service receives the packet but doesn't respond to invalid probes), just like a <strong>filtered</strong> port drops the probe. This ambiguity is what makes retries and longer timeouts essential for UDP—they help distinguish between truly open ports and filtered ones.</li>
+                            </ul>
+                        </li>
+                        
+                        <li><strong>Retransmissions</strong> (<code>--max-retries</code>)
+                            <ul>
+                                <li>Essential for UDP—more retries help distinguish open from filtered ports (addressing the open|filtered ambiguity), but dramatically increase scan time due to rate limiting. For UDP, consider higher retries (8-10) to improve accuracy, but expect much longer scan times.</li>
+                            </ul>
+                        </li>
+                        
+                        <li><strong>Scan Delays</strong> (<code>--scan-delay</code>, <code>--max-scan-delay</code>)
+                            <ul>
+                                <li>Critical for UDP—Linux kernels limit ICMP port unreachable messages to 1/second, making delays necessary to avoid overwhelming targets. Maximum UDP scan delay is typically 1 second (vs TCP's 5ms minimum). Even with T4/T5, UDP delays remain at 1 second due to rate limiting constraints.</li>
+                            </ul>
+                        </li>
+                        
+                        <li><strong>Rate Limiting</strong> (<code>--min-rate</code>, <code>--max-rate</code>)
+                            <ul>
+                                <li>Should be used cautiously with UDP to avoid triggering ICMP rate limits. Setting too high a rate will result in dropped probes and wasted time.</li>
+                            </ul>
+                        </li>
+                        
+                        <li><strong>Host Timeout</strong> (<code>--host-timeout</code>)
+                            <ul>
+                                <li>Highly recommended for UDP—use <code>15m</code> to skip slow rate-limited hosts. This allows scanning all responsive hosts quickly while working on slow hosts in the background.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <p>Nmap's adaptive algorithms help, but UDP scans will always be significantly slower than TCP due to protocol limitations and ICMP rate limiting.</p>
+                `;
+                
+                // Populate the standalone container with UDP fine-grained content
+                if (fineGrainedDescStandalone) {
+                    fineGrainedDescStandalone.innerHTML = fineGrainedDesc.innerHTML;
+                }
+                
+                if (maxScanDelayDesc) {
+                    maxScanDelayDesc.textContent = `Maximum delay between UDP probes. Critical for UDP scanning—Linux kernels limit ICMP port unreachable messages to 1/second, making delays necessary. Set to 0 for adaptive behavior (T3-T5). T0-T2 use delays of 5min-400ms for stealth. T4-T5 cap UDP delays at 1 second (unlike TCP's 10ms/5ms). Higher delays avoid overwhelming rate-limited targets but slow scans dramatically. UDP scans typically require longer delays than TCP.`;
+                }
+                
+                if (maxRetriesDesc) {
+                    maxRetriesDesc.textContent = `Maximum UDP probe retransmissions before giving up. More critical for UDP than TCP—helps distinguish open from filtered ports (open|filtered ambiguity). Higher values improve accuracy but dramatically increase scan time due to rate limiting. T0-T3 use 10 retries, T4 uses 6, T5 uses 2. For UDP, consider higher retries (8-10) to improve accuracy, but expect much longer scan times.`;
+                }
+                
+                if (parallelismDesc) {
+                    parallelismDesc.textContent = `Number of concurrent UDP probes sent simultaneously. Must be balanced carefully for UDP—too high overwhelms rate-limited targets (Linux limits ICMP errors to 1/second per host). 0 = serial (one at a time, T0-T2 behavior). T3-T5 use dynamic parallelism (typically 100-300+). For UDP, moderate parallelism (50-100) often works better than maximum to avoid triggering rate limits. Consider using --min-hostgroup instead to scan multiple hosts simultaneously.`;
+                }
+            } else {
+                // Hide standalone container and show fine-grained description in left column for TCP
+                if (mainContentWrapper) {
+                    mainContentWrapper.classList.remove('udp-mode');
+                }
+                
+                // Hide standalone container for TCP
+                if (fineGrainedContainerStandalone) {
+                    fineGrainedContainerStandalone.classList.remove('active');
+                }
+                
+                templateDesc.innerHTML = `Nmap's timing templates (0-5) provide a simple way to control scan aggressiveness without manually configuring dozens of parameters. Each template sets multiple timing values simultaneously: <strong>Paranoid (T0)</strong> and <strong>Sneaky (T1)</strong> serialize scans and add long delays (5 minutes to 15 seconds between probes) to evade IDS detection—ideal for stealth but extremely slow. <strong>Polite (T2)</strong> adds 400ms delays to reduce bandwidth and target load, but scans can take 10x longer than default. <strong>Normal (T3)</strong> is the balanced default with adaptive timing. <strong>Aggressive (T4)</strong> caps TCP scan delays at 10ms and reduces retries to 6, assuming fast reliable networks—recommended for modern infrastructure. <strong>Insane (T5)</strong> minimizes all timeouts (300ms max RTT, 5ms TCP delay, only 2 retries) for maximum speed, sacrificing some accuracy. Templates can be combined with fine-grained controls; granular options override template defaults for specific parameters.`;
+                
+                const tcpFineGrainedContent = `<strong>Fine-Grained Timing Controls:</strong> Beyond templates, Nmap offers precise control over scan behavior. <strong>Hostgroup size</strong> (--min-hostgroup, --max-hostgroup) determines how many hosts are scanned concurrently—larger groups are faster but delay results. <strong>Parallelism</strong> (--min-parallelism, --max-parallelism) controls concurrent probes per host—higher values speed scans but may overwhelm targets or trigger rate limiting. <strong>Probe timeouts</strong> (--min-rtt-timeout, --max-rtt-timeout, --initial-rtt-timeout) define how long Nmap waits for responses—lower values speed up scans on fast networks but cause false negatives on slow links. <strong>Retransmissions</strong> (--max-retries) determine persistence—more retries improve accuracy on unreliable networks but slow scans. <strong>Scan delays</strong> (--scan-delay, --max-scan-delay) insert pauses between probes to avoid rate limiting—TCP can use very low delays (5ms with T5). <strong>Rate limiting</strong> (--min-rate, --max-rate) directly controls packets per second. Nmap's adaptive algorithms (congestion control, RTT estimation, exponential backoff) dynamically adjust these parameters based on detected network conditions, packet loss, and latency—ensuring optimal balance between speed and accuracy without manual tuning.`;
+                
+                fineGrainedDesc.innerHTML = tcpFineGrainedContent;
+                
+                if (maxScanDelayDesc) {
+                    maxScanDelayDesc.textContent = `Maximum delay between probes. Set to 0 for adaptive behavior (T3-T5). T0-T2 use delays of 5min-400ms for stealth. T4 caps at 10ms, T5 at 5ms. Higher delays avoid rate limiting and IDS detection but slow scans dramatically.`;
+                }
+                
+                if (maxRetriesDesc) {
+                    maxRetriesDesc.textContent = `Maximum probe retransmissions before giving up. Higher values improve accuracy on unreliable networks but slow scans. T0-T3 use 10 retries, T4 uses 6, T5 uses 2. Set to 0 for fastest scans but lower accuracy.`;
+                }
+                
+                if (parallelismDesc) {
+                    parallelismDesc.textContent = `Number of concurrent probes sent simultaneously. 0 = serial (one at a time, T0-T2 behavior). T3-T5 use dynamic parallelism (typically 100-300+). Higher values speed scans but may overwhelm targets or trigger rate limiting.`;
+                }
+            }
+        }
+
+        // Protocol toggle handlers
+        tcpToggle.addEventListener('click', () => {
+            currentProtocol = 'tcp';
+            tcpToggle.classList.add('active');
+            udpToggle.classList.remove('active');
+            updateProtocolDescriptions();
+            updateCommandDisplay();
+        });
+
+        udpToggle.addEventListener('click', () => {
+            currentProtocol = 'udp';
+            udpToggle.classList.add('active');
+            tcpToggle.classList.remove('active');
+            updateProtocolDescriptions();
+            updateCommandDisplay();
+        });
+
+        // Function to get protocol scan flag
+        function getProtocolFlag() {
+            return currentProtocol === 'udp' ? '-sU' : '';
+        }
+
+        // Function to update command displays
+        function updateCommandDisplay() {
+            if (isCustomMode) {
+                updateFromParams();
+            } else {
+                updateMetrics(currentTemplate);
+            }
+        }
+
         function updateMetrics(value) {
             currentTemplate = value;
             isCustomMode = false;
@@ -955,7 +1353,9 @@
             `;
 
             // Update command
-            nmapCommand.textContent = `${data.command} target`;
+            const protocolFlag = getProtocolFlag();
+            const simpleCmd = protocolFlag ? `${data.command} ${protocolFlag} target` : `${data.command} target`;
+            nmapCommand.textContent = simpleCmd;
 
             // Update parameter sliders
             paramMaxRtt.value = data.maxRttTimeoutMs;
@@ -989,6 +1389,12 @@
 
         function buildGranularCommand(data) {
             let cmd = 'nmap';
+            
+            // Add protocol flag if UDP is selected
+            const protocolFlag = getProtocolFlag();
+            if (protocolFlag) {
+                cmd += ` ${protocolFlag}`;
+            }
             
             // Helper to clean value (remove parenthetical comments)
             const cleanValue = (value) => {
@@ -1263,6 +1669,12 @@
             // Build and update granular command
             let cmd = 'nmap';
             
+            // Add protocol flag if UDP is selected
+            const protocolFlag = getProtocolFlag();
+            if (protocolFlag) {
+                cmd += ` ${protocolFlag}`;
+            }
+            
             cmd += ` --max-rtt-timeout ${maxRtt}ms`;
             cmd += ` --min-rtt-timeout ${minRtt}ms`;
             cmd += ` --initial-rtt-timeout ${initialRtt}ms`;
@@ -1295,6 +1707,7 @@
 
         // Initialize with default value
         updateMetrics(3);
+        updateProtocolDescriptions();
     </script>
 </body>
 </html>
