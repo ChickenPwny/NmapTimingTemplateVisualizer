@@ -670,7 +670,81 @@
     <div class="main-container">
         <h1>Nmap Host Discovery Visualizer</h1>
         <p class="subtitle">Interactive visualization of Nmap host discovery techniques and options</p>
-        
+
+        <!-- Packet Flow Animation Section (full width) -->
+        <div class="animation-section">
+            <h2>Packet Flow Animation</h2>
+            <p style="margin-bottom: 20px; color: #666; font-size: 0.9em;">Visualize how different discovery probes interact with firewalls and reach target hosts.</p>
+            
+            <div class="animation-controls">
+                <button class="anim-button" onclick="animateProbe('PS', 443, 'SYN')">Simulate -PS443</button>
+                <button class="anim-button" onclick="animateProbe('PA', 80, 'ACK')">Simulate -PA80</button>
+                <button class="anim-button" onclick="animateProbe('PE', null, 'ICMP')">Simulate -PE</button>
+                <button class="anim-button" onclick="animateProbe('PU', 40125, 'UDP')">Simulate -PU</button>
+                <button class="anim-button" onclick="animateMultipleProbes()">Multiple Probes</button>
+                <button class="reset-button" onclick="resetAnimation()">Reset</button>
+            </div>
+
+            <div class="network-diagram" id="packetFlowDiagram">
+                <div class="network-node node-scanner">
+                    <div>📡</div>
+                    <div>Scanner</div>
+                </div>
+                <div class="network-node node-firewall" id="firewallNode">
+                    <div>🛡️</div>
+                    <div>Firewall</div>
+                </div>
+                <div class="network-node node-target">
+                    <div>🖥️</div>
+                    <div>Target</div>
+                </div>
+                <div class="firewall-status" id="firewallStatus"></div>
+                <div class="result-box" id="resultBox"></div>
+            </div>
+
+            <div class="animation-info">
+                <strong>How it works:</strong> Click a probe type to see how the packet travels. The firewall may allow it (green), block it (red), or send a spoofed RST (orange). If the packet reaches the target, you'll see the response and final result.
+            </div>
+        </div>
+
+        <!-- Traceroute Animation Section (full width) -->
+        <div class="animation-section" style="margin-top: 30px;">
+            <h2>Traceroute Animation</h2>
+            <p style="margin-bottom: 20px; color: #666; font-size: 0.9em;">Watch how traceroute discovers the network path by incrementing TTL values.</p>
+            
+            <div class="animation-controls">
+                <button class="anim-button" id="tracerouteButton" onclick="animateTraceroute()">Start Traceroute</button>
+                <button class="reset-button" onclick="resetTraceroute()">Reset</button>
+            </div>
+
+            <div class="traceroute-diagram" id="tracerouteDiagram">
+                <div class="network-node node-scanner" style="left: 30px; top: 50%; transform: translateY(-50%);">
+                    <div>📡</div>
+                    <div>Scanner</div>
+                </div>
+                <div class="network-node node-router" id="router1" style="left: 25%; top: 50%; transform: translate(-50%, -50%);">
+                    <div>🔀</div>
+                    <div>R1</div>
+                </div>
+                <div class="network-node node-router" id="router2" style="left: 45%; top: 50%; transform: translate(-50%, -50%);">
+                    <div>🔀</div>
+                    <div>R2</div>
+                </div>
+                <div class="network-node node-router" id="router3" style="left: 65%; top: 50%; transform: translate(-50%, -50%);">
+                    <div>🔀</div>
+                    <div>R3</div>
+                </div>
+                <div class="network-node node-target" style="right: 30px; top: 50%; transform: translateY(-50%);">
+                    <div>🖥️</div>
+                    <div>Target</div>
+                </div>
+            </div>
+
+            <div class="animation-info">
+                <strong>How it works:</strong> Traceroute starts with TTL=1. The first router decrements it to 0, drops the packet, and sends an ICMP Time Exceeded. This continues until the target is reached, revealing the complete network path.
+            </div>
+        </div>
+
         <div class="content-wrapper">
             <!-- LEFT PANEL: Basic Discovery Modes, UDP & SCTP, IP Protocol, Advanced Options -->
             <div class="discovery-options-panel">
@@ -950,81 +1024,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Packet Flow Animation Section (full width) -->
-        <div class="animation-section">
-            <h2>Packet Flow Animation</h2>
-            <p style="margin-bottom: 20px; color: #666; font-size: 0.9em;">Visualize how different discovery probes interact with firewalls and reach target hosts.</p>
-            
-            <div class="animation-controls">
-                <button class="anim-button" onclick="animateProbe('PS', 443, 'SYN')">Simulate -PS443</button>
-                <button class="anim-button" onclick="animateProbe('PA', 80, 'ACK')">Simulate -PA80</button>
-                <button class="anim-button" onclick="animateProbe('PE', null, 'ICMP')">Simulate -PE</button>
-                <button class="anim-button" onclick="animateProbe('PU', 40125, 'UDP')">Simulate -PU</button>
-                <button class="anim-button" onclick="animateMultipleProbes()">Multiple Probes</button>
-                <button class="reset-button" onclick="resetAnimation()">Reset</button>
-            </div>
-
-            <div class="network-diagram" id="packetFlowDiagram">
-                <div class="network-node node-scanner">
-                    <div>📡</div>
-                    <div>Scanner</div>
-                </div>
-                <div class="network-node node-firewall" id="firewallNode">
-                    <div>🛡️</div>
-                    <div>Firewall</div>
-                </div>
-                <div class="network-node node-target">
-                    <div>🖥️</div>
-                    <div>Target</div>
-                </div>
-                <div class="firewall-status" id="firewallStatus"></div>
-                <div class="result-box" id="resultBox"></div>
-            </div>
-
-            <div class="animation-info">
-                <strong>How it works:</strong> Click a probe type to see how the packet travels. The firewall may allow it (green), block it (red), or send a spoofed RST (orange). If the packet reaches the target, you'll see the response and final result.
-            </div>
-        </div>
-
-        <!-- Traceroute Animation Section (full width) -->
-        <div class="animation-section" style="margin-top: 30px;">
-            <h2>Traceroute Animation</h2>
-            <p style="margin-bottom: 20px; color: #666; font-size: 0.9em;">Watch how traceroute discovers the network path by incrementing TTL values.</p>
-            
-            <div class="animation-controls">
-                <button class="anim-button" id="tracerouteButton" onclick="animateTraceroute()">Start Traceroute</button>
-                <button class="reset-button" onclick="resetTraceroute()">Reset</button>
-            </div>
-
-            <div class="traceroute-diagram" id="tracerouteDiagram">
-                <div class="network-node node-scanner" style="left: 30px; top: 50%; transform: translateY(-50%);">
-                    <div>📡</div>
-                    <div>Scanner</div>
-                </div>
-                <div class="network-node node-router" id="router1" style="left: 25%; top: 50%; transform: translate(-50%, -50%);">
-                    <div>🔀</div>
-                    <div>R1</div>
-                </div>
-                <div class="network-node node-router" id="router2" style="left: 45%; top: 50%; transform: translate(-50%, -50%);">
-                    <div>🔀</div>
-                    <div>R2</div>
-                </div>
-                <div class="network-node node-router" id="router3" style="left: 65%; top: 50%; transform: translate(-50%, -50%);">
-                    <div>🔀</div>
-                    <div>R3</div>
-                </div>
-                <div class="network-node node-target" style="right: 30px; top: 50%; transform: translateY(-50%);">
-                    <div>🖥️</div>
-                    <div>Target</div>
-                </div>
-            </div>
-
-            <div class="animation-info">
-                <strong>How it works:</strong> Traceroute starts with TTL=1. The first router decrements it to 0, drops the packet, and sends an ICMP Time Exceeded. This continues until the target is reached, revealing the complete network path.
-            </div>
-        </div>
-    </div>
 
     <script>
         // State management
