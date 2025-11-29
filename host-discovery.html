@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nmap Host Discovery Visualizer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px;
+            color: #333;
+        }
+
+        .navigation-bar {
+            max-width: 2000px;
+            margin: 0 auto 20px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            user-select: none;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-item:hover {
+            background: #f0f0f0;
+            color: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .main-container {
+            max-width: 2000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 50px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 50px;
+            font-size: 1.1em;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 40px;
+            margin-bottom: 40px;
+            align-items: start;
+        }
+
+        @media (max-width: 1400px) {
+            .content-wrapper {
+                grid-template-columns: 1fr 1.2fr;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .discovery-options-panel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .discovery-options-panel h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .right-panel-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            position: sticky;
+            top: 20px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+
+        @media (max-width: 1200px) {
+            .right-panel-container {
+                position: static;
+                max-height: none;
+            }
+        }
+
+        .option-group {
+            margin-bottom: 30px;
+        }
+
+        .option-group h3 {
+            color: #555;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .option-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .option-item:hover {
+            border-left-color: #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .option-item.active {
+            border-left-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .option-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .option-label {
+            font-weight: 600;
+            color: #333;
+            font-size: 1em;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .option-description {
+            font-size: 0.85em;
+            color: #666;
+            line-height: 1.5;
+            margin-left: 32px;
+            margin-top: 8px;
+        }
+
+        .option-input {
+            margin-left: 32px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .option-input.active {
+            display: block;
+        }
+
+        .option-input input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            transition: border-color 0.3s;
+        }
+
+        .option-input input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .option-input label {
+            display: block;
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .command-panel, .visualization-panel, .option-group-panel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .command-panel h2, .visualization-panel h2, .option-group-panel h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .command-display {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            word-break: break-all;
+            border: 2px solid #444;
+        }
+
+        .command-display .target-placeholder {
+            color: #ffa500;
+        }
+
+        .copy-button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .copy-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .copy-button.copied {
+            background: #27ae60;
+        }
+
+        .info-panel {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .info-panel h3 {
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .info-panel p {
+            color: #856404;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        .probe-visualization {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .probe-item {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .probe-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+            flex-shrink: 0;
+        }
+
+        .probe-info {
+            flex: 1;
+        }
+
+        .probe-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .probe-details {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .probe-item.hidden {
+            display: none;
+        }
+
+        .default-probes-note {
+            background: #e7f3ff;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .default-probes-note strong {
+            color: #2980b9;
+        }
+
+        /* Animation Styles */
+        .animation-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .animation-section h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .animation-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .anim-button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .anim-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .anim-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .network-diagram {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: #fff;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .network-node {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.75em;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+
+        .node-scanner {
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .node-firewall {
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            width: 85px;
+        }
+
+        .node-target {
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+        }
+
+        .node-router {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            font-size: 0.7em;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+
+        .packet {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.7em;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            z-index: 10;
+            opacity: 0;
+        }
+
+        .packet.syn {
+            background: #3498db;
+        }
+
+        .packet.ack {
+            background: #9b59b6;
+        }
+
+        .packet.icmp {
+            background: #e67e22;
+        }
+
+        .packet.udp {
+            background: #1abc9c;
+        }
+
+        .packet.rst {
+            background: #e74c3c;
+        }
+
+        .packet.time-exceeded {
+            background: #f39c12;
+        }
+
+        .packet.port-unreachable {
+            background: #95a5a6;
+        }
+
+        .packet.animating {
+            opacity: 1;
+            transition: left 1s linear, top 1s linear, opacity 0.3s;
+        }
+
+        .firewall-status {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 20;
+        }
+
+        .firewall-status.show {
+            opacity: 1;
+        }
+
+        .firewall-status.allowed {
+            background: #27ae60;
+            color: white;
+        }
+
+        .firewall-status.blocked {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .firewall-status.spoofed {
+            background: #f39c12;
+            color: white;
+        }
+
+        .result-box {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1em;
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: 20;
+        }
+
+        .result-box.show {
+            opacity: 1;
+        }
+
+        .result-box.up {
+            background: #27ae60;
+            color: white;
+        }
+
+        .result-box.down {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .traceroute-diagram {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            background: #fff;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .hop-line {
+            position: absolute;
+            height: 3px;
+            background: #667eea;
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: 5;
+        }
+
+        .hop-line.active {
+            opacity: 0.6;
+        }
+
+        .hop-line.complete {
+            opacity: 1;
+            background: #27ae60;
+        }
+
+        .ttl-label {
+            position: absolute;
+            padding: 4px 8px;
+            background: #2d2d2d;
+            color: white;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 15;
+        }
+
+        .ttl-label.show {
+            opacity: 1;
+        }
+
+        .animation-info {
+            background: #e7f3ff;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .animation-info strong {
+            color: #2980b9;
+        }
+
+        .reset-button {
+            padding: 8px 16px;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .reset-button:hover {
+            background: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navigation-bar">
+        <a href="timing.html" class="nav-item">Timing</a>
+        <a href="host-discovery.html" class="nav-item active">Host Discovery</a>
+        <a href="scripting-and-automation.html" class="nav-item">Scripting and Automation</a>
+        <a href="evasion-and-firewall-bypassing.html" class="nav-item">Evasion and Firewall Bypassing</a>
+    </nav>
+
+    <div class="main-container">
+        <h1>Nmap Host Discovery Visualizer</h1>
+        <p class="subtitle">Interactive visualization of Nmap host discovery techniques and options</p>
+        
+        <div class="content-wrapper">
+            <!-- LEFT PANEL: Basic Discovery Modes, UDP & SCTP, IP Protocol, Advanced Options -->
+            <div class="discovery-options-panel">
+                <h2>Discovery Options</h2>
+                
+                <div class="option-group">
+                    <h3>Basic Discovery Modes</h3>
+                    
+                    <div class="option-item" id="option-sL">
+                        <div class="option-header">
+                            <input type="checkbox" class="option-checkbox" id="check-sL" data-option="sL">
+                            <label for="check-sL" class="option-label">-sL (List Scan)</label>
+                        </div>
+                        <div class="option-description">
+                            Lists each host without sending any packets. Performs reverse-DNS resolution by default.
+                        </div>
+                    </div>
+
+                    <div class="option-item" id="option-sn">
+                        <div class="option-header">
+                            <input type="checkbox" class="option-checkbox" id="check-sn" data-option="sn">
+                            <label for="check-sn" class="option-label">-sn (No Port Scan / Ping Scan)</label>
+                        </div>
+                        <div class="option-description">
+                            Performs host discovery only, no port scanning. Uses default probes: ICMP echo, TCP SYN to 443, TCP ACK to 80, ICMP timestamp.
+                        </div>
+                    </div>
+
+                    <div class="option-item" id="option-Pn">
+                        <div class="option-header">
+                            <input type="checkbox" class="option-checkbox" id="check-Pn" data-option="Pn">
+                            <label for="check-Pn" class="option-label">-Pn (No Ping / Skip Host Discovery)</label>
+                        </div>
+                        <div class="option-description">
+                            Skips host discovery entirely. Scans all specified IP addresses regardless of whether they appear to be up.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="option-group">
+                    <h3>UDP & SCTP Ping Options</h3>
+                    
+                    <div class="option-item" id="option-PU">
+                        <div class="option-header">
+                            <input type="checkbox" class="option-checkbox" id="check-PU" data-option="PU">
+                            <label for="check-PU" class="option-label">-PU (UDP Ping)</label>
+                        </div>
+                        <div class="option-description">
+                            Sends UDP packets. Elicits ICMP port unreachable from closed ports. Default port is 40125.
+                        </div>
+                        <div class="option-input" id="input-PU">
+                            <label>Port(s) (e.g., 53, 161, 40125):</label>
+                            <input type="text" id="ports-PU" placeholder="40125" value="40125">
+                        </div>
+                    </div>
+
+                    <div class="option-item" id="option-PY">
+                        <div class="option-header">
+                            <input type="checkbox" class="option-checkbox" id="check-PY" data-option="PY">
+                            <label for="check-PY" class="option-label">-PY (SCTP INIT Ping)</label>
+                        </div>
+                        <div class="option-description">
+                            Sends SCTP INIT chunks. Default port is 80. Requires root privileges.
+                        </div>
+                        <div class="option-input" id="input-PY">
+                            <label>Port(s) (e.g., 80, 5060):</label>
+                            <input type="text" id="ports-PY" placeholder="80" value="80">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="option-group">
+                    <h3>IP Protocol Ping</h3>
+                    
+                    <div class="option-item" id="option-PO">
+                        <div class="option-header">
+                            <input type="checkbox" class="option-checkbox" id="check-PO" data-option="PO">
+                            <label for="check-PO" class="option-label">-PO (IP Protocol Ping)</label>
+                        </div>
+                        <div class="option-description">
+                            Sends IP packets with specified protocol numbers. Default: ICMP (1), IGMP (2), IP-in-IP (4).
+                        </div>
+                        <div class="option-input" id="input-PO">
+                            <label>Protocol(s) (e.g., 1, 2, 4 or 1,6,17):</label>
+                            <input type="text" id="protocols-PO" placeholder="1,2,4" value="1,2,4">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="option-group">
+                    <h3>Advanced Options</h3>
+                    
+                    <div class="option-item" id="option-disable-arp">
+                        <div class="option-header">
+                            <input type="checkbox" class="option-checkbox" id="check-disable-arp" data-option="disable-arp">
+                            <label for="check-disable-arp" class="option-label">--disable-arp-ping</label>
+                        </div>
+                        <div class="option-description">
+                            Disables ARP/Neighbor Discovery for local ethernet hosts. Useful on networks using proxy ARP.
+                        </div>
+                    </div>
+
+                    <div class="option-item" id="option-ignore-rst">
+                        <div class="option-header">
+                            <input type="checkbox" class="option-checkbox" id="check-ignore-rst" data-option="ignore-rst">
+                            <label for="check-ignore-rst" class="option-label">--discovery-ignore-rst</label>
+                        </div>
+                        <div class="option-description">
+                            Ignores TCP RST replies during host discovery. Prevents false positives from firewalls spoofing RST packets.
+                        </div>
+                    </div>
+
+                    <div class="option-item" id="option-traceroute">
+                        <div class="option-header">
+                            <input type="checkbox" class="option-checkbox" id="check-traceroute" data-option="traceroute">
+                            <label for="check-traceroute" class="option-label">--traceroute</label>
+                        </div>
+                        <div class="option-description">
+                            Performs traceroute to each host after scanning. Uses dynamic timing and parallel execution.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL: Command, TCP Ping Options, ICMP Ping Options, Visualization -->
+            <div class="right-panel-container">
+                <!-- Generated Command Panel -->
+                <div class="command-panel">
+                    <h2>Generated Command</h2>
+                    <div class="command-display" id="commandDisplay">nmap <span class="target-placeholder">target</span></div>
+                    <button class="copy-button" id="copyButton">Copy Command</button>
+                    
+                    <div class="info-panel">
+                        <h3>About Host Discovery</h3>
+                        <p>
+                            Host discovery is the first step in network reconnaissance, reducing large IP ranges into a list of active hosts. 
+                            By default, Nmap sends an ICMP echo request, TCP SYN to port 443, TCP ACK to port 80, and an ICMP timestamp request. 
+                            You can combine multiple probe types to maximize chances of bypassing firewalls. ARP/Neighbor Discovery is done automatically 
+                            for local ethernet networks unless disabled.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- TCP Ping Options moved here -->
+                <div class="option-group-panel">
+                    <h2>TCP Ping Options</h2>
+                    
+                    <div class="option-item" id="option-PS">
+                        <div class="option-header">
+                            <input type="checkbox" class="option-checkbox" id="check-PS" data-option="PS">
+                            <label for="check-PS" class="option-label">-PS (TCP SYN Ping)</label>
+                        </div>
+                        <div class="option-description">
+                            Sends TCP SYN packets. Default port is 80. Can bypass firewalls that block ICMP.
+                        </div>
+                        <div class="option-input" id="input-PS">
+                            <label>Port(s) (e.g., 80, 443, 22-25,80,443):</label>
+                            <input type="text" id="ports-PS" placeholder="80" value="80">
+                        </div>
+                    </div>
+
+                    <div class="option-item" id="option-PA">
+                        <div class="option-header">
+                            <input type="checkbox" class="option-checkbox" id="check-PA" data-option="PA">
+                            <label for="check-PA" class="option-label">-PA (TCP ACK Ping)</label>
+                        </div>
+                        <div class="option-description">
+                            Sends TCP ACK packets. Useful for bypassing stateless firewalls that block SYN packets.
+                        </div>
+                        <div class="option-input" id="input-PA">
+                            <label>Port(s) (e.g., 80, 443, 22-25,80,443):</label>
+                            <input type="text" id="ports-PA" placeholder="80" value="80">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ICMP Ping Options moved here -->
+                <div class="option-group-panel">
+                    <h2>ICMP Ping Options</h2>
+                    
+                    <div class="option-item" id="option-PE">
+                        <div class="option-header">
+                            <input type="checkbox" class="option-checkbox" id="check-PE" data-option="PE">
+                            <label for="check-PE" class="option-label">-PE (ICMP Echo Request)</label>
+                        </div>
+                        <div class="option-description">
+                            Standard ICMP type 8 (echo request) ping. Many firewalls block this.
+                        </div>
+                    </div>
+
+                    <div class="option-item" id="option-PP">
+                        <div class="option-header">
+                            <input type="checkbox" class="option-checkbox" id="check-PP" data-option="PP">
+                            <label for="check-PP" class="option-label">-PP (ICMP Timestamp Request)</label>
+                        </div>
+                        <div class="option-description">
+                            ICMP timestamp request (code 13). Useful when echo requests are blocked.
+                        </div>
+                    </div>
+
+                    <div class="option-item" id="option-PM">
+                        <div class="option-header">
+                            <input type="checkbox" class="option-checkbox" id="check-PM" data-option="PM">
+                            <label for="check-PM" class="option-label">-PM (ICMP Address Mask Request)</label>
+                        </div>
+                        <div class="option-description">
+                            ICMP address mask request (code 17). Another alternative when echo requests are blocked.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Probes Visualization Panel -->
+                <div class="visualization-panel">
+                    <h2>Active Probes Visualization</h2>
+                    <div class="default-probes-note" id="defaultProbesNote">
+                        <strong>Default Probes:</strong> When no specific discovery options are selected, Nmap uses: ICMP echo request (-PE), 
+                        TCP SYN to port 443 (-PS443), TCP ACK to port 80 (-PA80), and ICMP timestamp request (-PP).
+                    </div>
+                    <div class="probe-visualization" id="probeVisualization">
+                        <div class="probe-item hidden" id="probe-PE">
+                            <div class="probe-icon">ICMP</div>
+                            <div class="probe-info">
+                                <div class="probe-name">ICMP Echo Request (-PE)</div>
+                                <div class="probe-details">Type 8 (echo request) - Standard ping packet</div>
+                            </div>
+                        </div>
+                        <div class="probe-item hidden" id="probe-PP">
+                            <div class="probe-icon">ICMP</div>
+                            <div class="probe-info">
+                                <div class="probe-name">ICMP Timestamp Request (-PP)</div>
+                                <div class="probe-details">Type 13 - Alternative when echo requests are blocked</div>
+                            </div>
+                        </div>
+                        <div class="probe-item hidden" id="probe-PM">
+                            <div class="probe-icon">ICMP</div>
+                            <div class="probe-info">
+                                <div class="probe-name">ICMP Address Mask Request (-PM)</div>
+                                <div class="probe-details">Type 17 - Another ICMP alternative</div>
+                            </div>
+                        </div>
+                        <div class="probe-item hidden" id="probe-PS">
+                            <div class="probe-icon">TCP</div>
+                            <div class="probe-info">
+                                <div class="probe-name">TCP SYN Ping (-PS)</div>
+                                <div class="probe-details">Port(s): <span id="probe-PS-ports">80</span> - SYN flag set</div>
+                            </div>
+                        </div>
+                        <div class="probe-item hidden" id="probe-PA">
+                            <div class="probe-icon">TCP</div>
+                            <div class="probe-info">
+                                <div class="probe-name">TCP ACK Ping (-PA)</div>
+                                <div class="probe-details">Port(s): <span id="probe-PA-ports">80</span> - ACK flag set</div>
+                            </div>
+                        </div>
+                        <div class="probe-item hidden" id="probe-PU">
+                            <div class="probe-icon">UDP</div>
+                            <div class="probe-info">
+                                <div class="probe-name">UDP Ping (-PU)</div>
+                                <div class="probe-details">Port(s): <span id="probe-PU-ports">40125</span> - Elicits ICMP port unreachable</div>
+                            </div>
+                        </div>
+                        <div class="probe-item hidden" id="probe-PY">
+                            <div class="probe-icon">SCTP</div>
+                            <div class="probe-info">
+                                <div class="probe-name">SCTP INIT Ping (-PY)</div>
+                                <div class="probe-details">Port(s): <span id="probe-PY-ports">80</span> - INIT chunk</div>
+                            </div>
+                        </div>
+                        <div class="probe-item hidden" id="probe-PO">
+                            <div class="probe-icon">IP</div>
+                            <div class="probe-info">
+                                <div class="probe-name">IP Protocol Ping (-PO)</div>
+                                <div class="probe-details">Protocol(s): <span id="probe-PO-protocols">1,2,4</span> - IP protocol numbers</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Packet Flow Animation Section (full width) -->
+        <div class="animation-section">
+            <h2>Packet Flow Animation</h2>
+            <p style="margin-bottom: 20px; color: #666; font-size: 0.9em;">Visualize how different discovery probes interact with firewalls and reach target hosts.</p>
+            
+            <div class="animation-controls">
+                <button class="anim-button" onclick="animateProbe('PS', 443, 'SYN')">Simulate -PS443</button>
+                <button class="anim-button" onclick="animateProbe('PA', 80, 'ACK')">Simulate -PA80</button>
+                <button class="anim-button" onclick="animateProbe('PE', null, 'ICMP')">Simulate -PE</button>
+                <button class="anim-button" onclick="animateProbe('PU', 40125, 'UDP')">Simulate -PU</button>
+                <button class="anim-button" onclick="animateMultipleProbes()">Multiple Probes</button>
+                <button class="reset-button" onclick="resetAnimation()">Reset</button>
+            </div>
+
+            <div class="network-diagram" id="packetFlowDiagram">
+                <div class="network-node node-scanner">
+                    <div>📡</div>
+                    <div>Scanner</div>
+                </div>
+                <div class="network-node node-firewall" id="firewallNode">
+                    <div>🛡️</div>
+                    <div>Firewall</div>
+                </div>
+                <div class="network-node node-target">
+                    <div>🖥️</div>
+                    <div>Target</div>
+                </div>
+                <div class="firewall-status" id="firewallStatus"></div>
+                <div class="result-box" id="resultBox"></div>
+            </div>
+
+            <div class="animation-info">
+                <strong>How it works:</strong> Click a probe type to see how the packet travels. The firewall may allow it (green), block it (red), or send a spoofed RST (orange). If the packet reaches the target, you'll see the response and final result.
+            </div>
+        </div>
+
+        <!-- Traceroute Animation Section (full width) -->
+        <div class="animation-section" style="margin-top: 30px;">
+            <h2>Traceroute Animation</h2>
+            <p style="margin-bottom: 20px; color: #666; font-size: 0.9em;">Watch how traceroute discovers the network path by incrementing TTL values.</p>
+            
+            <div class="animation-controls">
+                <button class="anim-button" id="tracerouteButton" onclick="animateTraceroute()">Start Traceroute</button>
+                <button class="reset-button" onclick="resetTraceroute()">Reset</button>
+            </div>
+
+            <div class="traceroute-diagram" id="tracerouteDiagram">
+                <div class="network-node node-scanner" style="left: 30px; top: 50%; transform: translateY(-50%);">
+                    <div>📡</div>
+                    <div>Scanner</div>
+                </div>
+                <div class="network-node node-router" id="router1" style="left: 25%; top: 50%; transform: translate(-50%, -50%);">
+                    <div>🔀</div>
+                    <div>R1</div>
+                </div>
+                <div class="network-node node-router" id="router2" style="left: 45%; top: 50%; transform: translate(-50%, -50%);">
+                    <div>🔀</div>
+                    <div>R2</div>
+                </div>
+                <div class="network-node node-router" id="router3" style="left: 65%; top: 50%; transform: translate(-50%, -50%);">
+                    <div>🔀</div>
+                    <div>R3</div>
+                </div>
+                <div class="network-node node-target" style="right: 30px; top: 50%; transform: translateY(-50%);">
+                    <div>🖥️</div>
+                    <div>Target</div>
+                </div>
+            </div>
+
+            <div class="animation-info">
+                <strong>How it works:</strong> Traceroute starts with TTL=1. The first router decrements it to 0, drops the packet, and sends an ICMP Time Exceeded. This continues until the target is reached, revealing the complete network path.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        const state = {
+            options: {},
+            defaultProbes: true
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEventListeners();
+            updateCommand();
+        });
+
+        function initializeEventListeners() {
+            // Checkbox listeners
+            document.querySelectorAll('.option-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const option = this.dataset.option;
+                    const optionItem = this.closest('.option-item');
+                    
+                    if (this.checked) {
+                        state.options[option] = true;
+                        optionItem.classList.add('active');
+                        
+                        // Show input if exists
+                        const inputDiv = optionItem.querySelector('.option-input');
+                        if (inputDiv) {
+                            inputDiv.classList.add('active');
+                        }
+                    } else {
+                        delete state.options[option];
+                        optionItem.classList.remove('active');
+                        
+                        // Hide input
+                        const inputDiv = optionItem.querySelector('.option-input');
+                        if (inputDiv) {
+                            inputDiv.classList.remove('active');
+                        }
+                    }
+                    
+                    updateCommand();
+                    updateVisualization();
+                });
+            });
+
+            // Input listeners for ports/protocols
+            document.querySelectorAll('.option-input input').forEach(input => {
+                input.addEventListener('input', function() {
+                    updateCommand();
+                    updateVisualization();
+                });
+            });
+
+            // Copy button
+            document.getElementById('copyButton').addEventListener('click', function() {
+                const command = document.getElementById('commandDisplay').textContent;
+                navigator.clipboard.writeText(command).then(() => {
+                    const button = this;
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.classList.add('copied');
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.classList.remove('copied');
+                    }, 2000);
+                });
+            });
+        }
+
+        function updateCommand() {
+            const parts = ['nmap'];
+            
+            // Check for mutually exclusive options
+            if (state.options.sL) {
+                parts.push('-sL');
+                return setCommand(parts);
+            }
+            
+            if (state.options.sn) {
+                parts.push('-sn');
+            }
+            
+            if (state.options.Pn) {
+                parts.push('-Pn');
+            }
+            
+            // TCP options
+            if (state.options.PS) {
+                const ports = document.getElementById('ports-PS').value.trim();
+                if (ports && ports !== '80') {
+                    parts.push(`-PS${ports}`);
+                } else {
+                    parts.push('-PS');
+                }
+            }
+            
+            if (state.options.PA) {
+                const ports = document.getElementById('ports-PA').value.trim();
+                if (ports && ports !== '80') {
+                    parts.push(`-PA${ports}`);
+                } else {
+                    parts.push('-PA');
+                }
+            }
+            
+            // UDP & SCTP
+            if (state.options.PU) {
+                const ports = document.getElementById('ports-PU').value.trim();
+                if (ports && ports !== '40125') {
+                    parts.push(`-PU${ports}`);
+                } else {
+                    parts.push('-PU');
+                }
+            }
+            
+            if (state.options.PY) {
+                const ports = document.getElementById('ports-PY').value.trim();
+                if (ports && ports !== '80') {
+                    parts.push(`-PY${ports}`);
+                } else {
+                    parts.push('-PY');
+                }
+            }
+            
+            // ICMP options
+            if (state.options.PE) {
+                parts.push('-PE');
+            }
+            
+            if (state.options.PP) {
+                parts.push('-PP');
+            }
+            
+            if (state.options.PM) {
+                parts.push('-PM');
+            }
+            
+            // IP Protocol
+            if (state.options.PO) {
+                const protocols = document.getElementById('protocols-PO').value.trim();
+                if (protocols && protocols !== '1,2,4') {
+                    parts.push(`-PO${protocols}`);
+                } else {
+                    parts.push('-PO');
+                }
+            }
+            
+            // Advanced options
+            if (state.options['disable-arp']) {
+                parts.push('--disable-arp-ping');
+            }
+            
+            if (state.options['ignore-rst']) {
+                parts.push('--discovery-ignore-rst');
+            }
+            
+            if (state.options.traceroute) {
+                parts.push('--traceroute');
+            }
+            
+            // Add target placeholder
+            parts.push('<span class="target-placeholder">target</span>');
+            
+            setCommand(parts);
+        }
+
+        function setCommand(parts) {
+            const commandDisplay = document.getElementById('commandDisplay');
+            commandDisplay.innerHTML = parts.join(' ');
+        }
+
+        function updateVisualization() {
+            // Check if any specific probes are selected
+            const hasSpecificProbes = state.options.PE || state.options.PP || state.options.PM || 
+                                     state.options.PS || state.options.PA || state.options.PU || 
+                                     state.options.PY || state.options.PO;
+            
+            const defaultNote = document.getElementById('defaultProbesNote');
+            
+            // Show/hide default note
+            if (hasSpecificProbes || state.options.sL || state.options.Pn) {
+                defaultNote.style.display = 'none';
+                state.defaultProbes = false;
+            } else {
+                defaultNote.style.display = 'block';
+                state.defaultProbes = true;
+            }
+            
+            // Show/hide probe visualizations
+            const probes = {
+                'PE': state.options.PE,
+                'PP': state.options.PP,
+                'PM': state.options.PM,
+                'PS': state.options.PS,
+                'PA': state.options.PA,
+                'PU': state.options.PU,
+                'PY': state.options.PY,
+                'PO': state.options.PO
+            };
+            
+            // Also show default probes if none selected and not using -sL or -Pn
+            if (!hasSpecificProbes && !state.options.sL && !state.options.Pn && !state.options.sn) {
+                probes.PE = true;
+                probes.PS = true;
+                probes.PA = true;
+                probes.PP = true;
+            }
+            
+            Object.keys(probes).forEach(probe => {
+                const element = document.getElementById(`probe-${probe}`);
+                if (probes[probe]) {
+                    element.classList.remove('hidden');
+                    
+                    // Update port/protocol info
+                    if (probe === 'PS') {
+                        const ports = document.getElementById('ports-PS').value.trim() || '80';
+                        document.getElementById('probe-PS-ports').textContent = ports;
+                    } else if (probe === 'PA') {
+                        const ports = document.getElementById('ports-PA').value.trim() || '80';
+                        document.getElementById('probe-PA-ports').textContent = ports;
+                    } else if (probe === 'PU') {
+                        const ports = document.getElementById('ports-PU').value.trim() || '40125';
+                        document.getElementById('probe-PU-ports').textContent = ports;
+                    } else if (probe === 'PY') {
+                        const ports = document.getElementById('ports-PY').value.trim() || '80';
+                        document.getElementById('probe-PY-ports').textContent = ports;
+                    } else if (probe === 'PO') {
+                        const protocols = document.getElementById('protocols-PO').value.trim() || '1,2,4';
+                        document.getElementById('probe-PO-protocols').textContent = protocols;
+                    }
+                } else {
+                    element.classList.add('hidden');
+                }
+            });
+        }
+
+        // Navigation highlighting
+        document.querySelectorAll('.nav-item').forEach(item => {
+            if (item.href === window.location.href || item.href.endsWith('host-discovery.html')) {
+                item.classList.add('active');
+            }
+        });
+
+        // ========== ANIMATION FUNCTIONS ==========
+
+        let animationInProgress = false;
+
+        function resetAnimation() {
+            const diagram = document.getElementById('packetFlowDiagram');
+            const packets = diagram.querySelectorAll('.packet');
+            packets.forEach(p => p.remove());
+            
+            const status = document.getElementById('firewallStatus');
+            status.classList.remove('show', 'allowed', 'blocked', 'spoofed');
+            status.textContent = '';
+            
+            const result = document.getElementById('resultBox');
+            result.classList.remove('show', 'up', 'down');
+            result.textContent = '';
+            
+            animationInProgress = false;
+            enableAnimationButtons();
+        }
+
+        function enableAnimationButtons() {
+            document.querySelectorAll('.anim-button').forEach(btn => {
+                btn.disabled = false;
+            });
+        }
+
+        function disableAnimationButtons() {
+            document.querySelectorAll('.anim-button').forEach(btn => {
+                btn.disabled = true;
+            });
+        }
+
+        function animateProbe(type, port, label) {
+            if (animationInProgress) return;
+            animationInProgress = true;
+            disableAnimationButtons();
+            resetAnimation();
+
+            const diagram = document.getElementById('packetFlowDiagram');
+            const scanner = diagram.querySelector('.node-scanner');
+            const firewall = diagram.querySelector('.node-firewall');
+            const target = diagram.querySelector('.node-target');
+            
+            const scannerRect = scanner.getBoundingClientRect();
+            const diagramRect = diagram.getBoundingClientRect();
+            const firewallRect = firewall.getBoundingClientRect();
+            const targetRect = target.getBoundingClientRect();
+            
+            const startX = scannerRect.left - diagramRect.left + scannerRect.width / 2;
+            const startY = scannerRect.top - diagramRect.top + scannerRect.height / 2;
+            const firewallX = firewallRect.left - diagramRect.left + firewallRect.width / 2;
+            const firewallY = firewallRect.top - diagramRect.top + firewallRect.height / 2;
+            const targetX = targetRect.left - diagramRect.left + targetRect.width / 2;
+            const targetY = targetRect.top - diagramRect.top + targetRect.height / 2;
+
+            // Create packet
+            const packet = document.createElement('div');
+            packet.className = `packet ${type.toLowerCase()}`;
+            packet.textContent = label;
+            packet.style.left = startX + 'px';
+            packet.style.top = startY + 'px';
+            diagram.appendChild(packet);
+
+            // Animate to firewall
+            setTimeout(() => {
+                packet.classList.add('animating');
+                packet.style.left = firewallX + 'px';
+                packet.style.top = firewallY + 'px';
+            }, 100);
+
+            // Firewall decision (after 1 second)
+            setTimeout(() => {
+                const firewallStatus = document.getElementById('firewallStatus');
+                const firewallDecision = getFirewallDecision(type, port);
+                
+                if (firewallDecision === 'blocked') {
+                    firewallStatus.textContent = 'BLOCKED';
+                    firewallStatus.className = 'firewall-status blocked show';
+                    packet.style.opacity = '0';
+                    
+                    // Show spoofed RST if applicable
+                    if (type === 'PS' || type === 'PA') {
+                        setTimeout(() => {
+                            const spoofedRst = document.createElement('div');
+                            spoofedRst.className = 'packet rst';
+                            spoofedRst.textContent = 'RST';
+                            spoofedRst.style.left = firewallX + 'px';
+                            spoofedRst.style.top = firewallY + 'px';
+                            diagram.appendChild(spoofedRst);
+                            
+                            setTimeout(() => {
+                                spoofedRst.classList.add('animating');
+                                spoofedRst.style.left = startX + 'px';
+                                spoofedRst.style.top = startY + 'px';
+                                
+                                setTimeout(() => {
+                                    const result = document.getElementById('resultBox');
+                                    result.textContent = 'Host Status: UNKNOWN (Firewall blocking)';
+                                    result.className = 'result-box down show';
+                                    animationInProgress = false;
+                                    enableAnimationButtons();
+                                }, 1000);
+                            }, 100);
+                        }, 500);
+                    } else {
+                        setTimeout(() => {
+                            const result = document.getElementById('resultBox');
+                            result.textContent = 'Host Status: UNKNOWN (Firewall blocking)';
+                            result.className = 'result-box down show';
+                            animationInProgress = false;
+                            enableAnimationButtons();
+                        }, 500);
+                    }
+                } else if (firewallDecision === 'spoofed') {
+                    firewallStatus.textContent = 'SPOOFED RST';
+                    firewallStatus.className = 'firewall-status spoofed show';
+                    
+                    // Show spoofed RST returning
+                    setTimeout(() => {
+                        const spoofedRst = document.createElement('div');
+                        spoofedRst.className = 'packet rst';
+                        spoofedRst.textContent = 'RST';
+                        spoofedRst.style.left = firewallX + 'px';
+                        spoofedRst.style.top = firewallY + 'px';
+                        diagram.appendChild(spoofedRst);
+                        
+                        setTimeout(() => {
+                            spoofedRst.classList.add('animating');
+                            spoofedRst.style.left = startX + 'px';
+                            spoofedRst.style.top = startY + 'px';
+                            
+                            setTimeout(() => {
+                                const result = document.getElementById('resultBox');
+                                result.textContent = 'Host Status: UNKNOWN (Spoofed RST detected)';
+                                result.className = 'result-box down show';
+                                animationInProgress = false;
+                                enableAnimationButtons();
+                            }, 1000);
+                        }, 100);
+                    }, 500);
+                } else {
+                    // Allowed - continue to target
+                    firewallStatus.textContent = 'ALLOWED';
+                    firewallStatus.className = 'firewall-status allowed show';
+                    
+                    setTimeout(() => {
+                        packet.style.left = targetX + 'px';
+                        packet.style.top = targetY + 'px';
+                        
+                        // Target response
+                        setTimeout(() => {
+                            const response = document.createElement('div');
+                            let responseType = 'rst';
+                            let responseLabel = 'RST';
+                            
+                            if (type === 'PU') {
+                                responseType = 'port-unreachable';
+                                responseLabel = 'ICMP';
+                            } else if (type === 'PE' || type === 'PP' || type === 'PM') {
+                                responseType = 'icmp';
+                                responseLabel = 'ECHO';
+                            }
+                            
+                            response.className = `packet ${responseType}`;
+                            response.textContent = responseLabel;
+                            response.style.left = targetX + 'px';
+                            response.style.top = targetY + 'px';
+                            diagram.appendChild(response);
+                            
+                            setTimeout(() => {
+                                response.classList.add('animating');
+                                response.style.left = startX + 'px';
+                                response.style.top = startY + 'px';
+                                
+                                setTimeout(() => {
+                                    const result = document.getElementById('resultBox');
+                                    result.textContent = 'Host is UP ✓';
+                                    result.className = 'result-box up show';
+                                    animationInProgress = false;
+                                    enableAnimationButtons();
+                                }, 1000);
+                            }, 100);
+                        }, 500);
+                    }, 100);
+                }
+            }, 1100);
+        }
+
+        function getFirewallDecision(type, port) {
+            // Simulate different firewall behaviors
+            if (type === 'PS' && port === 443) {
+                return Math.random() > 0.3 ? 'blocked' : 'allowed'; // 70% blocked
+            } else if (type === 'PA' && port === 80) {
+                return Math.random() > 0.2 ? 'allowed' : 'spoofed'; // 80% allowed, 20% spoofed
+            } else if (type === 'PU') {
+                return 'allowed'; // UDP often passes
+            } else if (type === 'PE') {
+                return Math.random() > 0.4 ? 'blocked' : 'allowed'; // 60% blocked
+            }
+            return 'allowed';
+        }
+
+        function animateMultipleProbes() {
+            if (animationInProgress) return;
+            animationInProgress = true;
+            disableAnimationButtons();
+            resetAnimation();
+
+            const diagram = document.getElementById('packetFlowDiagram');
+            const result = document.getElementById('resultBox');
+            
+            const probes = [
+                { type: 'PS', port: 443, label: 'SYN', delay: 0 },
+                { type: 'PA', port: 80, label: 'ACK', delay: 1500 },
+                { type: 'PU', port: 40125, label: 'UDP', delay: 3000 }
+            ];
+
+            let successProbe = null;
+            let probeIndex = 0;
+
+            function tryNextProbe() {
+                if (probeIndex >= probes.length) {
+                    if (!successProbe) {
+                        result.textContent = 'All probes failed - Host may be DOWN';
+                        result.className = 'result-box down show';
+                    }
+                    animationInProgress = false;
+                    enableAnimationButtons();
+                    return;
+                }
+
+                const probe = probes[probeIndex];
+                probeIndex++;
+
+                const firewallDecision = getFirewallDecision(probe.type, probe.port);
+                
+                if (firewallDecision === 'allowed' && !successProbe) {
+                    successProbe = probe;
+                    result.textContent = `Host is UP ✓ (via ${probe.label} probe)`;
+                    result.className = 'result-box up show';
+                    animationInProgress = false;
+                    enableAnimationButtons();
+                } else if (probeIndex < probes.length) {
+                    setTimeout(tryNextProbe, 1500);
+                } else {
+                    if (!successProbe) {
+                        result.textContent = 'All probes failed - Host may be DOWN';
+                        result.className = 'result-box down show';
+                    }
+                    animationInProgress = false;
+                    enableAnimationButtons();
+                }
+            }
+
+            // Show each probe attempt
+            probes.forEach((probe, index) => {
+                setTimeout(() => {
+                    const scanner = diagram.querySelector('.node-scanner');
+                    const firewall = diagram.querySelector('.node-firewall');
+                    const firewallStatus = document.getElementById('firewallStatus');
+                    
+                    const scannerRect = scanner.getBoundingClientRect();
+                    const diagramRect = diagram.getBoundingClientRect();
+                    const firewallRect = firewall.getBoundingClientRect();
+                    
+                    const startX = scannerRect.left - diagramRect.left + scannerRect.width / 2;
+                    const startY = scannerRect.top - diagramRect.top + scannerRect.height / 2;
+                    const firewallX = firewallRect.left - diagramRect.left + firewallRect.width / 2;
+                    const firewallY = firewallRect.top - diagramRect.top + firewallRect.height / 2;
+
+                    const packet = document.createElement('div');
+                    packet.className = `packet ${probe.type.toLowerCase()}`;
+                    packet.textContent = probe.label;
+                    packet.style.left = startX + 'px';
+                    packet.style.top = startY + 'px';
+                    diagram.appendChild(packet);
+
+                    setTimeout(() => {
+                        packet.classList.add('animating');
+                        packet.style.left = firewallX + 'px';
+                        packet.style.top = firewallY + 'px';
+                        
+                        setTimeout(() => {
+                            const decision = getFirewallDecision(probe.type, probe.port);
+                            if (decision === 'blocked') {
+                                firewallStatus.textContent = `BLOCKED (${probe.label})`;
+                                firewallStatus.className = 'firewall-status blocked show';
+                                packet.style.opacity = '0';
+                            } else if (decision === 'spoofed') {
+                                firewallStatus.textContent = `SPOOFED (${probe.label})`;
+                                firewallStatus.className = 'firewall-status spoofed show';
+                                packet.style.opacity = '0';
+                            } else {
+                                firewallStatus.textContent = `ALLOWED (${probe.label})`;
+                                firewallStatus.className = 'firewall-status allowed show';
+                                if (!successProbe) {
+                                    successProbe = probe;
+                                    result.textContent = `Host is UP ✓ (via ${probe.label} probe)`;
+                                    result.className = 'result-box up show';
+                                    animationInProgress = false;
+                                    enableAnimationButtons();
+                                }
+                            }
+                        }, 1100);
+                    }, 100);
+                }, probe.delay);
+            });
+
+            // Fallback timeout
+            setTimeout(() => {
+                if (animationInProgress) {
+                    animationInProgress = false;
+                    enableAnimationButtons();
+                }
+            }, 6000);
+        }
+
+        // Traceroute Animation
+        let tracerouteInProgress = false;
+
+        function resetTraceroute() {
+            const diagram = document.getElementById('tracerouteDiagram');
+            const packets = diagram.querySelectorAll('.packet');
+            packets.forEach(p => p.remove());
+            
+            const lines = diagram.querySelectorAll('.hop-line');
+            lines.forEach(l => l.remove());
+            
+            const labels = diagram.querySelectorAll('.ttl-label');
+            labels.forEach(l => l.remove());
+            
+            const routers = diagram.querySelectorAll('.node-router');
+            routers.forEach(r => {
+                r.style.opacity = '0.5';
+                r.style.transform = 'translate(-50%, -50%)';
+            });
+            
+            const target = diagram.querySelector('.node-target');
+            target.style.opacity = '1';
+            target.style.transform = 'translateY(-50%)';
+            
+            tracerouteInProgress = false;
+            const btn = document.getElementById('tracerouteButton');
+            if (btn) btn.disabled = false;
+        }
+
+        function animateTraceroute() {
+            if (tracerouteInProgress) return;
+            tracerouteInProgress = true;
+            const btn = document.getElementById('tracerouteButton');
+            if (btn) btn.disabled = true;
+
+            const diagram = document.getElementById('tracerouteDiagram');
+            const scanner = diagram.querySelector('.node-scanner');
+            const routers = [
+                diagram.querySelector('#router1'),
+                diagram.querySelector('#router2'),
+                diagram.querySelector('#router3')
+            ];
+            const target = diagram.querySelector('.node-target');
+            
+            const scannerRect = scanner.getBoundingClientRect();
+            const diagramRect = diagram.getBoundingClientRect();
+            
+            const positions = [
+                { x: scannerRect.left - diagramRect.left + scannerRect.width / 2, y: scannerRect.top - diagramRect.top + scannerRect.height / 2 },
+                { x: routers[0].getBoundingClientRect().left - diagramRect.left + routers[0].offsetWidth / 2, y: routers[0].getBoundingClientRect().top - diagramRect.top + routers[0].offsetHeight / 2 },
+                { x: routers[1].getBoundingClientRect().left - diagramRect.left + routers[1].offsetWidth / 2, y: routers[1].getBoundingClientRect().top - diagramRect.top + routers[1].offsetHeight / 2 },
+                { x: routers[2].getBoundingClientRect().left - diagramRect.left + routers[2].offsetWidth / 2, y: routers[2].getBoundingClientRect().top - diagramRect.top + routers[2].offsetHeight / 2 },
+                { x: target.getBoundingClientRect().left - diagramRect.left + target.offsetWidth / 2, y: target.getBoundingClientRect().top - diagramRect.top + target.offsetHeight / 2 }
+            ];
+
+            function sendProbe(ttl, targetIndex) {
+                if (targetIndex > 4) {
+                    tracerouteInProgress = false;
+                    const btn = document.getElementById('tracerouteButton');
+                    if (btn) btn.disabled = false;
+                    return;
+                }
+
+                const startX = positions[0].x;
+                const startY = positions[0].y;
+                const endX = positions[targetIndex].x;
+                const endY = positions[targetIndex].y;
+
+                // Create packet
+                const packet = document.createElement('div');
+                packet.className = 'packet icmp';
+                packet.textContent = `TTL=${ttl}`;
+                packet.style.left = startX + 'px';
+                packet.style.top = startY + 'px';
+                diagram.appendChild(packet);
+
+                // Create TTL label
+                const ttlLabel = document.createElement('div');
+                ttlLabel.className = 'ttl-label';
+                ttlLabel.textContent = `TTL=${ttl}`;
+                ttlLabel.style.left = (startX + 30) + 'px';
+                ttlLabel.style.top = (startY - 20) + 'px';
+                diagram.appendChild(ttlLabel);
+                setTimeout(() => ttlLabel.classList.add('show'), 100);
+
+                // Animate packet
+                setTimeout(() => {
+                    packet.classList.add('animating');
+                    packet.style.left = endX + 'px';
+                    packet.style.top = endY + 'px';
+                }, 100);
+
+                // Response
+                setTimeout(() => {
+                    if (targetIndex < 4) {
+                        // Router response (Time Exceeded)
+                        const response = document.createElement('div');
+                        response.className = 'packet time-exceeded';
+                        response.textContent = 'ICMP';
+                        response.style.left = endX + 'px';
+                        response.style.top = endY + 'px';
+                        diagram.appendChild(response);
+
+                        // Highlight router
+                        routers[targetIndex - 1].style.opacity = '1';
+                        routers[targetIndex - 1].style.transform = 'translate(-50%, -50%) scale(1.1)';
+                        routers[targetIndex - 1].style.transition = 'all 0.3s';
+
+                        // Draw line
+                        const line = document.createElement('div');
+                        line.className = 'hop-line active';
+                        line.style.left = startX + 'px';
+                        line.style.top = startY + 'px';
+                        line.style.width = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)) + 'px';
+                        line.style.transformOrigin = '0 0';
+                        const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+                        line.style.transform = `rotate(${angle}deg)`;
+                        diagram.appendChild(line);
+
+                        setTimeout(() => {
+                            response.classList.add('animating');
+                            response.style.left = startX + 'px';
+                            response.style.top = startY + 'px';
+                            
+                            setTimeout(() => {
+                                packet.remove();
+                                response.remove();
+                                ttlLabel.remove();
+                                line.classList.add('complete');
+                                sendProbe(ttl + 1, targetIndex + 1);
+                            }, 1000);
+                        }, 100);
+                    } else {
+                        // Target reached
+                        const response = document.createElement('div');
+                        response.className = 'packet port-unreachable';
+                        response.textContent = 'PORT';
+                        response.style.left = endX + 'px';
+                        response.style.top = endY + 'px';
+                        diagram.appendChild(response);
+
+                        // Draw final line
+                        const line = document.createElement('div');
+                        line.className = 'hop-line complete';
+                        line.style.left = startX + 'px';
+                        line.style.top = startY + 'px';
+                        line.style.width = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)) + 'px';
+                        line.style.transformOrigin = '0 0';
+                        const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+                        line.style.transform = `rotate(${angle}deg)`;
+                        diagram.appendChild(line);
+
+                        target.style.opacity = '1';
+                        target.style.transform = 'translateY(-50%) scale(1.1)';
+                        target.style.transition = 'all 0.3s';
+
+                        setTimeout(() => {
+                            response.classList.add('animating');
+                            response.style.left = startX + 'px';
+                            response.style.top = startY + 'px';
+                            
+                            setTimeout(() => {
+                                packet.remove();
+                                response.remove();
+                                ttlLabel.remove();
+                                tracerouteInProgress = false;
+                                const btn = document.getElementById('tracerouteButton');
+                                if (btn) btn.disabled = false;
+                            }, 1000);
+                        }, 100);
+                    }
+                }, 1100);
+            }
+
+            sendProbe(1, 1);
+        }
+    </script>
+</body>
+</html>

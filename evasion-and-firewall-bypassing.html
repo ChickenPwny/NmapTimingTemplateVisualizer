@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nmap Evasion and Firewall Bypassing Visualizer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px;
+            color: #333;
+        }
+
+        .navigation-bar {
+            max-width: 2000px;
+            margin: 0 auto 20px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            user-select: none;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-item:hover {
+            background: #f0f0f0;
+            color: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .main-container {
+            max-width: 2000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 50px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 50px;
+            font-size: 1.1em;
+        }
+
+        .content-section {
+            margin-top: 40px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navigation-bar">
+        <a href="timing.html" class="nav-item">Timing</a>
+        <a href="host-discovery.html" class="nav-item">Host Discovery</a>
+        <a href="scripting-and-automation.html" class="nav-item">Scripting and Automation</a>
+        <a href="evasion-and-firewall-bypassing.html" class="nav-item active">Evasion and Firewall Bypassing</a>
+    </nav>
+
+    <div class="main-container">
+        <h1>Nmap Evasion and Firewall Bypassing</h1>
+        <p class="subtitle">Interactive visualization of Nmap evasion techniques and firewall bypassing methods</p>
+        
+        <div class="content-section">
+            <h2>Evasion and Firewall Bypassing Overview</h2>
+            <p>Content for Evasion and Firewall Bypassing will go here...</p>
+        </div>
+    </div>
+
+    <script>
+        // Navigation highlighting
+        document.querySelectorAll('.nav-item').forEach(item => {
+            if (item.href === window.location.href) {
+                item.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
+
+

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nmap Timing Template Visualizer</title>
+    <title>Nmap Timing Template Visualizer - Timing</title>
     <style>
         * {
             margin: 0;
@@ -1387,11 +1387,8 @@
 
         // Navigation highlighting - highlight current page
         document.querySelectorAll('.nav-item').forEach(item => {
-            if (item.href && item.href.includes('index.html')) {
-                // Highlight Timing if on index.html
-                if (item.textContent.trim() === 'Timing') {
-                    item.classList.add('active');
-                }
+            if (item.href === window.location.href || (item.href.includes('timing.html') && window.location.pathname.includes('timing.html'))) {
+                item.classList.add('active');
             }
         });
 
