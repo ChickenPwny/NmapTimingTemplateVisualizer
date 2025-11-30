@@ -413,7 +413,7 @@
         .network-diagram {
             position: relative;
             width: 100%;
-            height: 300px;
+            height: 350px;
             background: #fff;
             border-radius: 8px;
             border: 2px solid #e0e0e0;
@@ -455,10 +455,26 @@
         }
 
         .node-target {
-            right: 30px;
+            right: 200px;
             top: 50%;
             transform: translateY(-50%);
             background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+        }
+
+        .node-backend {
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+            color: white;
+        }
+
+        .node-proxy {
+            right: 200px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             color: white;
         }
 
@@ -657,6 +673,205 @@
         .reset-button:hover {
             background: #7f8c8d;
         }
+
+        .filter-toggle {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .filter-toggle label {
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9em;
+        }
+
+        .filter-toggle select {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.9em;
+            cursor: pointer;
+            background: white;
+            color: #333;
+        }
+
+        .filter-toggle select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .port-state-overlay {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 15;
+        }
+
+        .port-state-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .port-state-badge.show {
+            opacity: 1;
+        }
+
+        .port-state-badge.open {
+            background: #27ae60;
+            color: white;
+        }
+
+        .port-state-badge.closed {
+            background: #3498db;
+            color: white;
+        }
+
+        .port-state-badge.filtered {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .evasion-success {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #27ae60;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1em;
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: 25;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+        }
+
+        .evasion-success.show {
+            opacity: 1;
+        }
+
+        .rtt-display {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d2d2d;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.7em;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 20;
+        }
+
+        .rtt-display.show {
+            opacity: 1;
+        }
+
+        .protocol-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .protocol-selector label {
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .protocol-selector input[type="radio"] {
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .path-divergence {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e7f3ff;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            color: #2c3e50;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 20;
+        }
+
+        .path-divergence.show {
+            opacity: 1;
+        }
+
+        .expert-summary {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e7f3ff 100%);
+            border-left: 4px solid #667eea;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+        }
+
+        .expert-summary h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+        .expert-summary ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        .expert-summary li {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: #2c3e50;
+        }
+
+        .expert-summary strong {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .expert-summary .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+            color: #856404;
+        }
+
+        .expert-summary code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
@@ -674,7 +889,29 @@
         <!-- Packet Flow Animation Section (full width) -->
         <div class="animation-section">
             <h2>Packet Flow Animation</h2>
+            
+            <div class="expert-summary">
+                <h3>💡 Visual Guide: Packet Flow Animation</h3>
+                <p style="margin-bottom: 15px; color: #2c3e50; line-height: 1.6;">
+                    This interactive simulation visualizes the <strong>real-world effectiveness</strong> of Nmap's core host discovery probes against a modern firewall. Click through the probes (<code>-PS</code>, <code>-PA</code>, <code>-PE</code>, <code>-PU</code>) to instantly see the packet's journey:
+                </p>
+                <ul>
+                    <li><strong>Bypass Strategy:</strong> Observe which probes cut straight through the firewall (e.g., a targeted TCP ACK or UDP probe) and which ones are cleanly blocked.</li>
+                    <li><strong>Protocol Response:</strong> See the exact response packet (e.g., <strong>SYN/ACK</strong>, <strong>RST</strong>, or <strong>ICMP Port Unreachable</strong>) required to mark a host as "Up."</li>
+                    <li><strong>The Trap:</strong> Witness how basic probes fail, and how firewalls can spoof responses—a scenario that traps "cert-getters" but is neutralized by the <strong>Advanced Probes</strong> and the <code>--discovery-ignore-rst</code> flag.</li>
+                </ul>
+            </div>
+            
             <p style="margin-bottom: 20px; color: #666; font-size: 0.9em;">Visualize how different discovery probes interact with firewalls and reach target hosts.</p>
+            
+            <div class="filter-toggle">
+                <label>Firewall Type:</label>
+                <select id="firewallType">
+                    <option value="stateless">Stateless (Blocks ICMP/SYN)</option>
+                    <option value="stateful">Stateful (Blocks Unexpected Packets)</option>
+                    <option value="permissive">Permissive (Allows Most Traffic)</option>
+                </select>
+            </div>
             
             <div class="animation-controls">
                 <button class="anim-button" onclick="animateProbe('PS', 443, 'SYN')">Simulate -PS443</button>
@@ -682,6 +919,7 @@
                 <button class="anim-button" onclick="animateProbe('PE', null, 'ICMP')">Simulate -PE</button>
                 <button class="anim-button" onclick="animateProbe('PU', 40125, 'UDP')">Simulate -PU</button>
                 <button class="anim-button" onclick="animateMultipleProbes()">Multiple Probes</button>
+                <button class="anim-button" onclick="animateBackendProbe()">Backend Service Test</button>
                 <button class="reset-button" onclick="resetAnimation()">Reset</button>
             </div>
 
@@ -694,12 +932,22 @@
                     <div>🛡️</div>
                     <div>Firewall</div>
                 </div>
-                <div class="network-node node-target">
-                    <div>🖥️</div>
-                    <div>Target</div>
+                <div class="network-node node-proxy" id="proxyNode">
+                    <div>🌐</div>
+                    <div>Web Proxy</div>
+                </div>
+                <div class="network-node node-backend" id="backendNode">
+                    <div>💾</div>
+                    <div>Backend DB</div>
                 </div>
                 <div class="firewall-status" id="firewallStatus"></div>
                 <div class="result-box" id="resultBox"></div>
+                <div class="port-state-overlay" id="portStateOverlay">
+                    <div class="port-state-badge open" id="portOpen">Open</div>
+                    <div class="port-state-badge closed" id="portClosed">Closed</div>
+                    <div class="port-state-badge filtered" id="portFiltered">Filtered</div>
+                </div>
+                <div class="evasion-success" id="evasionSuccess">Firewall Bypassed (Stateless Filter Evasion)</div>
             </div>
 
             <div class="animation-info">
@@ -710,10 +958,32 @@
         <!-- Traceroute Animation Section (full width) -->
         <div class="animation-section" style="margin-top: 30px;">
             <h2>Traceroute Animation</h2>
+            
+            <div class="expert-summary">
+                <h3>💡 Visual Guide: Traceroute Animation</h3>
+                <p style="margin-bottom: 15px; color: #2c3e50; line-height: 1.6;">
+                    Stop guessing about the network path! This visualization demystifies the <strong>Time-to-Live (TTL)</strong> process, showing you exactly where your packets are dying.
+                </p>
+                <ul>
+                    <li><strong>TTL in Action:</strong> Watch as the probe's TTL value increments, mapping each intermediate router (<strong>R1</strong>, <strong>R2</strong>, <strong>R3</strong>) that handles the traffic before reaching the target.</li>
+                    <li><strong>Diagnostic Power:</strong> Instantly identify the exact <strong>hop number</strong> where a packet is blocked or dropped. This is essential knowledge for determining if a firewall or an overzealous ISP is preventing your access, making it a critical diagnostic step for any serious network engagement.</li>
+                </ul>
+            </div>
+            
             <p style="margin-bottom: 20px; color: #666; font-size: 0.9em;">Watch how traceroute discovers the network path by incrementing TTL values.</p>
+            
+            <div class="protocol-selector">
+                <label>
+                    <input type="radio" name="tracerouteProtocol" value="icmp" checked> ICMP
+                </label>
+                <label>
+                    <input type="radio" name="tracerouteProtocol" value="udp"> UDP
+                </label>
+            </div>
             
             <div class="animation-controls">
                 <button class="anim-button" id="tracerouteButton" onclick="animateTraceroute()">Start Traceroute</button>
+                <button class="anim-button" onclick="animatePathDivergence()">Path Divergence Demo</button>
                 <button class="reset-button" onclick="resetTraceroute()">Reset</button>
             </div>
 
@@ -725,19 +995,27 @@
                 <div class="network-node node-router" id="router1" style="left: 25%; top: 50%; transform: translate(-50%, -50%);">
                     <div>🔀</div>
                     <div>R1</div>
+                    <div class="rtt-display" id="rtt1">2ms RTT</div>
                 </div>
                 <div class="network-node node-router" id="router2" style="left: 45%; top: 50%; transform: translate(-50%, -50%);">
                     <div>🔀</div>
                     <div>R2</div>
+                    <div class="rtt-display" id="rtt2">120ms RTT</div>
                 </div>
                 <div class="network-node node-router" id="router3" style="left: 65%; top: 50%; transform: translate(-50%, -50%);">
                     <div>🔀</div>
                     <div>R3</div>
+                    <div class="rtt-display" id="rtt3">45ms RTT</div>
                 </div>
-                <div class="network-node node-target" style="right: 30px; top: 50%; transform: translateY(-50%);">
+                <div class="network-node node-target" id="targetA" style="right: 200px; top: 50%; transform: translateY(-50%);">
                     <div>🖥️</div>
-                    <div>Target</div>
+                    <div>Target A</div>
                 </div>
+                <div class="network-node node-target" id="targetB" style="right: 30px; top: 50%; transform: translateY(-50%); opacity: 0.3;">
+                    <div>🖥️</div>
+                    <div>Target B</div>
+                </div>
+                <div class="path-divergence" id="pathDivergence">Path diverges at R1 - demonstrating network redundancy</div>
             </div>
 
             <div class="animation-info">
@@ -749,6 +1027,17 @@
             <!-- LEFT PANEL: Basic Discovery Modes, UDP & SCTP, IP Protocol, Advanced Options -->
             <div class="discovery-options-panel">
                 <h2>Discovery Options</h2>
+                
+                <div class="expert-summary">
+                    <h3>💡 Reference Guide: Discovery Options</h3>
+                    <p style="margin-bottom: 15px; color: #2c3e50; line-height: 1.6;">
+                        This is the <strong>Reference Guide for Professionals</strong>. Beyond simply listing the arguments, this section details the <strong>protocol-level purpose</strong> and <strong>firewall-bypassing intent</strong> of every discovery flag Nmap offers.
+                    </p>
+                    <ul>
+                        <li><strong>Strategic Selection:</strong> Learn the specific use cases: why you use <code>-PA</code> (TCP ACK) over <code>-PS</code> (TCP SYN) to bypass stateless rules, or how <code>-PO</code> (IP Protocol Ping) exploits lesser-known protocol-level weaknesses.</li>
+                        <li><strong>Command Builder:</strong> Use the integrated tool to build complex, multi-probe commands, ensuring your scan is comprehensive and resilient against modern network defenses.</li>
+                    </ul>
+                </div>
                 
                 <div class="option-group">
                     <h3>Basic Discovery Modes</h3>
@@ -1285,6 +1574,15 @@
             result.classList.remove('show', 'up', 'down');
             result.textContent = '';
             
+            // Reset port states
+            document.querySelectorAll('.port-state-badge').forEach(badge => {
+                badge.classList.remove('show');
+            });
+            
+            // Reset evasion success
+            const evasionSuccess = document.getElementById('evasionSuccess');
+            if (evasionSuccess) evasionSuccess.classList.remove('show');
+            
             animationInProgress = false;
             enableAnimationButtons();
         }
@@ -1310,19 +1608,19 @@
             const diagram = document.getElementById('packetFlowDiagram');
             const scanner = diagram.querySelector('.node-scanner');
             const firewall = diagram.querySelector('.node-firewall');
-            const target = diagram.querySelector('.node-target');
+            const proxy = diagram.querySelector('.node-proxy');
             
             const scannerRect = scanner.getBoundingClientRect();
             const diagramRect = diagram.getBoundingClientRect();
             const firewallRect = firewall.getBoundingClientRect();
-            const targetRect = target.getBoundingClientRect();
+            const proxyRect = proxy.getBoundingClientRect();
             
             const startX = scannerRect.left - diagramRect.left + scannerRect.width / 2;
             const startY = scannerRect.top - diagramRect.top + scannerRect.height / 2;
             const firewallX = firewallRect.left - diagramRect.left + firewallRect.width / 2;
             const firewallY = firewallRect.top - diagramRect.top + firewallRect.height / 2;
-            const targetX = targetRect.left - diagramRect.left + targetRect.width / 2;
-            const targetY = targetRect.top - diagramRect.top + targetRect.height / 2;
+            const proxyX = proxyRect.left - diagramRect.left + proxyRect.width / 2;
+            const proxyY = proxyRect.top - diagramRect.top + proxyRect.height / 2;
 
             // Create packet
             const packet = document.createElement('div');
@@ -1342,12 +1640,16 @@
             // Firewall decision (after 1 second)
             setTimeout(() => {
                 const firewallStatus = document.getElementById('firewallStatus');
-                const firewallDecision = getFirewallDecision(type, port);
+                const firewallType = document.getElementById('firewallType').value;
+                const firewallDecision = getFirewallDecision(type, port, firewallType);
                 
                 if (firewallDecision === 'blocked') {
                     firewallStatus.textContent = 'BLOCKED';
                     firewallStatus.className = 'firewall-status blocked show';
                     packet.style.opacity = '0';
+                    
+                    // Show filtered port state
+                    document.getElementById('portFiltered').classList.add('show');
                     
                     // Show spoofed RST if applicable
                     if (type === 'PS' || type === 'PA') {
@@ -1385,6 +1687,7 @@
                 } else if (firewallDecision === 'spoofed') {
                     firewallStatus.textContent = 'SPOOFED RST';
                     firewallStatus.className = 'firewall-status spoofed show';
+                    document.getElementById('portFiltered').classList.add('show');
                     
                     // Show spoofed RST returning
                     setTimeout(() => {
@@ -1410,32 +1713,55 @@
                         }, 100);
                     }, 500);
                 } else {
-                    // Allowed - continue to target
+                    // Allowed - continue to proxy
                     firewallStatus.textContent = 'ALLOWED';
                     firewallStatus.className = 'firewall-status allowed show';
                     
+                    // Check for evasion success
+                    if (firewallType === 'stateless' && type === 'PA') {
+                        const evasionSuccess = document.getElementById('evasionSuccess');
+                        evasionSuccess.classList.add('show');
+                        setTimeout(() => evasionSuccess.classList.remove('show'), 3000);
+                    }
+                    
                     setTimeout(() => {
-                        packet.style.left = targetX + 'px';
-                        packet.style.top = targetY + 'px';
+                        packet.style.left = proxyX + 'px';
+                        packet.style.top = proxyY + 'px';
                         
-                        // Target response
+                        // Proxy response
                         setTimeout(() => {
                             const response = document.createElement('div');
                             let responseType = 'rst';
-                            let responseLabel = 'RST';
+                            let responseLabel = 'SYN/ACK';
+                            let portState = 'open';
                             
                             if (type === 'PU') {
                                 responseType = 'port-unreachable';
                                 responseLabel = 'ICMP';
+                                portState = 'closed';
                             } else if (type === 'PE' || type === 'PP' || type === 'PM') {
                                 responseType = 'icmp';
                                 responseLabel = 'ECHO';
+                                portState = 'open';
+                            } else if (type === 'PS') {
+                                responseLabel = 'SYN/ACK';
+                                portState = 'open';
+                            } else if (type === 'PA') {
+                                responseLabel = 'RST';
+                                portState = 'closed';
+                            }
+                            
+                            // Show port state
+                            if (portState === 'open') {
+                                document.getElementById('portOpen').classList.add('show');
+                            } else if (portState === 'closed') {
+                                document.getElementById('portClosed').classList.add('show');
                             }
                             
                             response.className = `packet ${responseType}`;
                             response.textContent = responseLabel;
-                            response.style.left = targetX + 'px';
-                            response.style.top = targetY + 'px';
+                            response.style.left = proxyX + 'px';
+                            response.style.top = proxyY + 'px';
                             diagram.appendChild(response);
                             
                             setTimeout(() => {
@@ -1445,7 +1771,7 @@
                                 
                                 setTimeout(() => {
                                     const result = document.getElementById('resultBox');
-                                    result.textContent = 'Host is UP ✓';
+                                    result.textContent = 'Host is UP ✓ (Service: ' + portState.toUpperCase() + ')';
                                     result.className = 'result-box up show';
                                     animationInProgress = false;
                                     enableAnimationButtons();
@@ -1457,18 +1783,142 @@
             }, 1100);
         }
 
-        function getFirewallDecision(type, port) {
-            // Simulate different firewall behaviors
-            if (type === 'PS' && port === 443) {
-                return Math.random() > 0.3 ? 'blocked' : 'allowed'; // 70% blocked
-            } else if (type === 'PA' && port === 80) {
-                return Math.random() > 0.2 ? 'allowed' : 'spoofed'; // 80% allowed, 20% spoofed
-            } else if (type === 'PU') {
-                return 'allowed'; // UDP often passes
-            } else if (type === 'PE') {
-                return Math.random() > 0.4 ? 'blocked' : 'allowed'; // 60% blocked
+        function getFirewallDecision(type, port, firewallType) {
+            // Simulate different firewall behaviors based on firewall type
+            if (firewallType === 'stateless') {
+                // Stateless firewall blocks SYN and ICMP, but ACK can pass
+                if (type === 'PS' || type === 'PE') {
+                    return 'blocked';
+                } else if (type === 'PA') {
+                    return 'allowed'; // ACK bypasses stateless rules
+                } else if (type === 'PU') {
+                    return 'allowed'; // UDP often passes
+                }
+            } else if (firewallType === 'stateful') {
+                // Stateful firewall blocks unexpected packets
+                if (type === 'PA') {
+                    return 'spoofed'; // Unexpected ACK is suspicious
+                } else if (type === 'PS') {
+                    return Math.random() > 0.3 ? 'allowed' : 'blocked';
+                } else if (type === 'PE') {
+                    return Math.random() > 0.4 ? 'blocked' : 'allowed';
+                } else if (type === 'PU') {
+                    return 'allowed';
+                }
+            } else if (firewallType === 'permissive') {
+                // Permissive firewall allows most traffic
+                return 'allowed';
             }
             return 'allowed';
+        }
+
+        function animateBackendProbe() {
+            if (animationInProgress) return;
+            animationInProgress = true;
+            disableAnimationButtons();
+            resetAnimation();
+
+            const diagram = document.getElementById('packetFlowDiagram');
+            const scanner = diagram.querySelector('.node-scanner');
+            const firewall = diagram.querySelector('.node-firewall');
+            const proxy = diagram.querySelector('.node-proxy');
+            const backend = diagram.querySelector('.node-backend');
+            
+            const scannerRect = scanner.getBoundingClientRect();
+            const diagramRect = diagram.getBoundingClientRect();
+            const firewallRect = firewall.getBoundingClientRect();
+            const proxyRect = proxy.getBoundingClientRect();
+            const backendRect = backend.getBoundingClientRect();
+            
+            const startX = scannerRect.left - diagramRect.left + scannerRect.width / 2;
+            const startY = scannerRect.top - diagramRect.top + scannerRect.height / 2;
+            const firewallX = firewallRect.left - diagramRect.left + firewallRect.width / 2;
+            const firewallY = firewallRect.top - diagramRect.top + firewallRect.height / 2;
+            const proxyX = proxyRect.left - diagramRect.left + proxyRect.width / 2;
+            const proxyY = proxyRect.top - diagramRect.top + proxyRect.height / 2;
+            const backendX = backendRect.left - diagramRect.left + backendRect.width / 2;
+            const backendY = backendRect.top - diagramRect.top + backendRect.height / 2;
+
+            // First probe to proxy
+            const packet1 = document.createElement('div');
+            packet1.className = 'packet syn';
+            packet1.textContent = 'SYN';
+            packet1.style.left = startX + 'px';
+            packet1.style.top = startY + 'px';
+            diagram.appendChild(packet1);
+
+            setTimeout(() => {
+                packet1.classList.add('animating');
+                packet1.style.left = firewallX + 'px';
+                packet1.style.top = firewallY + 'px';
+            }, 100);
+
+            setTimeout(() => {
+                const firewallStatus = document.getElementById('firewallStatus');
+                firewallStatus.textContent = 'ALLOWED';
+                firewallStatus.className = 'firewall-status allowed show';
+                
+                setTimeout(() => {
+                    packet1.style.left = proxyX + 'px';
+                    packet1.style.top = proxyY + 'px';
+                    
+                    setTimeout(() => {
+                        // Proxy responds with SYN/ACK
+                        const response1 = document.createElement('div');
+                        response1.className = 'packet syn';
+                        response1.textContent = 'SYN/ACK';
+                        response1.style.left = proxyX + 'px';
+                        response1.style.top = proxyY + 'px';
+                        diagram.appendChild(response1);
+                        document.getElementById('portOpen').classList.add('show');
+                        
+                        setTimeout(() => {
+                            response1.classList.add('animating');
+                            response1.style.left = startX + 'px';
+                            response1.style.top = startY + 'px';
+                            
+                            // Second probe to backend (NAT-translated)
+                            setTimeout(() => {
+                                const packet2 = document.createElement('div');
+                                packet2.className = 'packet syn';
+                                packet2.textContent = 'SYN (NAT)';
+                                packet2.style.left = proxyX + 'px';
+                                packet2.style.top = proxyY + 'px';
+                                diagram.appendChild(packet2);
+                                
+                                setTimeout(() => {
+                                    packet2.classList.add('animating');
+                                    packet2.style.left = backendX + 'px';
+                                    packet2.style.top = backendY + 'px';
+                                    
+                                    setTimeout(() => {
+                                        const response2 = document.createElement('div');
+                                        response2.className = 'packet syn';
+                                        response2.textContent = '200 OK';
+                                        response2.style.left = backendX + 'px';
+                                        response2.style.top = backendY + 'px';
+                                        diagram.appendChild(response2);
+                                        
+                                        setTimeout(() => {
+                                            response2.classList.add('animating');
+                                            response2.style.left = proxyX + 'px';
+                                            response2.style.top = proxyY + 'px';
+                                            
+                                            setTimeout(() => {
+                                                const result = document.getElementById('resultBox');
+                                                result.textContent = 'Service UP ✓ (Backend Host Visible)';
+                                                result.className = 'result-box up show';
+                                                animationInProgress = false;
+                                                enableAnimationButtons();
+                                            }, 1000);
+                                        }, 100);
+                                    }, 500);
+                                }, 100);
+                            }, 500);
+                        }, 1000);
+                    }, 500);
+                }, 100);
+            }, 1100);
         }
 
         function animateMultipleProbes() {
@@ -1503,7 +1953,8 @@
                 const probe = probes[probeIndex];
                 probeIndex++;
 
-                const firewallDecision = getFirewallDecision(probe.type, probe.port);
+                const firewallType = document.getElementById('firewallType').value;
+                const firewallDecision = getFirewallDecision(probe.type, probe.port, firewallType);
                 
                 if (firewallDecision === 'allowed' && !successProbe) {
                     successProbe = probe;
@@ -1552,7 +2003,8 @@
                         packet.style.top = firewallY + 'px';
                         
                         setTimeout(() => {
-                            const decision = getFirewallDecision(probe.type, probe.port);
+                            const firewallType = document.getElementById('firewallType').value;
+                            const decision = getFirewallDecision(probe.type, probe.port, firewallType);
                             if (decision === 'blocked') {
                                 firewallStatus.textContent = `BLOCKED (${probe.label})`;
                                 firewallStatus.className = 'firewall-status blocked show';
@@ -1606,9 +2058,20 @@
                 r.style.transform = 'translate(-50%, -50%)';
             });
             
-            const target = diagram.querySelector('.node-target');
-            target.style.opacity = '1';
-            target.style.transform = 'translateY(-50%)';
+            const rttDisplays = diagram.querySelectorAll('.rtt-display');
+            rttDisplays.forEach(rtt => rtt.classList.remove('show'));
+            
+            const targets = diagram.querySelectorAll('.node-target');
+            targets.forEach(t => {
+                t.style.opacity = '1';
+                t.style.transform = 'translateY(-50%)';
+            });
+            
+            const targetB = document.getElementById('targetB');
+            if (targetB) targetB.style.opacity = '0.3';
+            
+            const pathDivergence = document.getElementById('pathDivergence');
+            if (pathDivergence) pathDivergence.classList.remove('show');
             
             tracerouteInProgress = false;
             const btn = document.getElementById('tracerouteButton');
@@ -1628,7 +2091,10 @@
                 diagram.querySelector('#router2'),
                 diagram.querySelector('#router3')
             ];
-            const target = diagram.querySelector('.node-target');
+            const target = document.getElementById('targetA');
+            
+            const protocol = document.querySelector('input[name="tracerouteProtocol"]:checked').value;
+            const rtts = [2, 120, 45]; // RTT values in ms for R1, R2, R3
             
             const scannerRect = scanner.getBoundingClientRect();
             const diagramRect = diagram.getBoundingClientRect();
@@ -1656,8 +2122,8 @@
 
                 // Create packet
                 const packet = document.createElement('div');
-                packet.className = 'packet icmp';
-                packet.textContent = `TTL=${ttl}`;
+                packet.className = protocol === 'icmp' ? 'packet icmp' : 'packet udp';
+                packet.textContent = `TTL=${ttl} (${protocol.toUpperCase()})`;
                 packet.style.left = startX + 'px';
                 packet.style.top = startY + 'px';
                 diagram.appendChild(packet);
@@ -1671,8 +2137,13 @@
                 diagram.appendChild(ttlLabel);
                 setTimeout(() => ttlLabel.classList.add('show'), 100);
 
+                // Calculate animation duration based on RTT
+                const rtt = targetIndex > 0 && targetIndex <= 3 ? rtts[targetIndex - 1] : 10;
+                const animationDuration = Math.max(500, rtt * 5); // Scale RTT to animation time
+
                 // Animate packet
                 setTimeout(() => {
+                    packet.style.transition = `left ${animationDuration}ms linear, top ${animationDuration}ms linear`;
                     packet.classList.add('animating');
                     packet.style.left = endX + 'px';
                     packet.style.top = endY + 'px';
@@ -1681,13 +2152,46 @@
                 // Response
                 setTimeout(() => {
                     if (targetIndex < 4) {
+                        // Check for protocol blocking (ICMP blocked at R2)
+                        if (protocol === 'icmp' && targetIndex === 2) {
+                            // ICMP blocked at R2
+                            setTimeout(() => {
+                                packet.style.opacity = '0';
+                                const timeoutMsg = document.createElement('div');
+                                timeoutMsg.className = 'ttl-label';
+                                timeoutMsg.textContent = 'TIMEOUT (ICMP Blocked)';
+                                timeoutMsg.style.left = endX + 'px';
+                                timeoutMsg.style.top = (endY - 30) + 'px';
+                                timeoutMsg.style.background = '#e74c3c';
+                                diagram.appendChild(timeoutMsg);
+                                setTimeout(() => timeoutMsg.classList.add('show'), 100);
+                                
+                                setTimeout(() => {
+                                    packet.remove();
+                                    ttlLabel.remove();
+                                    timeoutMsg.remove();
+                                    tracerouteInProgress = false;
+                                    const btn = document.getElementById('tracerouteButton');
+                                    if (btn) btn.disabled = false;
+                                }, 2000);
+                            }, animationDuration + 100);
+                            return;
+                        }
+                        
                         // Router response (Time Exceeded)
                         const response = document.createElement('div');
                         response.className = 'packet time-exceeded';
-                        response.textContent = 'ICMP';
+                        response.textContent = protocol === 'icmp' ? 'ICMP' : 'UDP';
                         response.style.left = endX + 'px';
                         response.style.top = endY + 'px';
                         diagram.appendChild(response);
+
+                        // Show RTT display
+                        const rttDisplay = document.getElementById(`rtt${targetIndex}`);
+                        if (rttDisplay) {
+                            rttDisplay.textContent = `${rtt}ms RTT`;
+                            rttDisplay.classList.add('show');
+                        }
 
                         // Highlight router
                         routers[targetIndex - 1].style.opacity = '1';
@@ -1706,6 +2210,7 @@
                         diagram.appendChild(line);
 
                         setTimeout(() => {
+                            response.style.transition = `left ${animationDuration}ms linear, top ${animationDuration}ms linear`;
                             response.classList.add('animating');
                             response.style.left = startX + 'px';
                             response.style.top = startY + 'px';
@@ -1716,7 +2221,7 @@
                                 ttlLabel.remove();
                                 line.classList.add('complete');
                                 sendProbe(ttl + 1, targetIndex + 1);
-                            }, 1000);
+                            }, animationDuration + 100);
                         }, 100);
                     } else {
                         // Target reached
@@ -1741,6 +2246,12 @@
                         target.style.opacity = '1';
                         target.style.transform = 'translateY(-50%) scale(1.1)';
                         target.style.transition = 'all 0.3s';
+                        
+                        // Show RTT for final hop
+                        const rttDisplay = document.getElementById('rtt3');
+                        if (rttDisplay) {
+                            rttDisplay.classList.add('show');
+                        }
 
                         setTimeout(() => {
                             response.classList.add('animating');
@@ -1761,6 +2272,191 @@
             }
 
             sendProbe(1, 1);
+        }
+
+        function animatePathDivergence() {
+            if (tracerouteInProgress) return;
+            tracerouteInProgress = true;
+            const btn = document.getElementById('tracerouteButton');
+            if (btn) btn.disabled = true;
+
+            const diagram = document.getElementById('tracerouteDiagram');
+            const scanner = diagram.querySelector('.node-scanner');
+            const routers = [
+                diagram.querySelector('#router1'),
+                diagram.querySelector('#router2'),
+                diagram.querySelector('#router3')
+            ];
+            const targetA = document.getElementById('targetA');
+            const targetB = document.getElementById('targetB');
+            
+            const scannerRect = scanner.getBoundingClientRect();
+            const diagramRect = diagram.getBoundingClientRect();
+            
+            const positionsA = [
+                { x: scannerRect.left - diagramRect.left + scannerRect.width / 2, y: scannerRect.top - diagramRect.top + scannerRect.height / 2 },
+                { x: routers[0].getBoundingClientRect().left - diagramRect.left + routers[0].offsetWidth / 2, y: routers[0].getBoundingClientRect().top - diagramRect.top + routers[0].offsetHeight / 2 },
+                { x: routers[1].getBoundingClientRect().left - diagramRect.left + routers[1].offsetWidth / 2, y: routers[1].getBoundingClientRect().top - diagramRect.top + routers[1].offsetHeight / 2 },
+                { x: targetA.getBoundingClientRect().left - diagramRect.left + targetA.offsetWidth / 2, y: targetA.getBoundingClientRect().top - diagramRect.top + targetA.offsetHeight / 2 }
+            ];
+            
+            const positionsB = [
+                { x: scannerRect.left - diagramRect.left + scannerRect.width / 2, y: scannerRect.top - diagramRect.top + scannerRect.height / 2 },
+                { x: routers[0].getBoundingClientRect().left - diagramRect.left + routers[0].offsetWidth / 2, y: routers[0].getBoundingClientRect().top - diagramRect.top + routers[0].offsetHeight / 2 },
+                { x: routers[2].getBoundingClientRect().left - diagramRect.left + routers[2].offsetWidth / 2, y: routers[2].getBoundingClientRect().top - diagramRect.top + routers[2].offsetHeight / 2 },
+                { x: targetB.getBoundingClientRect().left - diagramRect.left + targetB.offsetWidth / 2, y: targetB.getBoundingClientRect().top - diagramRect.top + targetB.offsetHeight / 2 }
+            ];
+
+            // First trace to Target A
+            function traceToA(ttl, hopIndex) {
+                if (hopIndex >= positionsA.length) {
+                    // Now trace to Target B
+                    targetB.style.opacity = '1';
+                    const pathDivergence = document.getElementById('pathDivergence');
+                    if (pathDivergence) pathDivergence.classList.add('show');
+                    traceToB(1, 1);
+                    return;
+                }
+
+                const startX = positionsA[0].x;
+                const startY = positionsA[0].y;
+                const endX = positionsA[hopIndex].x;
+                const endY = positionsA[hopIndex].y;
+
+                const packet = document.createElement('div');
+                packet.className = 'packet icmp';
+                packet.textContent = `TTL=${ttl}`;
+                packet.style.left = startX + 'px';
+                packet.style.top = startY + 'px';
+                diagram.appendChild(packet);
+
+                setTimeout(() => {
+                    packet.classList.add('animating');
+                    packet.style.left = endX + 'px';
+                    packet.style.top = endY + 'px';
+                }, 100);
+
+                setTimeout(() => {
+                    if (hopIndex < positionsA.length - 1) {
+                        // Router hop
+                        const line = document.createElement('div');
+                        line.className = 'hop-line active';
+                        line.style.left = startX + 'px';
+                        line.style.top = startY + 'px';
+                        line.style.width = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)) + 'px';
+                        line.style.transformOrigin = '0 0';
+                        const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+                        line.style.transform = `rotate(${angle}deg)`;
+                        diagram.appendChild(line);
+
+                        routers[hopIndex - 1].style.opacity = '1';
+                        routers[hopIndex - 1].style.transform = 'translate(-50%, -50%) scale(1.1)';
+
+                        setTimeout(() => {
+                            packet.remove();
+                            line.classList.add('complete');
+                            traceToA(ttl + 1, hopIndex + 1);
+                        }, 1000);
+                    } else {
+                        // Target A reached
+                        const line = document.createElement('div');
+                        line.className = 'hop-line complete';
+                        line.style.left = startX + 'px';
+                        line.style.top = startY + 'px';
+                        line.style.width = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)) + 'px';
+                        line.style.transformOrigin = '0 0';
+                        const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+                        line.style.transform = `rotate(${angle}deg)`;
+                        diagram.appendChild(line);
+
+                        targetA.style.opacity = '1';
+                        targetA.style.transform = 'translateY(-50%) scale(1.1)';
+
+                        setTimeout(() => {
+                            packet.remove();
+                            traceToA(ttl + 1, hopIndex + 1);
+                        }, 500);
+                    }
+                }, 1100);
+            }
+
+            function traceToB(ttl, hopIndex) {
+                if (hopIndex >= positionsB.length) {
+                    tracerouteInProgress = false;
+                    const btn = document.getElementById('tracerouteButton');
+                    if (btn) btn.disabled = false;
+                    return;
+                }
+
+                const startX = positionsB[0].x;
+                const startY = positionsB[0].y;
+                const endX = positionsB[hopIndex].x;
+                const endY = positionsB[hopIndex].y;
+
+                const packet = document.createElement('div');
+                packet.className = 'packet udp';
+                packet.textContent = `TTL=${ttl}`;
+                packet.style.left = startX + 'px';
+                packet.style.top = startY + 'px';
+                diagram.appendChild(packet);
+
+                setTimeout(() => {
+                    packet.classList.add('animating');
+                    packet.style.left = endX + 'px';
+                    packet.style.top = endY + 'px';
+                }, 100);
+
+                setTimeout(() => {
+                    if (hopIndex < positionsB.length - 1) {
+                        // Router hop - diverges at R1
+                        const line = document.createElement('div');
+                        line.className = 'hop-line active';
+                        line.style.left = startX + 'px';
+                        line.style.top = startY + 'px';
+                        line.style.width = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)) + 'px';
+                        line.style.transformOrigin = '0 0';
+                        const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+                        line.style.transform = `rotate(${angle}deg)`;
+                        line.style.background = '#e74c3c';
+                        diagram.appendChild(line);
+
+                        if (hopIndex === 2) {
+                            routers[2].style.opacity = '1';
+                            routers[2].style.transform = 'translate(-50%, -50%) scale(1.1)';
+                        }
+
+                        setTimeout(() => {
+                            packet.remove();
+                            line.classList.add('complete');
+                            traceToB(ttl + 1, hopIndex + 1);
+                        }, 1000);
+                    } else {
+                        // Target B reached
+                        const line = document.createElement('div');
+                        line.className = 'hop-line complete';
+                        line.style.left = startX + 'px';
+                        line.style.top = startY + 'px';
+                        line.style.width = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)) + 'px';
+                        line.style.transformOrigin = '0 0';
+                        const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+                        line.style.transform = `rotate(${angle}deg)`;
+                        line.style.background = '#e74c3c';
+                        diagram.appendChild(line);
+
+                        targetB.style.opacity = '1';
+                        targetB.style.transform = 'translateY(-50%) scale(1.1)';
+
+                        setTimeout(() => {
+                            packet.remove();
+                            tracerouteInProgress = false;
+                            const btn = document.getElementById('tracerouteButton');
+                            if (btn) btn.disabled = false;
+                        }, 500);
+                    }
+                }, 1100);
+            }
+
+            traceToA(1, 1);
         }
     </script>
 </body>
