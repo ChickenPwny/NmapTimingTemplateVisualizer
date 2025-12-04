@@ -31,13 +31,54 @@ class PasswordPatternAI {
             last: { numbers: 0.60, special: 0.15, letters: 0.25 }
         };
         
-        // Common password patterns (statistics)
+        // Common password patterns (statistics from breach analysis)
         this.commonPatterns = {
             'word+number': 0.35,      // 35% of passwords
             'word+special': 0.15,      // 15% of passwords
             'word+number+special': 0.20, // 20% of passwords
             'capitalized+number': 0.12,  // 12% of passwords
             'word+year': 0.18           // 18% of passwords
+        };
+        
+        // Structural archetypes (from breach analysis)
+        // Most common: U+L+N+ (uppercase + lowercase + numbers)
+        this.structuralArchetypes = {
+            'U+L+N+': 0.40,        // 40% - Most common structure
+            'U+L+N+S+': 0.25,      // 25% - With symbols
+            'U+L+S+N+': 0.15,      // 15% - Symbols before numbers
+            'L+N+': 0.12,          // 12% - Lowercase + numbers only
+            'U+L+': 0.08           // 8% - Letters only
+        };
+        
+        // Common suffix patterns (from 400K+ password analysis)
+        this.suffixPatterns = {
+            '?d?d': 0.35,          // 35% - Two digits (00-99)
+            '?d?d?d': 0.25,        // 25% - Three digits
+            '?d?d?d?d': 0.20,      // 20% - Four digits (years)
+            '?d': 0.10,            // 10% - Single digit
+            '?s': 0.05,            // 5% - Single symbol
+            '?d?d?s': 0.05         // 5% - Two digits + symbol
+        };
+        
+        // Common symbols (most frequent)
+        this.commonSymbols = '!@#$%&*+-_=';
+        
+        // Keyboard walk patterns (qwerty, asdf, zxcv, etc.)
+        this.keyboardWalks = [
+            'qwerty', 'qwertyuiop', 'asdf', 'asdfgh', 'zxcv', 'zxcvbn',
+            '123456', '12345678', '123456789', '098765', '0987654321'
+        ];
+        
+        // Leetspeak substitutions (most common)
+        this.leetspeakMap = {
+            'a': ['4', '@'],
+            'e': ['3'],
+            'i': ['1', '!'],
+            'o': ['0'],
+            's': ['5', '$'],
+            't': ['7'],
+            'l': ['1'],
+            'g': ['9']
         };
     }
 
@@ -165,30 +206,68 @@ class PasswordPatternAI {
         // Most passwords are 8-12 characters
         const optimalLength = this.predictOptimalLength(data);
 
-        // Pattern 1: Company + Year variations (improved with character frequency knowledge)
+        // Pattern 1: Company + Year variations (U+L+N+ structure - 40% most common)
         if (company) {
             const companyLen = Math.min(company.replace(/\s+/g, '').length, 8);
-            const letters = '?l'.repeat(companyLen);
             
+            // U+L+N+ structure (40% most common archetype)
             suggestions.push({
-                mask: `${letters}?d?d?d?d`,
-                description: `${companyLen} lowercase letters + 4 digits (Company + Year pattern) - Uses common letter frequency`,
+                mask: `?u${'?l'.repeat(companyLen - 1)}?d?d?d?d`,
+                description: `U+L+N+ structure (40% archetype): Capitalized company + 4 digits - Most common pattern`,
+                examples: [`${company.charAt(0).toUpperCase()}${company.toLowerCase().replace(/\s+/g, '').substring(1,companyLen)}${year}`],
+                confidence: 0.92, // Higher confidence - matches most common structure
+                pattern: 'U+L+N+',
+                attackMode: 'mask', // -a 3
+                hybridMode: null
+            });
+            
+            // Also suggest lowercase version (L+N+ - 12% archetype)
+            suggestions.push({
+                mask: `${'?l'.repeat(companyLen)}?d?d?d?d`,
+                description: `L+N+ structure (12% archetype): Lowercase company + 4 digits`,
                 examples: [`${company.toLowerCase().replace(/\s+/g, '').substring(0,companyLen)}${year}`],
-                confidence: 0.88,
-                pattern: 'company_year',
-                customCharset: this.generateOptimizedCharset('common') // Prioritize common letters like 'e', 't', 'a'
+                confidence: 0.85,
+                pattern: 'L+N+',
+                attackMode: 'mask', // -a 3
+                hybridMode: null
+            });
+            
+            // Hybrid attack suggestion (Mode 6 - Wordlist + Mask)
+            suggestions.push({
+                mask: `?d?d?d?d`,
+                description: `Hybrid Attack Mode 6: Dictionary word + 4-digit suffix (35% pattern) - Most efficient for word-based passwords`,
+                examples: [`password${year}`, `company${year}`],
+                confidence: 0.90,
+                pattern: 'hybrid_word_suffix',
+                attackMode: 'hybrid', // -a 6
+                hybridMode: 6,
+                hybridWordlist: 'rockyou.txt' // Example wordlist
             });
         }
 
-        // Pattern 2: Location + Year
+        // Pattern 2: Location + Year (U+L+N+ structure)
         if (location) {
-            const locShort = location.toLowerCase().replace(/\s+/g, '').substring(0, 6);
+            const locShort = location.toLowerCase().replace(/[\s,]+/g, '').substring(0, 6);
+            
+            // U+L+N+ structure (most common)
             suggestions.push({
-                mask: '?l?l?l?l?l?l?d?d?d?d',
-                description: '6 lowercase letters + 4 digits (Location + Year)',
-                examples: [`${locShort}${year}`, `${location.toLowerCase().substring(0,6)}2024`],
-                confidence: 0.80,
-                pattern: 'location_year'
+                mask: `?u${'?l'.repeat(5)}?d?d?d?d`,
+                description: 'U+L+N+ structure: Capitalized location + 4 digits (40% archetype)',
+                examples: [`${location.charAt(0).toUpperCase()}${locShort.substring(1)}${year}`],
+                confidence: 0.88,
+                pattern: 'U+L+N+',
+                attackMode: 'mask'
+            });
+            
+            // Hybrid attack for location-based words
+            suggestions.push({
+                mask: `?d?d?d?d`,
+                description: 'Hybrid Attack Mode 6: Location word + 4-digit year suffix',
+                examples: [`${locShort}${year}`],
+                confidence: 0.85,
+                pattern: 'hybrid_location_suffix',
+                attackMode: 'hybrid',
+                hybridMode: 6
             });
         }
 
@@ -226,17 +305,39 @@ class PasswordPatternAI {
             });
         }
 
-        // Pattern 6: Mixed case + numbers (improved with position knowledge)
-        // Knowledge: First letter often capitalized (40% of passwords), common letters in middle
+        // Pattern 6: U+L+N+ structure (40% most common archetype)
+        // Knowledge: First letter capitalized (40% of passwords), numbers at end (60%)
         suggestions.push({
             mask: '?u?l?l?l?l?l?d?d?d?d',
-            description: 'Mixed case + 4 digits (Capitalized word + Year) - Based on 40% uppercase first letter pattern',
+            description: 'U+L+N+ structure (40% archetype): Capitalized word + 4 digits - Most common structural pattern',
             examples: [
                 company ? `${company.charAt(0).toUpperCase()}${company.toLowerCase().substring(1,5)}${year}` : 'Pass2024',
                 location ? `${location.charAt(0).toUpperCase()}${location.toLowerCase().substring(1,5)}${year}` : 'City2024'
             ],
-            confidence: 0.68, // Higher confidence with pattern knowledge
-            pattern: 'mixed_year'
+            confidence: 0.90, // Highest confidence - matches most common structure
+            pattern: 'U+L+N+',
+            attackMode: 'mask'
+        });
+        
+        // Pattern 6b: U+L+N+S+ structure (25% archetype)
+        suggestions.push({
+            mask: '?u?l?l?l?l?l?d?d?d?d?s',
+            description: 'U+L+N+S+ structure (25% archetype): Capitalized word + 4 digits + symbol',
+            examples: ['Pass2024!', 'Word2024@'],
+            confidence: 0.82,
+            pattern: 'U+L+N+S+',
+            attackMode: 'mask',
+            customCharset: this.commonSymbols // Use common symbols only
+        });
+        
+        // Pattern 6c: U+L+S+N+ structure (15% archetype)
+        suggestions.push({
+            mask: '?u?l?l?l?l?l?s?d?d?d?d',
+            description: 'U+L+S+N+ structure (15% archetype): Capitalized word + symbol + 4 digits',
+            examples: ['Pass!2024', 'Word@2024'],
+            confidence: 0.75,
+            pattern: 'U+L+S+N+',
+            attackMode: 'mask'
         });
         
         // Pattern 7: Smart mask using character frequency (most common letters)

@@ -18,7 +18,7 @@ class HashcatCLIGenerator {
     }
 
     /**
-     * Generate HashCat command with mask attack
+     * Generate HashCat command with mask attack (-a 3)
      */
     generateMaskAttackCommand(mask, hashFile, options = {}) {
         const parts = ['hashcat'];
@@ -36,16 +36,17 @@ class HashcatCLIGenerator {
         // Mask
         parts.push(`"${mask}"`);
         
-        // Options
+        // Custom charsets (-1 through -4)
         if (options.customCharsets) {
             Object.entries(options.customCharsets).forEach(([num, charset], index) => {
-                parts.push(`-${index + 1} "${charset}"`);
+                const charsetNum = index + 1;
+                parts.push(`-${charsetNum} "${charset}"`);
             });
         }
         
         // Increment
         if (options.increment) {
-            parts.push(`-i`);
+            parts.push(`--increment`);
             if (options.increment.start && options.increment.stop) {
                 parts.push(`--increment-min=${options.increment.start}`);
                 parts.push(`--increment-max=${options.increment.stop}`);
@@ -183,19 +184,74 @@ class HashcatCLIGenerator {
             });
         }
         
-        // Command 2: HashCat mask attack (direct)
+        // Command 2: HashCat attacks based on mask attack modes
         if (data.masks && data.masks.length > 0) {
-            data.masks.slice(0, 3).forEach((maskData, index) => {
-                commands.push({
-                    title: `HashCat Mask Attack #${index + 1}: ${maskData.mask}`,
-                    description: maskData.description,
-                    command: this.generateMaskAttackCommand(maskData.mask, hashFile, {
-                        hashType: data.hashType || '0',
-                        outputFile: `cracked_${index + 1}.txt`,
-                        workload: data.workload || 3
-                    }),
-                    category: 'hashcat_mask'
-                });
+            data.masks.slice(0, 10).forEach((maskData, index) => {
+                // Mask attack (-a 3)
+                if (!maskData.attackMode || maskData.attackMode === 'mask') {
+                    const customCharsets = {};
+                    if (maskData.customCharset) {
+                        customCharsets['1'] = maskData.customCharset;
+                    }
+                    
+                    commands.push({
+                        title: `HashCat Mask Attack #${index + 1}: ${maskData.mask}`,
+                        description: maskData.description || `Mask attack using pattern: ${maskData.pattern}`,
+                        command: this.generateMaskAttackCommand(maskData.mask, hashFile, {
+                            hashType: data.hashType || '0',
+                            outputFile: `cracked_mask_${index + 1}.txt`,
+                            workload: data.workload || 3,
+                            customCharsets: Object.keys(customCharsets).length > 0 ? customCharsets : null
+                        }),
+                        category: 'hashcat_mask'
+                    });
+                }
+                
+                // Hybrid attack Mode 6 (Wordlist + Mask) - Most efficient for word+number patterns
+                if (maskData.attackMode === 'hybrid' && maskData.hybridMode === 6) {
+                    const wordlist = maskData.hybridWordlist || 'rockyou.txt';
+                    commands.push({
+                        title: `HashCat Hybrid Attack Mode 6: ${wordlist} + ${maskData.mask}`,
+                        description: maskData.description || `Hybrid attack: Dictionary word + mask suffix (35% pattern frequency)`,
+                        command: this.generateHybridAttackCommand6(wordlist, maskData.mask, hashFile, {
+                            hashType: data.hashType || '0',
+                            outputFile: `cracked_hybrid6_${index + 1}.txt`,
+                            workload: data.workload || 3
+                        }),
+                        category: 'hashcat_hybrid'
+                    });
+                }
+                
+                // Hybrid attack Mode 7 (Mask + Wordlist)
+                if (maskData.attackMode === 'hybrid' && maskData.hybridMode === 7) {
+                    const wordlist = maskData.hybridWordlist || 'rockyou.txt';
+                    commands.push({
+                        title: `HashCat Hybrid Attack Mode 7: ${maskData.mask} + ${wordlist}`,
+                        description: maskData.description || `Hybrid attack: Mask prefix + dictionary word`,
+                        command: this.generateHybridAttackCommand7(maskData.mask, wordlist, hashFile, {
+                            hashType: data.hashType || '0',
+                            outputFile: `cracked_hybrid7_${index + 1}.txt`,
+                            workload: data.workload || 3
+                        }),
+                        category: 'hashcat_hybrid'
+                    });
+                }
+                
+                // Rule-based attack (-a 0) - For Leetspeak, capitalization mutations
+                if (maskData.attackMode === 'rule') {
+                    const wordlist = maskData.hybridWordlist || 'rockyou.txt';
+                    const ruleFile = maskData.ruleFile || 'rules/best64.rule';
+                    commands.push({
+                        title: `HashCat Rule-Based Attack: ${wordlist} + ${ruleFile}`,
+                        description: maskData.description || maskData.note || `Rule-based attack with JTR rules (capitalization, Leetspeak)`,
+                        command: this.generateRuleBasedAttackCommand(wordlist, ruleFile, hashFile, {
+                            hashType: data.hashType || '0',
+                            outputFile: `cracked_rules_${index + 1}.txt`,
+                            workload: data.workload || 3
+                        }),
+                        category: 'hashcat_rules'
+                    });
+                }
             });
         }
         
