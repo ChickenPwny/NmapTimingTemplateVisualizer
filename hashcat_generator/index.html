@@ -65,12 +65,19 @@
                     <small>Additional custom wordlist to merge</small>
                 </div>
 
-                <div class="form-group">
-                    <label for="customFile">Custom User File Upload (Optional):</label>
-                    <input type="file" id="customFile" name="customFile" accept=".txt,.csv">
-                    <small>Additional user data to incorporate</small>
-                </div>
+            <div class="form-group">
+                <label for="customFile">Custom User File Upload (Optional):</label>
+                <input type="file" id="customFile" name="customFile" accept=".txt,.csv">
+                <small>Additional user data to incorporate</small>
             </div>
+
+            <div class="form-group">
+                <label for="crackedPasswordsFile">Cracked Passwords for AI Learning (Optional):</label>
+                <input type="file" id="crackedPasswordsFile" name="crackedPasswordsFile" accept=".txt">
+                <small>Upload successfully cracked passwords (one per line) to train AI pattern recognition</small>
+                <div id="crackedPasswordsPreview" class="file-preview"></div>
+            </div>
+        </div>
 
             <div class="form-group">
                 <label>
@@ -121,7 +128,8 @@
             <div id="maskTab" class="tab-content">
                 <div class="output-header">
                     <h2>Generated Password Masks</h2>
-                    <p class="mask-help">AI-suggested mask patterns based on your inputs</p>
+                    <p class="mask-help">AI-suggested mask patterns based on your inputs and learned patterns</p>
+                    <div id="aiInsights" class="ai-insights" style="display:none;"></div>
                 </div>
                 <div id="maskOutput" class="mask-container"></div>
             </div>
@@ -138,7 +146,19 @@
         </div>
     </div>
 
+    <footer class="hashcat-footer">
+        <div class="footer-content">
+            <p class="footer-title">HashCat Resources:</p>
+            <div class="footer-links">
+                <a href="https://hashcat.net/hashcat/" target="_blank" rel="noopener noreferrer">HashCat Official</a>
+                <a href="https://hashcat.net/wiki/" target="_blank" rel="noopener noreferrer">HashCat Wiki</a>
+                <a href="https://hashcat.net/wiki/doku.php?id=maskprocessor" target="_blank" rel="noopener noreferrer">Maskprocessor Documentation</a>
+            </div>
+        </div>
+    </footer>
+
     <script src="js/geolocation.js"></script>
+    <script src="js/pattern-analyzer.js"></script>
     <script src="js/tensorflow-ai.js"></script>
     <script src="js/wordlist-builder.js"></script>
     <script src="js/mask-generator.js"></script>

@@ -5,6 +5,7 @@
 class HashcatGeneratorApp {
     constructor() {
         this.ai = new PasswordPatternAI();
+        this.patternAnalyzer = new PatternAnalyzer();
         this.wordlistBuilder = new WordlistBuilder();
         this.maskGenerator = new MaskGenerator();
         this.cliGenerator = new HashcatCLIGenerator();
@@ -17,6 +18,7 @@ class HashcatGeneratorApp {
         this.initializeEventListeners();
         this.initializeTabs();
         this.autoDetectLocation();
+        this.loadLearnedPatterns();
     }
 
     /**
@@ -31,6 +33,13 @@ class HashcatGeneratorApp {
         // File preview handlers
         document.getElementById('usersFile').addEventListener('change', (e) => {
             this.previewFile(e.target.files[0], 'usersPreview');
+        });
+
+        // Cracked passwords file handler
+        document.getElementById('crackedPasswordsFile').addEventListener('change', async (e) => {
+            if (e.target.files[0]) {
+                await this.analyzeCrackedPasswords(e.target.files[0]);
+            }
         });
 
         // Location detection button
@@ -146,7 +155,10 @@ class HashcatGeneratorApp {
 
             // Analyze patterns and generate masks
             const aiSuggestions = this.ai.analyzePatterns(formData);
-            const masks = this.maskGenerator.generateMasks(aiSuggestions, formData);
+            let masks = this.maskGenerator.generateMasks(aiSuggestions, formData);
+            
+            // Enhance masks with AI-learned patterns
+            masks = this.patternAnalyzer.getImprovedMasks(masks);
             this.currentMasks = masks;
 
             // Generate CLI commands
@@ -227,12 +239,30 @@ class HashcatGeneratorApp {
      */
     displayMasks(masks) {
         const maskContainer = document.getElementById('maskOutput');
+        const insightsContainer = document.getElementById('aiInsights');
         if (!maskContainer) {
             console.error('Mask container not found');
             return;
         }
 
         maskContainer.innerHTML = '';
+
+        // Show AI insights if available
+        if (this.patternAnalyzer.analysisCount > 0) {
+            const insights = this.patternAnalyzer.getCharacterFrequencyInsights();
+            const patternInsights = this.patternAnalyzer.getPatternInsights();
+            
+            insightsContainer.style.display = 'block';
+            insightsContainer.innerHTML = `
+                <div class="insight-card">
+                    <strong>🧠 AI Insights (from ${insights.totalAnalyzed} analyzed passwords):</strong><br>
+                    <span>Top Characters: ${insights.topCharacters.slice(0, 5).map(c => `<strong>${c.char}</strong> ${c.frequency}`).join(', ')}</span><br>
+                    <span>Top Patterns: ${patternInsights.topPatterns.slice(0, 3).map(p => `<strong>${p.pattern}</strong> ${p.frequency}`).join(', ')}</span>
+                </div>
+            `;
+        } else {
+            insightsContainer.style.display = 'none';
+        }
 
         masks.forEach((maskData, index) => {
             const card = document.createElement('div');
@@ -242,10 +272,21 @@ class HashcatGeneratorApp {
                 ? `<div class="mask-example">Examples: ${maskData.examples.slice(0, 3).join(', ')}</div>`
                 : '';
 
+            const aiBadge = maskData.aiEnhanced 
+                ? `<span style="background:#667eea; color:white; padding:2px 8px; border-radius:4px; font-size:11px; margin-left:5px;">🤖 AI-Enhanced</span>`
+                : '';
+            
+            const customCharsetInfo = maskData.customCharset
+                ? `<div style="margin-top:5px; font-size:11px; color:#667eea;">
+                    <strong>Optimized Charset:</strong> ${this.escapeHtml(maskData.customCharset.substring(0, 30))}${maskData.customCharset.length > 30 ? '...' : ''}
+                   </div>`
+                : '';
+
             card.innerHTML = `
-                <h3>Mask #${index + 1} <span style="font-size:12px; color:#999;">(${Math.round(maskData.confidence * 100)}% confidence)</span></h3>
+                <h3>Mask #${index + 1} <span style="font-size:12px; color:#999;">(${Math.round(maskData.confidence * 100)}% confidence)</span>${aiBadge}</h3>
                 <div class="mask-pattern">${maskData.mask}</div>
                 <div class="mask-description">${maskData.description}</div>
+                ${customCharsetInfo}
                 ${examplesHtml}
                 <div style="margin-top:10px; font-size:11px; color:#999;">
                     Pattern: ${maskData.pattern}
@@ -506,6 +547,81 @@ class HashcatGeneratorApp {
             document.execCommand('copy');
             document.body.removeChild(textarea);
             alert(successMessage || 'Copied to clipboard!');
+        }
+    }
+
+    /**
+     * Analyze cracked passwords file for AI learning
+     */
+    async analyzeCrackedPasswords(file) {
+        try {
+            const text = await this.readFileAsText(file);
+            const passwords = text.split('\n')
+                .map(line => line.trim())
+                .filter(line => line.length > 0);
+            
+            if (passwords.length === 0) {
+                alert('No passwords found in file');
+                return;
+            }
+
+            // Analyze passwords
+            this.patternAnalyzer.analyzeCrackedPasswords(passwords);
+            
+            // Update preview
+            const preview = document.getElementById('crackedPasswordsPreview');
+            const insights = this.patternAnalyzer.getCharacterFrequencyInsights();
+            const patternInsights = this.patternAnalyzer.getPatternInsights();
+            
+            preview.innerHTML = `
+                <strong>✅ Analyzed ${passwords.length} passwords</strong><br>
+                <strong>Top Characters:</strong> ${insights.topCharacters.slice(0, 5).map(c => `${c.char} (${c.frequency})`).join(', ')}<br>
+                <strong>Top Patterns:</strong> ${patternInsights.topPatterns.slice(0, 3).map(p => `${p.pattern} (${p.frequency})`).join(', ')}<br>
+                <div style="background:#e8f5e9; padding:10px; margin-top:10px; border-radius:5px; border-left:3px solid #4caf50;">
+                    <strong>💡 Next Step:</strong> Click "Generate Mask & Wordlist" to see AI-enhanced masks using these learned patterns!
+                </div>
+            `;
+            
+            // Save learned patterns to localStorage
+            this.saveLearnedPatterns();
+            
+            console.log('AI Pattern Analysis:', {
+                characterFrequency: insights,
+                patterns: patternInsights,
+                learnedMasks: this.patternAnalyzer.learnedMasks.length
+            });
+            
+        } catch (error) {
+            console.error('Error analyzing cracked passwords:', error);
+            alert('Error analyzing passwords: ' + error.message);
+        }
+    }
+
+    /**
+     * Save learned patterns to localStorage
+     */
+    saveLearnedPatterns() {
+        try {
+            const patterns = this.patternAnalyzer.exportPatterns();
+            localStorage.setItem('hashcat_learned_patterns', JSON.stringify(patterns));
+        } catch (error) {
+            console.warn('Could not save patterns to localStorage:', error);
+        }
+    }
+
+    /**
+     * Load learned patterns from localStorage
+     */
+    loadLearnedPatterns() {
+        try {
+            const saved = localStorage.getItem('hashcat_learned_patterns');
+            if (saved) {
+                const patterns = JSON.parse(saved);
+                this.patternAnalyzer.importPatterns(patterns);
+                console.log(`Loaded ${patterns.analysisCount || 0} previously analyzed passwords`);
+            }
+        } catch (error) {
+            console.warn('Could not load patterns from localStorage:', error);
         }
     }
 }
