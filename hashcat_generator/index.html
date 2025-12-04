@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HashCat Mask Generator - AI-Powered Password Mask Creation</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav class="navigation-bar">
+        <div class="tool-selector">
+            <span class="tool-selector-label">TOOL:</span>
+            <a href="../index.html" class="tool-btn">Home</a>
+            <a href="index.html" class="tool-btn active">HashCat</a>
+            <a href="../nmap_generator/index.html" class="tool-btn">Nmap</a>
+        </div>
+        <div class="inner-navigation">
+            <a href="index.html" class="nav-item active">Masking</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>🔐 HashCat Mask Generator</h1>
+            <p class="subtitle">AI-Powered Password Mask & Wordlist Generator for HashCat</p>
+        </header>
+
+        <form id="hashcatForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="location">Location:</label>
+                    <div class="location-input-group">
+                        <input type="text" id="location" name="location" placeholder="e.g., New York, Los Angeles, Seattle">
+                        <button type="button" id="detectLocationBtn" class="location-detect-btn">
+                            <span id="detectLocationBtnText">📍 Auto-detect</span>
+                            <span id="detectLocationBtnLoader" class="loader" style="display:none;"></span>
+                        </button>
+                    </div>
+                    <small id="locationStatus">Business location for context-based passwords. Click "Auto-detect" to use your current location.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="companyName">Company Name:</label>
+                    <input type="text" id="companyName" name="companyName" placeholder="e.g., Acme Corp, TechSolutions">
+                    <small>Company name for password variations</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="usersFile">Users File:</label>
+                    <input type="file" id="usersFile" name="usersFile" accept=".txt,.csv">
+                    <small>One username per line (txt or csv format)</small>
+                    <div id="usersPreview" class="file-preview"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="year">Year:</label>
+                    <input type="number" id="year" name="year" value="2024" min="2000" max="2030">
+                    <small>Year for date-based password patterns</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="wordlistFile">Custom Wordlist Upload (Optional):</label>
+                    <input type="file" id="wordlistFile" name="wordlistFile" accept=".txt">
+                    <small>Additional custom wordlist to merge</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="customFile">Custom User File Upload (Optional):</label>
+                    <input type="file" id="customFile" name="customFile" accept=".txt,.csv">
+                    <small>Additional user data to incorporate</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="includeSeasonal" checked>
+                    Include Seasonal Words (Winter, Spring, Summer, Fall)
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="includeCompanyVariations" checked>
+                    Generate Company Name Variations
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="includeLocationVariations" checked>
+                    Generate Location Variations
+                </label>
+            </div>
+
+            <button type="button" id="generateBtn" class="primary-btn">
+                <span id="generateBtnText">Generate Mask & Wordlist</span>
+                <span id="generateBtnLoader" class="loader" style="display:none;"></span>
+            </button>
+        </form>
+
+        <div class="output-section" id="outputSection" style="display:none;">
+            <div class="output-tabs">
+                <button class="tab-btn active" data-tab="wordlist">Wordlist</button>
+                <button class="tab-btn" data-tab="mask">Masks</button>
+                <button class="tab-btn" data-tab="commands">HashCat Commands</button>
+            </div>
+
+            <div id="wordlistTab" class="tab-content active">
+                <div class="output-header">
+                    <h2>Generated Wordlist</h2>
+                    <div class="output-stats" id="wordlistStats"></div>
+                </div>
+                <div class="output-controls">
+                    <button class="secondary-btn" id="downloadWordlist">Download Wordlist</button>
+                    <button class="secondary-btn" id="copyWordlist">Copy to Clipboard</button>
+                </div>
+                <pre id="wordlistOutput" class="output-pre"></pre>
+            </div>
+
+            <div id="maskTab" class="tab-content">
+                <div class="output-header">
+                    <h2>Generated Password Masks</h2>
+                    <p class="mask-help">AI-suggested mask patterns based on your inputs</p>
+                </div>
+                <div id="maskOutput" class="mask-container"></div>
+            </div>
+
+            <div id="commandsTab" class="tab-content">
+                <div class="output-header">
+                    <h2>HashCat CLI Commands</h2>
+                    <p class="mask-help">Ready-to-use commands for your terminal</p>
+                </div>
+                <div id="hashcatCommandsContainer" class="commands-container">
+                    <!-- Individual command panels will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/geolocation.js"></script>
+    <script src="js/tensorflow-ai.js"></script>
+    <script src="js/wordlist-builder.js"></script>
+    <script src="js/mask-generator.js"></script>
+    <script src="js/hashcat-cli.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

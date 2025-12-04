@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nmap Timing Template Visualizer - Timing</title>
+    <title>Nmap Timing Template Visualizer</title>
     <style>
         * {
             margin: 0;
@@ -619,8 +619,55 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             padding: 20px 40px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
             gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .tool-selector {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .tool-selector-label {
+            font-size: 0.9em;
+            color: #666;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .tool-btn {
+            font-size: 1em;
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            user-select: none;
+            text-decoration: none;
+            display: inline-block;
+            border: 2px solid transparent;
+        }
+
+        .tool-btn:hover {
+            background: #f0f0f0;
+            color: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .tool-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .inner-navigation {
+            display: flex;
+            gap: 20px;
+            align-items: center;
             flex-wrap: wrap;
         }
 
@@ -744,10 +791,18 @@
 </head>
 <body>
     <nav class="navigation-bar">
-        <a href="timing.html" class="nav-item active">Timing</a>
-        <a href="host-discovery.html" class="nav-item">Host Discovery</a>
-        <a href="scripting-and-automation.html" class="nav-item">Scripting and Automation</a>
-        <a href="evasion-and-firewall-bypassing.html" class="nav-item">Evasion and Firewall Bypassing</a>
+        <div class="tool-selector">
+            <span class="tool-selector-label">TOOL:</span>
+            <a href="../index.html" class="tool-btn">Home</a>
+            <a href="../hashcat_generator/index.html" class="tool-btn">HashCat</a>
+            <a href="index.html" class="tool-btn active">Nmap</a>
+        </div>
+        <div class="inner-navigation">
+            <a href="timing.html" class="nav-item">Timing</a>
+            <a href="host-discovery.html" class="nav-item">Host Discovery</a>
+            <a href="scripting-and-automation.html" class="nav-item">Scripting and Automation</a>
+            <a href="evasion-and-firewall-bypassing.html" class="nav-item">Evasion and Firewall Bypassing</a>
+        </div>
     </nav>
 
     <div class="protocol-header">
@@ -1387,8 +1442,11 @@
 
         // Navigation highlighting - highlight current page
         document.querySelectorAll('.nav-item').forEach(item => {
-            if (item.href === window.location.href || (item.href.includes('timing.html') && window.location.pathname.includes('timing.html'))) {
-                item.classList.add('active');
+            if (item.href && item.href.includes('index.html')) {
+                // Highlight Timing if on index.html
+                if (item.textContent.trim() === 'Timing') {
+                    item.classList.add('active');
+                }
             }
         });
 
