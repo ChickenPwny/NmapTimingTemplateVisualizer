@@ -51,6 +51,12 @@
             margin-top: 40px;
         }
 
+        @media (min-width: 1200px) {
+            .tools-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
         .tool-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 15px;
@@ -107,6 +113,15 @@
             box-shadow: 0 20px 40px rgba(102, 126, 234, 0.5);
         }
 
+        .tool-card.signature {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .tool-card.signature:hover {
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.5);
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 40px 20px;
@@ -150,6 +165,14 @@
                 <div class="tool-name">Nmap</div>
                 <div class="tool-description">
                     Interactive Nmap visualizer with timing templates, host discovery, and advanced scanning techniques
+                </div>
+            </a>
+
+            <a href="DaSignatureParser/index.html" class="tool-card signature">
+                <div class="tool-icon">🛡️</div>
+                <div class="tool-name">SIEM Rules Parser</div>
+                <div class="tool-description">
+                    Comprehensive Snort ↔ Suricata rule converter with intelligent detection, protocol conversion, and optimization
                 </div>
             </a>
         </div>

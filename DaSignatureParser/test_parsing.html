@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Parsing</title>
+</head>
+<body>
+    <h1>Test SIEM Rule Parsing</h1>
+    <textarea id="input" style="width: 100%; height: 200px;"></textarea>
+    <button onclick="testParsing()">Test Parsing</button>
+    <div id="output" style="white-space: pre-wrap; font-family: monospace;"></div>
+
+    <script src="parser.js"></script>
+    <script>
+        function testParsing() {
+            const input = document.getElementById('input').value;
+            const output = document.getElementById('output');
+            
+            const parser = new SIEMRuleParser();
+            
+            try {
+                const rules = parser.parseRules(input);
+                const detectedType = parser.detectRuleType(input);
+                
+                output.textContent = `Detected Type: ${detectedType}\n\nParsed Rules:\n${JSON.stringify(rules, null, 2)}`;
+            } catch (error) {
+                output.textContent = `Error: ${error.message}\n\nStack: ${error.stack}`;
+            }
+        }
+        
+        // Load test data
+        document.getElementById('input').value = `alert tcp $EXTERNAL_NET any -> $HOME_NET 80 (msg:"ET-MALWARE C2 HTTP POST with File Upload"; flow:to_server,established; http.method; content:"POST"; http.uri; content:"/upload.php"; http.header; content:"User-Agent|3A| Mozilla/5.0"; http.content; content:"file=malicious.exe"; fast_pattern; urilen:2<>10; isdataat:!0,relative; pcre:"/malware\\.exe/i"; flowbits:set,attack_stage1; classtype:trojan-activity; reference:url,virustotal.com; sid:1000001; rev:3;)`;
+    </script>
+</body>
+</html>

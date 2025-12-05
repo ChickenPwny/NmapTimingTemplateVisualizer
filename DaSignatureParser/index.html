@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 da signature parser - Complete SIEM Rule Management Platform</title>
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; frame-src 'none';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Navigation Bar Styles */
+        .navigation-bar {
+            max-width: 2000px;
+            margin: 0 auto 20px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .tool-selector {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .tool-selector-label {
+            font-size: 0.9em;
+            color: #666;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .tool-btn {
+            font-size: 1em;
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            user-select: none;
+            text-decoration: none;
+            display: inline-block;
+            border: 2px solid transparent;
+        }
+
+        .tool-btn:hover {
+            background: #f0f0f0;
+            color: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .tool-btn.active {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+
+        .inner-navigation {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            user-select: none;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-item:hover {
+            background: #f0f0f0;
+            color: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        /* Enhanced security-aware styles */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #1a1a1a;
+            min-height: calc(100vh - 100px);
+            padding: 20px;
+            color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            border-radius: 10px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #fff;
+        }
+
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .security-warning {
+            background: #ff6b6b;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .converter-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .input-section, .output-section {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #444;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-header h3 {
+            margin: 0;
+            color: #fff;
+        }
+
+        .input-section textarea,
+        .output-section textarea {
+            width: 100%;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+            min-height: 300px;
+            box-sizing: border-box;
+        }
+
+        .input-section textarea:focus,
+        .output-section textarea:focus {
+            outline: none;
+            border-color: #007acc;
+            box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #138496;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        .analysis-section, .log-section {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #444;
+            margin-bottom: 20px;
+        }
+
+        .analysis-content, .log-content {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .log-entry {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-radius: 3px;
+        }
+
+        .log-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .log-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .log-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .log-time {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .log-type {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .analysis-summary h4 {
+            color: #007acc;
+            margin-top: 0;
+        }
+
+        .analysis-summary p {
+            margin: 5px 0;
+        }
+
+        .analysis-summary ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .analysis-summary li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navigation-bar">
+        <div class="tool-selector">
+            <span class="tool-selector-label">TOOL:</span>
+            <a href="../index.html" class="tool-btn">Home</a>
+            <a href="../hashcat_generator/index.html" class="tool-btn">HashCat</a>
+            <a href="../nmap_generator/index.html" class="tool-btn">Nmap</a>
+            <a href="index.html" class="tool-btn active">SIEM Parser</a>
+        </div>
+        <div class="inner-navigation">
+            <a href="index.html" class="nav-item active">Converter</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="header">
+            <h1>🎯 da signature parser</h1>
+            <p>Complete SIEM Rule Management Platform - Convert, Analyze, Validate & Optimize</p>
+            <div class="security-warning">
+                ⚠️ This tool processes security rules. All inputs are validated for security.
+            </div>
+        </header>
+
+        <main>
+            <div class="converter-section">
+                <div class="input-section">
+                    <div class="section-header">
+                        <h3>📥 Input Rules</h3>
+                        <button class="btn btn-primary" onclick="clearInput()">Clear</button>
+                    </div>
+                    <textarea id="inputRules" placeholder="Paste your Snort or Suricata rules here..."></textarea>
+                </div>
+
+                <div class="output-section">
+                    <div class="section-header">
+                        <h3>📤 Converted Rules</h3>
+                        <button class="btn btn-secondary" onclick="copyOutput()">Copy</button>
+                    </div>
+                    <textarea id="outputRules" placeholder="Converted rules will appear here..." readonly></textarea>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-success" onclick="convertToSnort()">Convert to Snort</button>
+                <button class="btn btn-warning" onclick="convertToSuricata()">Convert to Suricata</button>
+                <button class="btn btn-info" onclick="analyzeRules()">Analyze Rules</button>
+            </div>
+
+            <div class="analysis-section">
+                <div class="section-header">
+                    <h3>📊 Analysis Results</h3>
+                </div>
+                <div id="analysisResults" class="analysis-content">
+                    <p>Click "Analyze Rules" to see detailed analysis</p>
+                </div>
+            </div>
+
+            <div class="log-section">
+                <div class="section-header">
+                    <h3>📝 Conversion Log</h3>
+                    <button class="btn btn-secondary" onclick="clearLog()">Clear Log</button>
+                </div>
+                <div id="conversionLog" class="log-content">
+                    <p>Conversion details will appear here</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Load scripts -->
+    <script src="security.js"></script>
+    <script src="parser.js"></script>
+    <script src="converter.js"></script>
+    <script src="app.js"></script>
+
+    <script>
+        // Simple security check - only for truly dangerous patterns
+        function checkForDangerousContent(content) {
+            const dangerousPatterns = [
+                /<script[^>]*>/i,
+                /javascript:/i,
+                /on\w+\s*=/i
+            ];
+            
+            return dangerousPatterns.some(pattern => pattern.test(content));
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputTextarea = document.getElementById('inputRules');
+            
+            if (inputTextarea) {
+                inputTextarea.addEventListener('input', function() {
+                    const content = this.value;
+                    if (checkForDangerousContent(content)) {
+                        console.warn('Potentially dangerous content detected');
+                        // Don't clear the input, just warn
+                    }
+                });
+            }
+        });
+
+        // Global functions for onclick handlers
+        window.clearInput = function() {
+            const input = document.getElementById('inputRules');
+            if (input) input.value = '';
+        };
+
+        window.copyOutput = function() {
+            const output = document.getElementById('outputRules');
+            if (!output || !output.value.trim()) {
+                alert('No content to copy');
+                return;
+            }
+
+            navigator.clipboard.writeText(output.value).then(() => {
+                console.log('Content copied to clipboard');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        };
+
+        window.clearLog = function() {
+            const log = document.getElementById('conversionLog');
+            if (log) {
+                log.innerHTML = '<p>Conversion details will appear here</p>';
+            }
+        };
+    </script>
+</body>
+</html>
