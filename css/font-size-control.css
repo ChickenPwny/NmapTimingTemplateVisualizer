@@ -1,0 +1,109 @@
+/* Font Size Control Widget Styles */
+
+.font-size-control-container {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    padding-left: 20px;
+    border-left: 2px solid #e0e0e0;
+}
+
+.font-size-control-container.floating {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    z-index: 1000;
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+.font-size-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 2px solid #667eea;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+
+.font-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+}
+
+.font-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.font-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(102, 126, 234, 0.3);
+}
+
+.font-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.font-btn span {
+    line-height: 1;
+    user-select: none;
+}
+
+.font-size-display {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #667eea;
+    min-width: 45px;
+    text-align: center;
+    user-select: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .font-size-control-container:not(.floating) {
+        margin-left: 10px;
+        padding-left: 10px;
+        border-left: 1px solid #e0e0e0;
+    }
+
+    .font-size-control-container.floating {
+        top: 15px;
+        right: 15px;
+    }
+
+    .font-size-control {
+        padding: 4px 8px;
+        gap: 6px;
+    }
+
+    .font-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 18px;
+    }
+
+    .font-size-display {
+        font-size: 0.85em;
+        min-width: 40px;
+    }
+}
+
