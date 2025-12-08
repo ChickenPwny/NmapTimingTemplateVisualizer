@@ -47,14 +47,31 @@ class HashcatGeneratorApp {
             this.detectLocation();
         });
 
-        // Security Insights toggle
+        // Security Insights toggle - make entire header clickable
         const securityInsightsToggle = document.getElementById('securityInsightsToggle');
         const securityInsightsContent = document.getElementById('securityInsightsContent');
-        if (securityInsightsToggle && securityInsightsContent) {
-            securityInsightsToggle.addEventListener('click', () => {
+        const securityInsightsHeader = document.querySelector('.security-insights-header');
+        
+        if (securityInsightsToggle && securityInsightsContent && securityInsightsHeader) {
+            const toggleInsights = () => {
                 const isExpanded = securityInsightsContent.style.display !== 'none';
                 securityInsightsContent.style.display = isExpanded ? 'none' : 'block';
                 securityInsightsToggle.classList.toggle('expanded', !isExpanded);
+            };
+            
+            // Make entire header clickable
+            securityInsightsHeader.addEventListener('click', (e) => {
+                // If clicking the button, let the button handler take care of it
+                if (e.target === securityInsightsToggle || e.target.closest('.security-insights-toggle')) {
+                    return;
+                }
+                toggleInsights();
+            });
+            
+            // Button click handler
+            securityInsightsToggle.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent header click from also firing
+                toggleInsights();
             });
         }
 

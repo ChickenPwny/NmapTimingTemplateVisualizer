@@ -908,6 +908,15 @@ input[type="checkbox"] {
     align-items: center;
     margin-bottom: 15px;
     cursor: pointer;
+    padding: 10px;
+    margin: -10px -10px 15px -10px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+    user-select: none;
+}
+
+.security-insights-header:hover {
+    background-color: rgba(40, 167, 69, 0.1);
 }
 
 .security-insights-header h3 {
