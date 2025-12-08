@@ -29,6 +29,192 @@
             <p class="subtitle">AI-Powered Password Mask & Wordlist Generator for HashCat</p>
         </header>
 
+        <!-- Security Insights Info Box - Moved to top -->
+        <div class="security-insights-form-box">
+            <div class="security-insights-header">
+                <h3>🔒 Security Insights</h3>
+                <button type="button" class="security-insights-toggle" id="securityInsightsToggle">
+                    <span class="toggle-icon">▼</span>
+                </button>
+            </div>
+            <div class="security-insights-content" id="securityInsightsContent" style="display: none;">
+                <div class="insights-container">
+                    <!-- Special Character Paradox Section -->
+                    <div class="insight-section">
+                        <h3>🔍 The Special Character Paradox</h3>
+                        <div class="insight-content">
+                            <p><strong>Question:</strong> Does forcing special characters really add password complexity, or does it merely narrow a user's password into a more guessable realm?</p>
+                            
+                            <div class="thought-experiment">
+                                <h4>Thought Experiment: 8-15 Character Passwords</h4>
+                                <p>Let's examine a common scenario:</p>
+                                <ul>
+                                    <li><strong>Password Length:</strong> 8-15 characters (minimum requirement: 8)</li>
+                                    <li><strong>Policy Requirement:</strong> Must contain at least one special character</li>
+                                    <li><strong>User Behavior:</strong> Users typically create a strong base password, then append a special character at the end when prompted</li>
+                                </ul>
+                                
+                                <div class="analysis-box">
+                                    <strong>Result:</strong> What appears to be a 15-character password space is actually reduced to:
+                                    <ul>
+                                        <li><strong>8-14 character spaces</strong> for the base password</li>
+                                        <li><strong>1 character space</strong> at the end (almost always)</li>
+                                        <li><strong>Narrowed special character set:</strong> Due to keyboard placement, users typically choose from <code>!@#?:;.</code></li>
+                                    </ul>
+                                </div>
+                                
+                                <p><strong>Impact:</strong> Instead of 95^15 possible combinations (if all 95 printable ASCII characters were equally likely), we're dealing with approximately 94^14 × 5 combinations—a massive reduction in search space.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Keyboard Placement Patterns -->
+                    <div class="insight-section">
+                        <h3>⌨️ Keyboard Placement Patterns</h3>
+                        <div class="insight-content">
+                            <p>Special character selection is heavily influenced by keyboard layout and accessibility:</p>
+                            
+                            <div class="keyboard-patterns">
+                                <div class="pattern-category">
+                                    <h4>Most Common Special Characters (by keyboard position):</h4>
+                                    <ul>
+                                        <li><strong>Top Row (Shift + Number):</strong> !@#$%^&*()</li>
+                                        <li><strong>Easily Accessible:</strong> !@#?:;.</li>
+                                        <li><strong>Common Substitutions:</strong> @ for 'a', $ for 's', ! for 'i' or 'l'</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="pattern-category">
+                                    <h4>Position Patterns:</h4>
+                                    <ul>
+                                        <li><strong>End of Password:</strong> ~85% of special characters appear at the end</li>
+                                        <li><strong>Beginning:</strong> ~10% (often when user thinks ahead)</li>
+                                        <li><strong>Middle:</strong> ~5% (rare, usually in complex passwords)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Character Space Reduction -->
+                    <div class="insight-section">
+                        <h3>📉 Character Space Reduction Analysis</h3>
+                        <div class="insight-content">
+                            <p>Password policies that force specific character types actually <em>reduce</em> the effective search space:</p>
+                            
+                            <div class="space-calculation">
+                                <h4>Example Calculation:</h4>
+                                <table class="calculation-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Scenario</th>
+                                            <th>Effective Search Space</th>
+                                            <th>Reduction Factor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>8-char, no restrictions</td>
+                                            <td>95^8 ≈ 6.6×10^15</td>
+                                            <td>Baseline</td>
+                                        </tr>
+                                        <tr>
+                                            <td>8-char, 1 special required</td>
+                                            <td>~94^7 × 5 ≈ 6.4×10^14</td>
+                                            <td>~10× reduction</td>
+                                        </tr>
+                                        <tr>
+                                            <td>8-char, special at end only</td>
+                                            <td>~94^7 × 5 ≈ 6.4×10^14</td>
+                                            <td>~10× reduction</td>
+                                        </tr>
+                                        <tr>
+                                            <td>15-char, special at end</td>
+                                            <td>~94^14 × 5 ≈ 1.2×10^28</td>
+                                            <td>~19× reduction vs. random</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="key-insight">
+                                <strong>Key Insight:</strong> The longer the password, the more significant the reduction becomes when special characters are predictable in position and type.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mask Prediction Implications -->
+                    <div class="insight-section">
+                        <h3>🎯 Mask Prediction Implications</h3>
+                        <div class="insight-content">
+                            <p>Understanding these patterns allows for more effective HashCat mask generation:</p>
+                            
+                            <div class="mask-strategies">
+                                <h4>Optimized Mask Strategies:</h4>
+                                <ol>
+                                    <li><strong>End-Position Special Characters:</strong>
+                                        <ul>
+                                            <li>Use masks like: <code>?l?l?l?l?l?l?l?l?s</code> (7 lowercase + 1 special)</li>
+                                            <li>Limit special charset to: <code>!@#?:;.</code> instead of full <code>?s</code></li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Custom Charsets:</strong>
+                                        <ul>
+                                            <li>Create custom charset: <code>-1 !@#?:;.</code> for special characters</li>
+                                            <li>Use: <code>?l?l?l?l?l?l?l?l?1</code> (where ?1 is custom special set)</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Length-Based Masks:</strong>
+                                        <ul>
+                                            <li>Prioritize 8-12 character masks (most common)</li>
+                                            <li>Test end-position specials first, then beginning, then middle</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </div>
+                            
+                            <div class="practical-example">
+                                <h4>Practical Example:</h4>
+                                <p>For a policy requiring 8+ characters with 1 special:</p>
+                                <pre class="mask-example-code"># Instead of: ?a?a?a?a?a?a?a?a
+# Use: ?l?l?l?l?l?l?l?1
+# Where ?1 = !@#?:;.</pre>
+                                <p>This reduces the search space from ~6.6×10^15 to ~2.0×10^13—a <strong>330× improvement</strong> in cracking speed.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommendations -->
+                    <div class="insight-section">
+                        <h3>💡 Recommendations</h3>
+                        <div class="insight-content">
+                            <div class="recommendations-list">
+                                <div>
+                                    <h4>For Password Cracking:</h4>
+                                    <ul>
+                                        <li>Always prioritize end-position special characters</li>
+                                        <li>Use custom charsets for special characters based on keyboard layout</li>
+                                        <li>Test shorter masks first (8-10 chars) before longer ones</li>
+                                        <li>Consider position-based mask rules (end > beginning > middle)</li>
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <h4>For Password Policy Design:</h4>
+                                    <ul>
+                                        <li>Avoid forcing specific character types in specific positions</li>
+                                        <li>Focus on length over complexity requirements</li>
+                                        <li>Consider passphrase policies instead of complex character requirements</li>
+                                        <li>Educate users about password patterns to avoid</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <form id="hashcatForm">
             <div class="form-grid">
                 <div class="form-group">
@@ -49,18 +235,18 @@
                     <small>Company name for password variations</small>
                 </div>
 
-                <div class="form-group">
-                    <label for="usersFile">Users File:</label>
-                    <input type="file" id="usersFile" name="usersFile" accept=".txt,.csv">
-                    <small>One username per line (txt or csv format)</small>
-                    <div id="usersPreview" class="file-preview"></div>
-                </div>
+            <div class="form-group">
+                <label for="usersFile">Users File:</label>
+                <input type="file" id="usersFile" name="usersFile" accept=".txt,.csv">
+                <small>One username per line (txt or csv format)</small>
+                <div id="usersPreview" class="file-preview"></div>
+            </div>
 
-                <div class="form-group">
-                    <label for="year">Year:</label>
-                    <input type="number" id="year" name="year" value="2024" min="2000" max="2030">
-                    <small>Year for date-based password patterns</small>
-                </div>
+            <div class="form-group">
+                <label for="year">Year:</label>
+                <input type="number" id="year" name="year" value="2024" min="2000" max="2030">
+                <small>Year for date-based password patterns</small>
+            </div>
 
                 <div class="form-group">
                     <label for="wordlistFile">Custom Wordlist Upload (Optional):</label>
@@ -114,6 +300,7 @@
                 <button class="tab-btn active" data-tab="wordlist">Wordlist</button>
                 <button class="tab-btn" data-tab="mask">Masks</button>
                 <button class="tab-btn" data-tab="commands">HashCat Commands</button>
+                <button class="tab-btn" data-tab="insights">Security Insights</button>
             </div>
 
             <div id="wordlistTab" class="tab-content active">
@@ -144,6 +331,188 @@
                 </div>
                 <div id="hashcatCommandsContainer" class="commands-container">
                     <!-- Individual command panels will be inserted here -->
+                </div>
+            </div>
+
+            <div id="insightsTab" class="tab-content">
+                <div class="output-header">
+                    <h2>Password Predictability & Mask Optimization</h2>
+                    <p class="mask-help">Understanding how password policies and human behavior affect password cracking</p>
+                </div>
+                
+                <div class="insights-container">
+                    <!-- Special Character Paradox Section -->
+                    <div class="insight-section">
+                        <h3>🔍 The Special Character Paradox</h3>
+                        <div class="insight-content">
+                            <p><strong>Question:</strong> Does forcing special characters really add password complexity, or does it merely narrow a user's password into a more guessable realm?</p>
+                            
+                            <div class="thought-experiment">
+                                <h4>Thought Experiment: 8-15 Character Passwords</h4>
+                                <p>Let's examine a common scenario:</p>
+                                <ul>
+                                    <li><strong>Password Length:</strong> 8-15 characters (minimum requirement: 8)</li>
+                                    <li><strong>Policy Requirement:</strong> Must contain at least one special character</li>
+                                    <li><strong>User Behavior:</strong> Users typically create a strong base password, then append a special character at the end when prompted</li>
+                                </ul>
+                                
+                                <div class="analysis-box">
+                                    <strong>Result:</strong> What appears to be a 15-character password space is actually reduced to:
+                                    <ul>
+                                        <li><strong>8-14 character spaces</strong> for the base password</li>
+                                        <li><strong>1 character space</strong> at the end (almost always)</li>
+                                        <li><strong>Narrowed special character set:</strong> Due to keyboard placement, users typically choose from <code>!@#?:;.</code></li>
+                                    </ul>
+                                </div>
+                                
+                                <p><strong>Impact:</strong> Instead of 95^15 possible combinations (if all 95 printable ASCII characters were equally likely), we're dealing with approximately 94^14 × 5 combinations—a massive reduction in search space.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Keyboard Placement Patterns -->
+                    <div class="insight-section">
+                        <h3>⌨️ Keyboard Placement Patterns</h3>
+                        <div class="insight-content">
+                            <p>Special character selection is heavily influenced by keyboard layout and accessibility:</p>
+                            
+                            <div class="keyboard-patterns">
+                                <div class="pattern-category">
+                                    <h4>Most Common Special Characters (by keyboard position):</h4>
+                                    <ul>
+                                        <li><strong>Top Row (Shift + Number):</strong> !@#$%^&*()</li>
+                                        <li><strong>Easily Accessible:</strong> !@#?:;.</li>
+                                        <li><strong>Common Substitutions:</strong> @ for 'a', $ for 's', ! for 'i' or 'l'</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="pattern-category">
+                                    <h4>Position Patterns:</h4>
+                                    <ul>
+                                        <li><strong>End of Password:</strong> ~85% of special characters appear at the end</li>
+                                        <li><strong>Beginning:</strong> ~10% (often when user thinks ahead)</li>
+                                        <li><strong>Middle:</strong> ~5% (rare, usually in complex passwords)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Character Space Reduction -->
+                    <div class="insight-section">
+                        <h3>📉 Character Space Reduction Analysis</h3>
+                        <div class="insight-content">
+                            <p>Password policies that force specific character types actually <em>reduce</em> the effective search space:</p>
+                            
+                            <div class="space-calculation">
+                                <h4>Example Calculation:</h4>
+                                <table class="calculation-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Scenario</th>
+                                            <th>Effective Search Space</th>
+                                            <th>Reduction Factor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>8-char, no restrictions</td>
+                                            <td>95^8 ≈ 6.6×10^15</td>
+                                            <td>Baseline</td>
+                                        </tr>
+                                        <tr>
+                                            <td>8-char, 1 special required</td>
+                                            <td>~94^7 × 5 ≈ 6.4×10^14</td>
+                                            <td>~10× reduction</td>
+                                        </tr>
+                                        <tr>
+                                            <td>8-char, special at end only</td>
+                                            <td>~94^7 × 5 ≈ 6.4×10^14</td>
+                                            <td>~10× reduction</td>
+                                        </tr>
+                                        <tr>
+                                            <td>15-char, special at end</td>
+                                            <td>~94^14 × 5 ≈ 1.2×10^28</td>
+                                            <td>~19× reduction vs. random</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="key-insight">
+                                <strong>Key Insight:</strong> The longer the password, the more significant the reduction becomes when special characters are predictable in position and type.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mask Prediction Implications -->
+                    <div class="insight-section">
+                        <h3>🎯 Mask Prediction Implications</h3>
+                        <div class="insight-content">
+                            <p>Understanding these patterns allows for more effective HashCat mask generation:</p>
+                            
+                            <div class="mask-strategies">
+                                <h4>Optimized Mask Strategies:</h4>
+                                <ol>
+                                    <li><strong>End-Position Special Characters:</strong>
+                                        <ul>
+                                            <li>Use masks like: <code>?l?l?l?l?l?l?l?l?s</code> (7 lowercase + 1 special)</li>
+                                            <li>Limit special charset to: <code>!@#?:;.</code> instead of full <code>?s</code></li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Custom Charsets:</strong>
+                                        <ul>
+                                            <li>Create custom charset: <code>-1 !@#?:;.</code> for special characters</li>
+                                            <li>Use: <code>?l?l?l?l?l?l?l?l?1</code> (where ?1 is custom special set)</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Length-Based Masks:</strong>
+                                        <ul>
+                                            <li>Prioritize 8-12 character masks (most common)</li>
+                                            <li>Test end-position specials first, then beginning, then middle</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </div>
+                            
+                            <div class="practical-example">
+                                <h4>Practical Example:</h4>
+                                <p>For a policy requiring 8+ characters with 1 special:</p>
+                                <pre class="mask-example-code"># Instead of: ?a?a?a?a?a?a?a?a
+# Use: ?l?l?l?l?l?l?l?1
+# Where ?1 = !@#?:;.</pre>
+                                <p>This reduces the search space from ~6.6×10^15 to ~2.0×10^13—a <strong>330× improvement</strong> in cracking speed.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommendations -->
+                    <div class="insight-section">
+                        <h3>💡 Recommendations</h3>
+                        <div class="insight-content">
+                            <div class="recommendations-list">
+                                <div>
+                                    <h4>For Password Cracking:</h4>
+                                    <ul>
+                                        <li>Always prioritize end-position special characters</li>
+                                        <li>Use custom charsets for special characters based on keyboard layout</li>
+                                        <li>Test shorter masks first (8-10 chars) before longer ones</li>
+                                        <li>Consider position-based mask rules (end > beginning > middle)</li>
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <h4>For Password Policy Design:</h4>
+                                    <ul>
+                                        <li>Avoid forcing specific character types in specific positions</li>
+                                        <li>Focus on length over complexity requirements</li>
+                                        <li>Consider passphrase policies instead of complex character requirements</li>
+                                        <li>Educate users about password patterns to avoid</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

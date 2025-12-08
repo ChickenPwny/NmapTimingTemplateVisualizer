@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerShell Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
+            min-height: 100vh;
+            padding: 30px;
+            color: #333;
+        }
+
+        .navigation-bar {
+            max-width: 2000px;
+            margin: 0 auto 20px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .tool-selector {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .tool-selector-label {
+            font-size: 0.9em;
+            color: #666;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .tool-btn {
+            font-size: 1em;
+            font-weight: 600;
+            color: #0078d4;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            user-select: none;
+            text-decoration: none;
+            display: inline-block;
+            border: 2px solid transparent;
+        }
+
+        .tool-btn:hover {
+            background: #f0f0f0;
+            color: #005a9e;
+            transform: translateY(-2px);
+        }
+
+        .tool-btn.active {
+            background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
+        }
+
+        .inner-navigation {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #0078d4;
+            cursor: pointer;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            user-select: none;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-item:hover {
+            background: #f0f0f0;
+            color: #005a9e;
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
+        }
+
+        .page-wrapper {
+            display: grid;
+            grid-template-columns: 300px 2fr 350px;
+            gap: 40px;
+            max-width: 2000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: transparent;
+        }
+
+        @media (max-width: 1400px) {
+            .page-wrapper {
+                grid-template-columns: 280px 2fr 320px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .page-wrapper {
+                grid-template-columns: 1fr;
+            }
+            
+            .left-panel,
+            .right-panel {
+                position: static;
+                max-height: none;
+            }
+        }
+
+        .left-container,
+        .middle-container,
+        .right-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 50px;
+        }
+
+        .left-panel,
+        .middle-panel,
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .left-panel,
+        .right-panel {
+            gap: 30px;
+            position: sticky;
+            top: 20px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0078d4;
+            margin-bottom: 15px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 50px;
+            font-size: 1.1em;
+        }
+
+        .dashboard-area {
+            min-height: 500px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px dashed #dee2e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 1.2em;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .tools-sidebar {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 200px;
+        }
+
+        .tools-sidebar h3 {
+            color: #0078d4;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .tools-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tools-list li {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 5px;
+            border-left: 3px solid #0078d4;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tools-list li:hover {
+            background: #e7f3ff;
+            transform: translateX(5px);
+        }
+
+        .placeholder-text {
+            color: #6c757d;
+            font-style: italic;
+        }
+    </style>
+    <link rel="stylesheet" href="../css/font-size-control.css">
+</head>
+<body>
+    <nav class="navigation-bar">
+        <div class="tool-selector">
+            <span class="tool-selector-label">TOOL:</span>
+            <a href="../index.html" class="tool-btn">Home</a>
+            <a href="../hashcat_generator/index.html" class="tool-btn">HashCat</a>
+            <a href="../nmap_generator/index.html" class="tool-btn">Nmap</a>
+            <a href="../DaSignatureParser/index.html" class="tool-btn">SIEM Parser</a>
+            <a href="index.html" class="tool-btn active">PowerShell</a>
+        </div>
+        <div class="inner-navigation">
+            <a href="index.html" class="nav-item active">Dashboard</a>
+            <div class="font-size-control-container"></div>
+        </div>
+    </nav>
+
+    <div class="page-wrapper">
+        <!-- LEFT SIDEBAR: Tools Panel -->
+        <div class="left-container">
+            <div class="left-panel">
+                <div class="tools-sidebar">
+                    <h3>Tools</h3>
+                    <ul class="tools-list">
+                        <li>Tool 1</li>
+                        <li>Tool 2</li>
+                        <li>Tool 3</li>
+                        <li>Tool 4</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT AREA: Dashboard -->
+        <div class="middle-container">
+            <h1>⚡ PowerShell Dashboard</h1>
+            <p class="subtitle">Interactive dashboard for PowerShell operations and automation</p>
+
+            <div class="middle-panel">
+                <div class="dashboard-area">
+                    <div class="placeholder-text">
+                        Dashboard content area - Ready for your PowerShell tools and widgets
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDEBAR: Additional Panel -->
+        <div class="right-container">
+            <div class="right-panel">
+                <div class="tools-sidebar">
+                    <h3>Info Panel</h3>
+                    <p class="placeholder-text">
+                        Additional information and controls can be placed here
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/font-size-control.js"></script>
+</body>
+</html>
+

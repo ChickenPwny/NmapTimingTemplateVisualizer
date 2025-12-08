@@ -674,3 +674,380 @@ input[type="checkbox"] {
 .insight-card strong {
     font-weight: 600;
 }
+
+/* Security Insights Tab Styles */
+.insights-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.insight-section {
+    background: white;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-left: 4px solid #28a745;
+}
+
+.insight-section h3 {
+    margin: 0 0 20px 0;
+    color: #333;
+    font-size: 1.4em;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.insight-content {
+    line-height: 1.8;
+    color: #555;
+}
+
+.insight-content p {
+    margin-bottom: 15px;
+}
+
+.thought-experiment {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #667eea;
+}
+
+.thought-experiment h4 {
+    color: #667eea;
+    margin: 0 0 15px 0;
+}
+
+.thought-experiment ul {
+    margin: 10px 0 0 20px;
+}
+
+.analysis-box {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.analysis-box strong {
+    color: #856404;
+}
+
+.analysis-box ul {
+    margin: 10px 0 0 20px;
+}
+
+.analysis-box code {
+    background: #f5f5f5;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    color: #d63384;
+}
+
+.keyboard-patterns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.pattern-category {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+}
+
+.pattern-category h4 {
+    color: #333;
+    margin: 0 0 10px 0;
+    font-size: 1.1em;
+}
+
+.pattern-category ul {
+    margin: 10px 0 0 20px;
+}
+
+.space-calculation {
+    margin: 20px 0;
+}
+
+.calculation-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.calculation-table thead {
+    background: #667eea;
+    color: white;
+}
+
+.calculation-table th,
+.calculation-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.calculation-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.key-insight {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 6px;
+    margin: 20px 0;
+    font-weight: 600;
+}
+
+.mask-strategies {
+    background: #e7f3ff;
+    padding: 20px;
+    border-radius: 6px;
+    margin: 20px 0;
+    border-left: 4px solid #007bff;
+}
+
+.mask-strategies h4 {
+    color: #004085;
+    margin: 0 0 15px 0;
+}
+
+.mask-strategies ol,
+.mask-strategies ul {
+    margin: 10px 0 0 20px;
+}
+
+.mask-strategies code {
+    background: #2d2d2d;
+    color: #f8f8f2;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+}
+
+.practical-example {
+    background: #d1ecf1;
+    border: 1px solid #bee5eb;
+    border-radius: 6px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.practical-example h4 {
+    color: #0c5460;
+    margin: 0 0 15px 0;
+}
+
+.mask-example-code {
+    background: #2d2d2d;
+    color: #f8f8f2;
+    padding: 15px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    overflow-x: auto;
+    margin: 15px 0;
+}
+
+.recommendations-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin: 20px 0;
+}
+
+.recommendations-list h4 {
+    color: #28a745;
+    margin: 0 0 15px 0;
+    font-size: 1.2em;
+}
+
+.recommendations-list ul {
+    margin: 10px 0 0 20px;
+    line-height: 1.8;
+}
+
+@media (max-width: 768px) {
+    .keyboard-patterns,
+    .recommendations-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .calculation-table {
+        font-size: 0.85em;
+    }
+    
+    .calculation-table th,
+    .calculation-table td {
+        padding: 8px;
+    }
+}
+
+/* Security Insights Form Box */
+.security-insights-form-box {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 2px solid #28a745;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0 30px 0;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+}
+
+.security-insights-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.security-insights-header h3 {
+    margin: 0;
+    color: #28a745;
+    font-size: 1.3em;
+    font-weight: 600;
+}
+
+.security-insights-toggle {
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.security-insights-toggle:hover {
+    background: #218838;
+    transform: scale(1.1);
+}
+
+.security-insights-toggle.expanded .toggle-icon {
+    transform: rotate(180deg);
+}
+
+.toggle-icon {
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+.security-insights-content {
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.security-insights-quick-summary {
+    line-height: 1.8;
+    color: #333;
+}
+
+.security-insights-quick-summary > p {
+    margin-bottom: 15px;
+    font-size: 1.05em;
+}
+
+.security-insights-key-points {
+    background: white;
+    border-left: 4px solid #667eea;
+    padding: 15px;
+    border-radius: 6px;
+    margin: 15px 0;
+}
+
+.security-insights-key-points h4 {
+    color: #667eea;
+    margin: 0 0 10px 0;
+    font-size: 1.1em;
+}
+
+.security-insights-key-points ul {
+    margin: 10px 0 0 20px;
+}
+
+.security-insights-key-points code {
+    background: #f5f5f5;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    color: #d63384;
+}
+
+.security-insights-example {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-left: 4px solid #ffc107;
+    padding: 15px;
+    border-radius: 6px;
+    margin: 15px 0;
+}
+
+.security-insights-example strong {
+    color: #856404;
+}
+
+.security-insights-example ul {
+    margin: 10px 0 0 20px;
+}
+
+.security-insights-action {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.security-insights-link-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+}
+
+.security-insights-link-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+}
+
+.security-insights-link-btn:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .security-insights-form-box {
+        margin: 15px 0;
+        padding: 15px;
+    }
+    
+    .security-insights-header h3 {
+        font-size: 1.1em;
+    }
+}

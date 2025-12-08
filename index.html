@@ -53,7 +53,13 @@
 
         @media (min-width: 1200px) {
             .tools-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1600px) {
+            .tools-grid {
+                grid-template-columns: repeat(4, 1fr);
             }
         }
 
@@ -122,6 +128,15 @@
             box-shadow: 0 20px 40px rgba(255, 107, 107, 0.5);
         }
 
+        .tool-card.powershell {
+            background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
+            box-shadow: 0 10px 30px rgba(0, 120, 212, 0.3);
+        }
+
+        .tool-card.powershell:hover {
+            box-shadow: 0 20px 40px rgba(0, 120, 212, 0.5);
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 40px 20px;
@@ -175,6 +190,14 @@
                 <div class="tool-name">SIEM Rules Parser</div>
                 <div class="tool-description">
                     Comprehensive Snort ↔ Suricata rule converter with intelligent detection, protocol conversion, and optimization
+                </div>
+            </a>
+
+            <a href="powershell_dashboard/index.html" class="tool-card powershell">
+                <div class="tool-icon">⚡</div>
+                <div class="tool-name">PowerShell Dashboard</div>
+                <div class="tool-description">
+                    Interactive PowerShell dashboard for security operations, automation, and system management
                 </div>
             </a>
         </div>

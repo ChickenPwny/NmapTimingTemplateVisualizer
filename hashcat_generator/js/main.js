@@ -47,6 +47,17 @@ class HashcatGeneratorApp {
             this.detectLocation();
         });
 
+        // Security Insights toggle
+        const securityInsightsToggle = document.getElementById('securityInsightsToggle');
+        const securityInsightsContent = document.getElementById('securityInsightsContent');
+        if (securityInsightsToggle && securityInsightsContent) {
+            securityInsightsToggle.addEventListener('click', () => {
+                const isExpanded = securityInsightsContent.style.display !== 'none';
+                securityInsightsContent.style.display = isExpanded ? 'none' : 'block';
+                securityInsightsToggle.classList.toggle('expanded', !isExpanded);
+            });
+        }
+
         // Download buttons
         document.getElementById('downloadWordlist').addEventListener('click', () => {
             this.downloadWordlist();
