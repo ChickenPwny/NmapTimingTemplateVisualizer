@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSINT Intelligence Report Generator</title>
+    <link rel="stylesheet" href="../css/font-size-control.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="font-size-control-container floating"></div>
+    
+    <div class="container">
+        <header>
+            <h1>🔍 OSINT Intelligence Report Generator</h1>
+            <p class="subtitle">Comprehensive External Attack Surface & Threat Intelligence</p>
+        </header>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label for="companyName">Company Name or Domain</label>
+                <input type="text" id="companyName" placeholder="e.g., example.com or Example Corp" />
+                <button id="generateReport" class="btn-primary">Generate OSINT Report</button>
+            </div>
+            
+            <div class="api-keys-section">
+                <details>
+                    <summary>Optional API Keys (for enhanced data)</summary>
+                    <div class="api-keys">
+                        <div class="api-key-item">
+                            <label for="shodanKey">Shodan API Key:</label>
+                            <input type="password" id="shodanKey" placeholder="Optional - for IP/host data" />
+                        </div>
+                        <div class="api-key-item">
+                            <label for="virustotalKey">VirusTotal API Key:</label>
+                            <input type="password" id="virustotalKey" placeholder="Optional - for threat intel" />
+                        </div>
+                        <div class="api-key-item">
+                            <label for="hunterKey">Hunter.io API Key:</label>
+                            <input type="password" id="hunterKey" placeholder="Optional - for email discovery" />
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <div id="loadingIndicator" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Collecting OSINT data from multiple sources...</p>
+            <div class="progress-steps"></div>
+        </div>
+
+        <div id="reportContainer" class="report-container hidden">
+            <div class="report-header">
+                <h2>OSINT Intelligence Report</h2>
+                <div class="report-actions">
+                    <button id="exportPDF" class="btn-secondary">Export PDF</button>
+                    <button id="exportJSON" class="btn-secondary">Export JSON</button>
+                    <button id="newReport" class="btn-secondary">New Report</button>
+                </div>
+            </div>
+            
+            <div id="reportContent" class="report-content">
+                <!-- Report sections will be dynamically generated -->
+            </div>
+        </div>
+
+        <div id="errorContainer" class="error-container hidden"></div>
+    </div>
+
+    <script src="../js/font-size-control.js"></script>
+    <script src="js/osint-engine.js"></script>
+    <script src="js/report-generator.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
+

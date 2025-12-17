@@ -137,6 +137,24 @@
             box-shadow: 0 20px 40px rgba(0, 120, 212, 0.5);
         }
 
+        .tool-card.osint {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            box-shadow: 0 10px 30px rgba(30, 60, 114, 0.3);
+        }
+
+        .tool-card.osint:hover {
+            box-shadow: 0 20px 40px rgba(30, 60, 114, 0.5);
+        }
+
+        .tool-card.blog {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.3);
+        }
+
+        .tool-card.blog:hover {
+            box-shadow: 0 20px 40px rgba(245, 87, 108, 0.5);
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 40px 20px;
@@ -169,6 +187,14 @@
         <p class="subtitle">Choose a tool to get started</p>
         
         <div class="tools-grid">
+            <a href="blog/index.html" class="tool-card blog">
+                <div class="tool-icon">📝</div>
+                <div class="tool-name">Blog</div>
+                <div class="tool-description">
+                    Personal thoughts and insights on security tools, techniques, and experiences
+                </div>
+            </a>
+
             <a href="hashcat_generator/index.html" class="tool-card hashcat">
                 <div class="tool-icon">🔑</div>
                 <div class="tool-name">HashCat</div>
@@ -198,6 +224,14 @@
                 <div class="tool-name">PowerShell Dashboard</div>
                 <div class="tool-description">
                     Interactive PowerShell dashboard for security operations, automation, and system management
+                </div>
+            </a>
+
+            <a href="osint_tool/index.html" class="tool-card osint">
+                <div class="tool-icon">🔍</div>
+                <div class="tool-name">OSINT Intelligence</div>
+                <div class="tool-description">
+                    Comprehensive OSINT report generator with dark web intelligence, attack surface mapping, and threat intelligence
                 </div>
             </a>
         </div>

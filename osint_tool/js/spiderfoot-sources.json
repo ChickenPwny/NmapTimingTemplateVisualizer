@@ -1,0 +1,1532 @@
+[
+  {
+    "name": "AbstractAPI",
+    "summary": "Look up domain, phone and IP address information from AbstractAPI.",
+    "website": "https://app.abstractapi.com/",
+    "description": "Abstract provides powerful APIs to help you enrich any user experience or automate any workflow.",
+    "model": "FREE_NOAUTH_LIMITED",
+    "module": "sfp_abstractapi",
+    "category": "other",
+    "query_url": "https://app.abstractapi.com/"
+  },
+  {
+    "name": "abuse.ch",
+    "summary": "Check if a host/domain, IP address or netblock is malicious according to Abuse.ch.",
+    "website": "https://www.abuse.ch",
+    "description": "abuse.ch is operated by a random swiss guy fighting malware for non-profit,",
+    "model": "FREE_AUTH_UNLIMITED",
+    "module": "sfp_abusech",
+    "category": "threatIntelligence",
+    "query_url": "https://www.abuse.ch"
+  },
+  {
+    "name": "AbuseIPDB",
+    "summary": "Check if an IP address is malicious according to AbuseIPDB.com blacklist.",
+    "website": "https://www.abuseipdb.com",
+    "description": "AbuseIPDB is a project dedicated to helping combat the spread of hackers,",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_abuseipdb",
+    "category": "ipAddresses",
+    "query_url": "https://www.abuseipdb.com/check/$$TARGET$$"
+  },
+  {
+    "name": "Abusix Mail Intelligence",
+    "summary": "Check if a netblock or IP address is in the Abusix Mail Intelligence blacklist.",
+    "website": "https://abusix.org/",
+    "description": "Abusix Mail Intelligence is an innovative set of blocklists (RBL/DNSBL)",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_abusix",
+    "category": "emails",
+    "query_url": "https://abusix.org/"
+  },
+  {
+    "name": "AdBlock Check",
+    "summary": "Check if linked pages would be blocked by AdBlock Plus.",
+    "website": "https://adblockplus.org/",
+    "description": "Adblock Plus is a free extension that allows you to customize your web experience.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_adblock",
+    "category": "other",
+    "query_url": "https://adblockplus.org/"
+  },
+  {
+    "name": "AdGuard DNS",
+    "summary": "Check if a host would be blocked by AdGuard DNS.",
+    "website": "https://adguard.com/",
+    "description": "AdGuard DNS is a foolproof way to block Internet ads that does not require installing any applications.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_adguard_dns",
+    "category": "subdomains",
+    "query_url": "https://adguard.com/"
+  },
+  {
+    "name": "Ahmia",
+    "summary": "Search Tor ",
+    "website": "https://ahmia.fi/",
+    "description": "Ahmia searches hidden services on the Tor network. To access these hidden services,",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_ahmia",
+    "category": "darkWeb",
+    "query_url": "https://ahmia.fi/search/?q=$$TARGET$$"
+  },
+  {
+    "name": "AlienVault OTX",
+    "summary": "Obtain information from AlienVault Open Threat Exchange (OTX)",
+    "website": "https://otx.alienvault.com/",
+    "description": "The World\u2019s First Truly Open Threat Intelligence Community",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_alienvault",
+    "category": "other",
+    "query_url": "https://otx.alienvault.com/"
+  },
+  {
+    "name": "AlienVault IP Reputation",
+    "summary": "Check if an IP or netblock is malicious according to the AlienVault IP Reputation database.",
+    "website": "https://cybersecurity.att.com/",
+    "description": "Looking at security through new eyes.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_alienvaultiprep",
+    "category": "ipAddresses",
+    "query_url": "https://cybersecurity.att.com/"
+  },
+  {
+    "name": "Apple iTunes",
+    "summary": "Search Apple iTunes for mobile apps.",
+    "website": "https://itunes.apple.com/",
+    "description": "The Apple iTunes store is a store for downloading",
+    "model": "FREE_AUTH_UNLIMITED",
+    "module": "sfp_apple_itunes",
+    "category": "other",
+    "query_url": "https://itunes.apple.com/"
+  },
+  {
+    "name": "Archive.org",
+    "summary": "Identifies historic versions of interesting files/pages from the Wayback Machine.",
+    "website": "https://archive.org/",
+    "description": "Internet Archive is a non-profit library of millions of free books, movies, software, music, websites, and more.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_archiveorg",
+    "category": "other",
+    "query_url": "https://archive.org/"
+  },
+  {
+    "name": "ARIN",
+    "summary": "Queries ARIN registry for contact information.",
+    "website": "https://www.arin.net/",
+    "description": "ARIN is a nonprofit, member-based organization that administers IP addresses &",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_arin",
+    "category": "other",
+    "query_url": "https://www.arin.net/"
+  },
+  {
+    "name": "Azure Blob Finder",
+    "summary": "Search for potential Azure blobs associated with the target and attempt to list their contents.",
+    "website": "https://azure.microsoft.com/en-in/services/storage/blobs/",
+    "description": "Massively scalable and secure object storage for cloud-native workloads,",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_azureblobstorage",
+    "category": "other",
+    "query_url": "https://azure.microsoft.com/en-in/services/storage/blobs/"
+  },
+  {
+    "name": "BGPView",
+    "summary": "Obtain network information from BGPView API.",
+    "website": "https://bgpview.io/",
+    "description": "BGPView is a simple API allowing consumers to view all sort of analytics data about the current state and structure of the internet.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_bgpview",
+    "category": "other",
+    "query_url": "https://bgpview.io/"
+  },
+  {
+    "name": "BinaryEdge",
+    "summary": "Obtain information from BinaryEdge.io Internet scanning systems, including breaches, vulnerabilities, torrents and passive DNS.",
+    "website": "https://www.binaryedge.io/",
+    "description": "We scan the entire public internet, create real-time threat intelligence streams,",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_binaryedge",
+    "category": "other",
+    "query_url": "https://www.binaryedge.io/"
+  },
+  {
+    "name": "Bing",
+    "summary": "Obtain information from bing to identify sub-domains and links.",
+    "website": "https://www.bing.com/",
+    "description": "The Bing Search APIs let you build web-connected apps and services that",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_bingsearch",
+    "category": "other",
+    "query_url": "https://www.bing.com/"
+  },
+  {
+    "name": "Bing (Shared IPs)",
+    "summary": "Search Bing for hosts sharing the same IP.",
+    "website": "https://www.bing.com/",
+    "description": "The Bing Search APIs let you build web-connected apps and services that",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_bingsharedip",
+    "category": "ipAddresses",
+    "query_url": "https://www.bing.com/"
+  },
+  {
+    "name": "Bitcoin Who",
+    "summary": "Check for Bitcoin addresses against the Bitcoin Who",
+    "website": "https://bitcoinwhoswho.com/",
+    "description": "Check for Bitcoin addresses against the Bitcoin Who",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_bitcoinwhoswho",
+    "category": "other",
+    "query_url": "https://bitcoinwhoswho.com/"
+  },
+  {
+    "name": "Blockchain",
+    "summary": "Queries blockchain.info to find the balance of identified bitcoin wallet addresses.",
+    "website": "https://www.blockchain.com/",
+    "description": "Blockchain Exchange is the most secure place to buy, sell, and trade crypto.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_blockchain",
+    "category": "other",
+    "query_url": "https://www.blockchain.com/"
+  },
+  {
+    "name": "blocklist.de",
+    "summary": "Check if a netblock or IP is malicious according to blocklist.de.",
+    "website": "http://www.blocklist.de/en/index.html",
+    "description": "www.blocklist.de is a free and voluntary service provided by a Fraud/Abuse-specialist,",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_blocklistde",
+    "category": "other",
+    "query_url": "http://www.blocklist.de/en/index.html"
+  },
+  {
+    "name": "BotScout",
+    "summary": "Searches BotScout.com",
+    "website": "https://botscout.com/",
+    "description": "BotScout helps prevent automated web scripts, known as \\",
+    "model": "FREE_NOAUTH_LIMITED",
+    "module": "sfp_botscout",
+    "category": "other",
+    "query_url": "https://botscout.com/"
+  },
+  {
+    "name": "botvrij.eu",
+    "summary": "Check if a domain is malicious according to botvrij.eu.",
+    "website": "https://botvrij.eu/",
+    "description": "Botvrij.eu provides different sets",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_botvrij",
+    "category": "other",
+    "query_url": "https://botvrij.eu/"
+  },
+  {
+    "name": "BuiltWith",
+    "summary": "Query BuiltWith.com",
+    "website": "https://builtwith.com/",
+    "description": "Build lists of websites from our database of 38,701+ web technologies and over a quarter of a billion websites showing",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_builtwith",
+    "category": "other",
+    "query_url": "https://builtwith.com/"
+  },
+  {
+    "name": "CallerName",
+    "summary": "Lookup US phone number location and reputation information.",
+    "website": "http://callername.com/",
+    "description": "CallerName is a free, reverse phone lookup service for both cell and landline numbers.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_callername",
+    "category": "other",
+    "query_url": "http://callername.com/"
+  },
+  {
+    "name": "Censys",
+    "summary": "Obtain host information from Censys.io.",
+    "website": "https://censys.io/",
+    "description": "Discover exposures and other common entry points for attackers.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_censys",
+    "category": "other",
+    "query_url": "https://censys.io/"
+  },
+  {
+    "name": "CertSpotter",
+    "summary": "Gather information about SSL certificates from SSLMate CertSpotter API.",
+    "website": "https://sslmate.com/certspotter/",
+    "description": "Gather information about SSL certificates from SSLMate CertSpotter API.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_certspotter",
+    "category": "other",
+    "query_url": "https://sslmate.com/certspotter/"
+  },
+  {
+    "name": "CINS Army List",
+    "summary": "Check if a netblock or IP address is malicious according to Collective Intelligence Network Security (CINS) Army list.",
+    "website": "https://cinsscore.com/",
+    "description": "Leveraging data from our network of Sentinel",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_cinsscore",
+    "category": "other",
+    "query_url": "https://cinsscore.com/"
+  },
+  {
+    "name": "CIRCL.LU",
+    "summary": "Obtain information from CIRCL.LU",
+    "website": "https://www.circl.lu/",
+    "description": "The Computer Incident Response Center Luxembourg (CIRCL) is a government-driven initiative",
+    "model": "FREE_AUTH_UNLIMITED",
+    "module": "sfp_circllu",
+    "category": "other",
+    "query_url": "https://www.circl.lu/"
+  },
+  {
+    "name": "Leak-Lookup",
+    "summary": "Searches Leak-Lookup.com",
+    "website": "https://leak-lookup.com/",
+    "description": "Leak-Lookup allows you to search across thousands of data breaches",
+    "model": "FREE_AUTH_UNLIMITED",
+    "module": "sfp_citadel",
+    "category": "dataBreaches",
+    "query_url": "https://leak-lookup.com/"
+  },
+  {
+    "name": "CleanBrowsing.org",
+    "summary": "Check if a host would be blocked by CleanBrowsing.org DNS content filters.",
+    "website": "https://cleanbrowsing.org/",
+    "description": "You get to decide what type of content is allowed in your home or network via our",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_cleanbrowsing",
+    "category": "other",
+    "query_url": "https://cleanbrowsing.org/"
+  },
+  {
+    "name": "CleanTalk Spam List",
+    "summary": "Check if a netblock or IP address is on CleanTalk.org",
+    "website": "https://cleantalk.org",
+    "description": "CleanTalk is a Cloud-Based spam filtering service that allows you to protect your website from spam.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_cleantalk",
+    "category": "other",
+    "query_url": "https://cleantalk.org"
+  },
+  {
+    "name": "Clearbit",
+    "summary": "Check for names, addresses, domains and more based on lookups of e-mail addresses on clearbit.com.",
+    "website": "https://clearbit.com/",
+    "description": "Clearbit is the marketing data engine for all of your customer interactions.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_clearbit",
+    "category": "other",
+    "query_url": "https://clearbit.com/"
+  },
+  {
+    "name": "CloudFlare DNS",
+    "summary": "Check if a host would be blocked by CloudFlare DNS.",
+    "website": "https://www.cloudflare.com/",
+    "description": "1.1.1.1 for Families is the easiest way to add a layer of protection to",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_cloudflaredns",
+    "category": "subdomains",
+    "query_url": "https://www.cloudflare.com/"
+  },
+  {
+    "name": "CoinBlocker Lists",
+    "summary": "Check if a domain appears on CoinBlocker lists.",
+    "website": "https://zerodot1.gitlab.io/CoinBlockerListsWeb/",
+    "description": "The CoinBlockerLists are a project to prevent illegal mining in",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_coinblocker",
+    "category": "other",
+    "query_url": "https://zerodot1.gitlab.io/CoinBlockerListsWeb/"
+  },
+  {
+    "name": "CommonCrawl",
+    "summary": "Searches for URLs found through CommonCrawl.org.",
+    "website": "http://commoncrawl.org/",
+    "description": "We build and maintain an open repository of web crawl data that can be accessed and analyzed by anyone.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_commoncrawl",
+    "category": "other",
+    "query_url": "http://commoncrawl.org/"
+  },
+  {
+    "name": "Comodo Secure DNS",
+    "summary": "Check if a host would be blocked by Comodo Secure DNS.",
+    "website": "https://www.comodo.com/secure-dns/",
+    "description": "Comodo Secure DNS is a domain name resolution service",
+    "model": "FREE_NOAUTH_LIMITED",
+    "module": "sfp_comodo",
+    "category": "subdomains",
+    "query_url": "https://www.comodo.com/secure-dns/"
+  },
+  {
+    "name": "Crobat API",
+    "summary": "Search Crobat API for subdomains.",
+    "website": "https://sonar.omnisint.io/",
+    "description": "The entire Rapid7 Sonar DNS dataset indexed,",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_crobat_api",
+    "category": "other",
+    "query_url": "https://sonar.omnisint.io/"
+  },
+  {
+    "name": "Certificate Transparency",
+    "summary": "Gather hostnames from historical certificates in crt.sh.",
+    "website": "https://crt.sh/",
+    "description": "Free CT Log Certificate Search Tool from Sectigo (formerly Comodo CA).",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_crt",
+    "category": "certificates",
+    "query_url": "https://crt.sh/?q=%.$$TARGET$$"
+  },
+  {
+    "name": "CRXcavator",
+    "summary": "Search CRXcavator for Chrome extensions.",
+    "website": "https://crxcavator.io/",
+    "description": "CRXcavator automatically scans the entire Chrome Web",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_crxcavator",
+    "category": "darkWeb",
+    "query_url": "https://crxcavator.io/"
+  },
+  {
+    "name": "CyberCrime-Tracker.net",
+    "summary": "Check if a host/domain or IP address is malicious according to CyberCrime-Tracker.net.",
+    "website": "https://cybercrime-tracker.net/",
+    "description": "CyberCrime is a C&C panel tracker, in other words,",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_cybercrimetracker",
+    "category": "other",
+    "query_url": "https://cybercrime-tracker.net/"
+  },
+  {
+    "name": "Debounce",
+    "summary": "Check whether an email is disposable",
+    "website": "https://debounce.io/",
+    "description": "DeBounce provides a free & powerful API endpoint for checking",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_debounce",
+    "category": "other",
+    "query_url": "https://debounce.io/"
+  },
+  {
+    "name": "Digital Ocean Space Finder",
+    "summary": "Search for potential Digital Ocean Spaces associated with the target and attempt to list their contents.",
+    "website": "https://www.digitalocean.com/products/spaces/",
+    "description": "Store and deliver vast amounts of content.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_digitaloceanspace",
+    "category": "other",
+    "query_url": "https://www.digitalocean.com/products/spaces/"
+  },
+  {
+    "name": "DNS for Family",
+    "summary": "Check if a host would be blocked by DNS for Family.",
+    "website": "https://dnsforfamily.com/",
+    "description": "DNS for Family aims to block websites which are considered as porn.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_dns_for_family",
+    "category": "subdomains",
+    "query_url": "https://dnsforfamily.com/"
+  },
+  {
+    "name": "DNSGrep",
+    "summary": "Obtain Passive DNS information from Rapid7 Sonar Project using DNSGrep API.",
+    "website": "https://opendata.rapid7.com/",
+    "description": "Offering researchers and community members open access to data from Project Sonar,",
+    "model": "FREE_AUTH_UNLIMITED",
+    "module": "sfp_dnsgrep",
+    "category": "subdomains",
+    "query_url": "https://opendata.rapid7.com/"
+  },
+  {
+    "name": "DroneBL",
+    "summary": "Query the DroneBL database for open relays, open proxies, vulnerable servers, etc.",
+    "website": "https://dronebl.org/",
+    "description": "DroneBL is a realtime monitor of abusable IPs, which has",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_dronebl",
+    "category": "other",
+    "query_url": "https://dronebl.org/"
+  },
+  {
+    "name": "DuckDuckGo",
+    "summary": "Query DuckDuckGo",
+    "website": "https://duckduckgo.com/",
+    "description": "Our Instant Answer API gives you free access to many of our instant answers like:",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_duckduckgo",
+    "category": "other",
+    "query_url": "https://duckduckgo.com/"
+  },
+  {
+    "name": "EmailCrawlr",
+    "summary": "Search EmailCrawlr for email addresses and phone numbers associated with a domain.",
+    "website": "https://emailcrawlr.com/",
+    "description": "By using the EmailCrawlr JSON API you can:",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_emailcrawlr",
+    "category": "emails",
+    "query_url": "https://emailcrawlr.com/"
+  },
+  {
+    "name": "EmailFormat",
+    "summary": "Look up e-mail addresses on email-format.com.",
+    "website": "https://www.email-format.com/",
+    "description": "Save time and energy - find the email address formats in use at thousands of companies.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_emailformat",
+    "category": "emails",
+    "query_url": "https://www.email-format.com/"
+  },
+  {
+    "name": "EmailRep",
+    "summary": "Search EmailRep.io for email address reputation.",
+    "website": "https://emailrep.io/",
+    "description": "Illuminate the \\",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_emailrep",
+    "category": "emails",
+    "query_url": "https://emailrep.io/"
+  },
+  {
+    "name": "Emerging Threats",
+    "summary": "Check if a netblock or IP address is malicious according to EmergingThreats.net.",
+    "website": "https://rules.emergingthreats.net/",
+    "description": "Emerging Threats delivers the most timely and accurate threat intelligence.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_emergingthreats",
+    "category": "threatIntelligence",
+    "query_url": "https://rules.emergingthreats.net/"
+  },
+  {
+    "name": "Etherscan",
+    "summary": "Queries etherscan.io to find the balance of identified ethereum wallet addresses.",
+    "website": "https://etherscan.io",
+    "description": "Etherscan allows you to explore and search the Ethereum blockchain",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_etherscan",
+    "category": "other",
+    "query_url": "https://etherscan.io"
+  },
+  {
+    "name": "Flickr",
+    "summary": "Search Flickr for domains, URLs and emails related to the specified domain.",
+    "website": "https://www.flickr.com/",
+    "description": "Flickr is almost certainly the best online photo management and sharing application in the world.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_flickr",
+    "category": "other",
+    "query_url": "https://www.flickr.com/"
+  },
+  {
+    "name": "Focsec",
+    "summary": "Look up IP address information from Focsec.",
+    "website": "https://focsec.com/",
+    "description": "Our API lets you know if a user",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_focsec",
+    "category": "other",
+    "query_url": "https://focsec.com/"
+  },
+  {
+    "name": "FortiGuard Antispam",
+    "summary": "Check if an IP address is malicious according to FortiGuard Antispam.",
+    "website": "https://www.fortiguard.com/",
+    "description": "FortiGuard Antispam provides a comprehensive and multi-layered approach to detect and filter spam processed by organizations.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_fortinet",
+    "category": "other",
+    "query_url": "https://www.fortiguard.com/"
+  },
+  {
+    "name": "Fraudguard",
+    "summary": "Obtain threat information from Fraudguard.io",
+    "website": "https://fraudguard.io/",
+    "description": "FraudGuard is a service designed to provide an easy way to validate usage",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_fraudguard",
+    "category": "other",
+    "query_url": "https://fraudguard.io/"
+  },
+  {
+    "name": "FullContact",
+    "summary": "Gather domain and e-mail information from FullContact.com API.",
+    "website": "https://www.fullcontact.com",
+    "description": "Connecting data. Consolidating identities. Applying insights. Amplifying media reach.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_fullcontact",
+    "category": "other",
+    "query_url": "https://www.fullcontact.com"
+  },
+  {
+    "name": "FullHunt",
+    "summary": "Identify domain attack surface using FullHunt API.",
+    "website": "https://fullhunt.io/",
+    "description": "Discover, monitor, and secure your attack surface.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_fullhunt",
+    "category": "other",
+    "query_url": "https://fullhunt.io/"
+  },
+  {
+    "name": "Github",
+    "summary": "Identify associated public code repositories on Github.",
+    "website": "https://github.com/",
+    "description": "GitHub brings together the world",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_github",
+    "category": "socialMedia",
+    "query_url": "https://github.com/search?q=$$TARGET$$&type=repositories"
+  },
+  {
+    "name": "GLEIF",
+    "summary": "Look up company information from Global Legal Entity Identifier Foundation (GLEIF).",
+    "website": "https://search.gleif.org/",
+    "description": "The Global Legal Entity Identifier Foundation (GLEIF) Global LEI Index contains",
+    "model": "FREE_NOAUTH_LIMITED",
+    "module": "sfp_gleif",
+    "category": "other",
+    "query_url": "https://search.gleif.org/?q=$$TARGET$$"
+  },
+  {
+    "name": "Google Tag Manager",
+    "summary": "Search Google Tag Manager (GTM) for hosts sharing the same GTM code.",
+    "website": "https://tagmanager.google.com",
+    "description": "Manage all your website tags without editing code. Google Tag Manager",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_google_tag_manager",
+    "category": "other",
+    "query_url": "https://tagmanager.google.com"
+  },
+  {
+    "name": "Google Maps",
+    "summary": "Identifies potential physical addresses and latitude/longitude coordinates.",
+    "website": "https://cloud.google.com/maps-platform/",
+    "description": "Explore where real-world insights and immersive location experiences can take your business.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_googlemaps",
+    "category": "other",
+    "query_url": "https://cloud.google.com/maps-platform/"
+  },
+  {
+    "name": "Google Object Storage Finder",
+    "summary": "Search for potential Google Object Storage buckets associated with the target and attempt to list their contents.",
+    "website": "https://cloud.google.com/storage",
+    "description": "Object storage for companies of all sizes.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_googleobjectstorage",
+    "category": "darkWeb",
+    "query_url": "https://cloud.google.com/storage"
+  },
+  {
+    "name": "Google",
+    "summary": "Obtain information from the Google Custom Search API to identify sub-domains and links.",
+    "website": "https://developers.google.com/custom-search",
+    "description": "Google Custom Search enables you to create a search engine for your website, your blog, or a collection of websites.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_googlesearch",
+    "category": "other",
+    "query_url": "https://developers.google.com/custom-search?q=$$TARGET$$"
+  },
+  {
+    "name": "Gravatar",
+    "summary": "Retrieve user information from Gravatar API.",
+    "website": "https://secure.gravatar.com/",
+    "description": "Your Gravatar is an image that follows you from site to site",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_gravatar",
+    "category": "other",
+    "query_url": "https://secure.gravatar.com/"
+  },
+  {
+    "name": "Grayhat Warfare",
+    "summary": "Find bucket names matching the keyword extracted from a domain from Grayhat API.",
+    "website": "https://buckets.grayhatwarfare.com/",
+    "description": "It is a searchable database of open buckets.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_grayhatwarfare",
+    "category": "other",
+    "query_url": "https://buckets.grayhatwarfare.com/"
+  },
+  {
+    "name": "Greensnow",
+    "summary": "Check if a netblock or IP address is malicious according to greensnow.co.",
+    "website": "https://greensnow.co/",
+    "description": "GreenSnow is a team consisting of the best specialists in computer security,",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_greensnow",
+    "category": "other",
+    "query_url": "https://greensnow.co/"
+  },
+  {
+    "name": "grep.app",
+    "summary": "Search grep.app API for links and emails related to the specified domain.",
+    "website": "https://grep.app/",
+    "description": "grep.app searches code from over a half million public repositories on GitHub.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_grep_app",
+    "category": "other",
+    "query_url": "https://grep.app/"
+  },
+  {
+    "name": "HackerOne (Unofficial)",
+    "summary": "Check external vulnerability scanning/reporting service h1.nobbd.de to see if the target is listed.",
+    "website": "http://www.nobbd.de/",
+    "description": "Unofficial Bug Monitoring platform for HackerOne.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_h1nobbdde",
+    "category": "other",
+    "query_url": "http://www.nobbd.de/"
+  },
+  {
+    "name": "HackerTarget",
+    "summary": "Search HackerTarget.com for hosts sharing the same IP.",
+    "website": "https://hackertarget.com/",
+    "description": "Simplify the security assessment process with hosted vulnerability scanners.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_hackertarget",
+    "category": "other",
+    "query_url": "https://hackertarget.com/"
+  },
+  {
+    "name": "Project Honey Pot",
+    "summary": "Query the Project Honey Pot database for IP addresses.",
+    "website": "https://www.projecthoneypot.org/",
+    "description": "Project Honey Pot is the first and only distributed system for identifying spammers",
+    "model": "FREE_AUTH_UNLIMITED",
+    "module": "sfp_honeypot",
+    "category": "other",
+    "query_url": "https://www.projecthoneypot.org/"
+  },
+  {
+    "name": "Hunter.io",
+    "summary": "Check for e-mail addresses and names on hunter.io.",
+    "website": "https://hunter.io/",
+    "description": "Hunter lets you find email addresses in seconds and connect with the people that matter for your business.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_hunter",
+    "category": "other",
+    "query_url": "https://hunter.io/"
+  },
+  {
+    "name": "Hybrid Analysis",
+    "summary": "Search Hybrid Analysis for domains and URLs related to the target.",
+    "website": "https://www.hybrid-analysis.com",
+    "description": "A free malware analysis service for the community.",
+    "model": "FREE_AUTH_UNLIMITED",
+    "module": "sfp_hybrid_analysis",
+    "category": "other",
+    "query_url": "https://www.hybrid-analysis.com"
+  },
+  {
+    "name": "Iknowwhatyoudownload.com",
+    "summary": "Check iknowwhatyoudownload.com for IP addresses that have been using torrents.",
+    "website": "https://iknowwhatyoudownload.com/en/peer/",
+    "description": "Our system collects torrent files in two ways: parsing torrent sites, and listening DHT network.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_iknowwhatyoudownload",
+    "category": "other",
+    "query_url": "https://iknowwhatyoudownload.com/en/peer/"
+  },
+  {
+    "name": "IntelligenceX",
+    "summary": "Obtain information from IntelligenceX about identified IP addresses, domains, e-mail addresses and phone numbers.",
+    "website": "https://intelx.io/",
+    "description": "Intelligence X is an independent European technology company founded in 2018 by Peter Kleissner.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_intelx",
+    "category": "other",
+    "query_url": "https://intelx.io/"
+  },
+  {
+    "name": "ipapi.co",
+    "summary": "Queries ipapi.co to identify geolocation of IP Addresses using ipapi.co API",
+    "website": "https://ipapi.co/",
+    "description": "Powerful & Simple REST API for IP Address Geolocation.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_ipapico",
+    "category": "ipAddresses",
+    "query_url": "https://ipapi.co/"
+  },
+  {
+    "name": "ipapi.com",
+    "summary": "Queries ipapi.com to identify geolocation of IP Addresses using ipapi.com API",
+    "website": "https://ipapi.com/",
+    "description": "ipapi provides an easy-to-use API interface allowing customers",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_ipapicom",
+    "category": "ipAddresses",
+    "query_url": "https://ipapi.com/"
+  },
+  {
+    "name": "IPInfo.io",
+    "summary": "Identifies the physical location of IP addresses identified using ipinfo.io.",
+    "website": "https://ipinfo.io",
+    "description": "The Trusted Source for IP Address Data.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_ipinfo",
+    "category": "ipAddresses",
+    "query_url": "https://ipinfo.io/$$TARGET$$"
+  },
+  {
+    "name": "ipstack",
+    "summary": "Identifies the physical location of IP addresses identified using ipstack.com.",
+    "website": "https://ipstack.com/",
+    "description": "Locate and identify website visitors by IP address.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_ipstack",
+    "category": "ipAddresses",
+    "query_url": "https://ipstack.com/"
+  },
+  {
+    "name": "Internet Storm Center",
+    "summary": "Check if an IP address is malicious according to SANS ISC.",
+    "website": "https://isc.sans.edu",
+    "description": "The ISC provides a free analysis and warning service to thousands of Internet users",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_isc",
+    "category": "darkWeb",
+    "query_url": "https://isc.sans.edu"
+  },
+  {
+    "name": "JsonWHOIS.com",
+    "summary": "Search JsonWHOIS.com for WHOIS records associated with a domain.",
+    "website": "https://jsonwhois.com",
+    "description": "Get access to accurate Whois records for generic and country TLDs.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_jsonwhoiscom",
+    "category": "whois",
+    "query_url": "https://whois.com/whois/$$TARGET$$"
+  },
+  {
+    "name": "Keybase",
+    "summary": "Obtain additional information about domain names and identified usernames.",
+    "website": "https://keybase.io/",
+    "description": "Keybase is a key directory that maps social media identities to encryption keys",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_keybase",
+    "category": "other",
+    "query_url": "https://keybase.io/"
+  },
+  {
+    "name": "Koodous",
+    "summary": "Search Koodous for mobile apps.",
+    "website": "https://koodous.com/apks/",
+    "description": "Search Koodous for mobile apps.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_koodous",
+    "category": "other",
+    "query_url": "https://koodous.com/apks/"
+  },
+  {
+    "name": "LeakIX",
+    "summary": "Search LeakIX for host data leaks, open ports, software and geoip.",
+    "website": "https://leakix.net/",
+    "description": "LeakIX provides insights into devices and servers that are compromised",
+    "model": "FREE_AUTH_UNLIMITED",
+    "module": "sfp_leakix",
+    "category": "dataBreaches",
+    "query_url": "https://leakix.net/"
+  },
+  {
+    "name": "Maltiverse",
+    "summary": "Obtain information about any malicious activities involving IP addresses",
+    "website": "https://maltiverse.com",
+    "description": "The Open IOC Search Engine.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_maltiverse",
+    "category": "other",
+    "query_url": "https://maltiverse.com"
+  },
+  {
+    "name": "MalwarePatrol",
+    "summary": "Searches malwarepatrol.net",
+    "website": "https://www.malwarepatrol.net/",
+    "description": "Based in the USA and Brazil, our history is one of community spirit and dedication to",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_malwarepatrol",
+    "category": "other",
+    "query_url": "https://www.malwarepatrol.net/"
+  },
+  {
+    "name": "MetaDefender",
+    "summary": "Search MetaDefender API for IP address and domain IP reputation.",
+    "website": "https://metadefender.opswat.com/",
+    "description": "File Analysis - Analyzing binaries with 30+ anti-malware engines.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_metadefender",
+    "category": "other",
+    "query_url": "https://metadefender.opswat.com/"
+  },
+  {
+    "name": "Mnemonic PassiveDNS",
+    "summary": "Obtain Passive DNS information from PassiveDNS.mnemonic.no.",
+    "website": "https://www.mnemonic.no",
+    "description": "mnemonic helps businesses manage their security risks,",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_mnemonic",
+    "category": "subdomains",
+    "query_url": "https://www.mnemonic.no"
+  },
+  {
+    "name": "multiproxy.org Open Proxies",
+    "summary": "Check if an IP address is an open proxy according to multiproxy.org open proxy list.",
+    "website": "https://multiproxy.org/",
+    "description": "MultiProxy is a multifunctional personal proxy server that protects your privacy",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_multiproxy",
+    "category": "ipAddresses",
+    "query_url": "https://multiproxy.org/"
+  },
+  {
+    "name": "MySpace",
+    "summary": "Gather username and location from MySpace.com profiles.",
+    "website": "https://myspace.com/",
+    "description": "Myspace is a place where people come to connect, discover, and share.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_myspace",
+    "category": "other",
+    "query_url": "https://myspace.com/"
+  },
+  {
+    "name": "NameAPI",
+    "summary": "Check whether an email is disposable",
+    "website": "https://www.nameapi.org/",
+    "description": "The NameAPI DEA-Detector checks email addresses",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_nameapi",
+    "category": "other",
+    "query_url": "https://www.nameapi.org/"
+  },
+  {
+    "name": "NetworksDB",
+    "summary": "Search NetworksDB.io API for IP address and domain information.",
+    "website": "https://networksdb.io/",
+    "description": "Our database contains information about the public IPv4 and IPv6 addresses,",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_networksdb",
+    "category": "other",
+    "query_url": "https://networksdb.io/"
+  },
+  {
+    "name": "NeutrinoAPI",
+    "summary": "Search NeutrinoAPI for phone location information, IP address information, and host reputation.",
+    "website": "https://www.neutrinoapi.com/",
+    "description": "Neutrino API - The general-purpose API - Build smarter applications.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_neutrinoapi",
+    "category": "other",
+    "query_url": "https://www.neutrinoapi.com/"
+  },
+  {
+    "name": "numverify",
+    "summary": "Lookup phone number location and carrier information from numverify.com.",
+    "website": "http://numverify.com/",
+    "description": "Global Phone Number Validation & Lookup JSON API.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_numverify",
+    "category": "other",
+    "query_url": "http://numverify.com/"
+  },
+  {
+    "name": "Onion.link",
+    "summary": "Search Tor ",
+    "website": "https://onion.link/",
+    "description": "Enabling search and global access to Tor",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_onioncity",
+    "category": "darkWeb",
+    "query_url": "https://onionsearchengine.com/search.php?search=$$TARGET$$"
+  },
+  {
+    "name": "Onionsearchengine.com",
+    "summary": "Search Tor onionsearchengine.com for mentions of the target domain.",
+    "website": "https://as.onionsearchengine.com",
+    "description": "No cookies, no javascript, no trace. We protect your privacy.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_onionsearchengine",
+    "category": "darkWeb",
+    "query_url": "https://onionsearchengine.com/search.php?search=$$TARGET$$"
+  },
+  {
+    "name": "Open Bug Bounty",
+    "summary": "Check external vulnerability scanning/reporting service openbugbounty.org to see if the target is listed.",
+    "website": "https://www.openbugbounty.org/",
+    "description": "Open Bug Bounty is an open, disintermediated, cost-free, and community-driven bug bounty platform",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_openbugbounty",
+    "category": "other",
+    "query_url": "https://www.openbugbounty.org/"
+  },
+  {
+    "name": "OpenCorporates",
+    "summary": "Look up company information from OpenCorporates.",
+    "website": "https://opencorporates.com",
+    "description": "The largest open database of companies in the world.",
+    "model": "FREE_NOAUTH_LIMITED",
+    "module": "sfp_opencorporates",
+    "category": "other",
+    "query_url": "https://opencorporates.com"
+  },
+  {
+    "name": "OpenDNS",
+    "summary": "Check if a host would be blocked by OpenDNS.",
+    "website": "https://www.opendns.com/",
+    "description": "Cisco Umbrella provides protection against threats on the internet such as",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_opendns",
+    "category": "subdomains",
+    "query_url": "https://www.opendns.com/"
+  },
+  {
+    "name": "OpenNIC DNS",
+    "summary": "Resolves host names in the OpenNIC alternative DNS system.",
+    "website": "https://www.opennic.org/",
+    "description": "An organization of hobbyists who run an alternative DNS network,",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_opennic",
+    "category": "subdomains",
+    "query_url": "https://www.opennic.org/"
+  },
+  {
+    "name": "OpenPhish",
+    "summary": "Check if a host/domain is malicious according to OpenPhish.com.",
+    "website": "https://openphish.com/",
+    "description": "Timely. Accurate. Relevant Threat Intelligence.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_openphish",
+    "category": "other",
+    "query_url": "https://openphish.com/"
+  },
+  {
+    "name": "OpenStreetMap",
+    "summary": "Retrieves latitude/longitude coordinates for physical addresses from OpenStreetMap API.",
+    "website": "https://www.openstreetmap.org/",
+    "description": "OpenStreetMap powers map data on thousands of web sites, mobile apps, and hardware devices.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_openstreetmap",
+    "category": "other",
+    "query_url": "https://www.openstreetmap.org/"
+  },
+  {
+    "name": "PasteBin",
+    "summary": "PasteBin search (via Google Search API) to identify related content.",
+    "website": "https://pastebin.com/",
+    "description": "Pastebin is a website where you can store any text online for easy sharing.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_pastebin",
+    "category": "dataBreaches",
+    "query_url": "https://pastebin.com/"
+  },
+  {
+    "name": "PhishStats",
+    "summary": "Check if a netblock or IP address is malicious according to PhishStats.",
+    "website": "https://phishstats.info/",
+    "description": "PhishStats is a real time Phishing database that gathers phishing URLs from several sources.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_phishstats",
+    "category": "other",
+    "query_url": "https://phishstats.info/"
+  },
+  {
+    "name": "PhishTank",
+    "summary": "Check if a host/domain is malicious according to PhishTank.",
+    "website": "https://phishtank.com/",
+    "description": "Submit suspected phishes. Track the status of your submissions. Verify other users",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_phishtank",
+    "category": "other",
+    "query_url": "https://phishtank.com/"
+  },
+  {
+    "name": "Psbdmp",
+    "summary": "Check psbdmp.cc (PasteBin Dump) for potentially hacked e-mails and domains.",
+    "website": "https://psbdmp.cc/",
+    "description": "Pastebin dump security monitor.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_psbdmp",
+    "category": "other",
+    "query_url": "https://psbdmp.cc/"
+  },
+  {
+    "name": "Pulsedive",
+    "summary": "Obtain information from Pulsedive",
+    "website": "https://pulsedive.com/",
+    "description": "Why check 30 different solutions for varying snippets of data when you can just check one?",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_pulsedive",
+    "category": "other",
+    "query_url": "https://pulsedive.com/"
+  },
+  {
+    "name": "PunkSpider",
+    "summary": "Check the QOMPLX punkspider.io service to see if the target is listed as vulnerable.",
+    "website": "https://punkspider.io/",
+    "description": "The idea behind Punkspider is very simple - we",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_punkspider",
+    "category": "other",
+    "query_url": "https://punkspider.io/"
+  },
+  {
+    "name": "Quad9",
+    "summary": "Check if a host would be blocked by Quad9 DNS.",
+    "website": "https://quad9.net/",
+    "description": "Quad9 brings together cyber threat intelligence about malicious domains",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_quad9",
+    "category": "other",
+    "query_url": "https://quad9.net/"
+  },
+  {
+    "name": "RIPE",
+    "summary": "Queries the RIPE registry (includes ARIN data) to identify netblocks and other info.",
+    "website": "https://www.ripe.net/",
+    "description": "We",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_ripe",
+    "category": "ipAddresses",
+    "query_url": "https://www.ripe.net/"
+  },
+  {
+    "name": "RiskIQ",
+    "summary": "Obtain information from RiskIQ",
+    "website": "https://community.riskiq.com/",
+    "description": "RiskIQ Community brings petabytes of internet intelligence directly to your fingertips.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_riskiq",
+    "category": "other",
+    "query_url": "https://community.riskiq.com/"
+  },
+  {
+    "name": "Robtex",
+    "summary": "Search Robtex.com for hosts sharing the same IP.",
+    "website": "https://www.robtex.com/",
+    "description": "Robtex is used for various kinds of research of IP numbers, Domain names, etc",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_robtex",
+    "category": "other",
+    "query_url": "https://www.robtex.com/"
+  },
+  {
+    "name": "Amazon S3 Bucket Finder",
+    "summary": "Search for potential Amazon S3 buckets associated with the target and attempt to list their contents.",
+    "website": "https://aws.amazon.com/s3/",
+    "description": "Amazon S3 is cloud object storage with industry-leading scalability, data availability, security, and performance.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_s3bucket",
+    "category": "other",
+    "query_url": "https://aws.amazon.com/s3/"
+  },
+  {
+    "name": "searchcode",
+    "summary": "Search searchcode for code repositories mentioning the target domain.",
+    "website": "https://searchcode.com/",
+    "description": "Simple, comprehensive code search.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_searchcode",
+    "category": "searchEngines",
+    "query_url": "https://searchcode.com/?q=$$TARGET$$"
+  },
+  {
+    "name": "SecurityTrails",
+    "summary": "Obtain Passive DNS and other information from SecurityTrails",
+    "website": "https://securitytrails.com/",
+    "description": "Data for Security companies, researchers and teams. Fast, always up API that",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_securitytrails",
+    "category": "other",
+    "query_url": "https://securitytrails.com/domain/$$TARGET$$/subdomains"
+  },
+  {
+    "name": "SHODAN",
+    "summary": "Obtain information from SHODAN about identified IP addresses.",
+    "website": "https://www.shodan.io/",
+    "description": "Shodan is the world",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_shodan",
+    "category": "other",
+    "query_url": "https://www.shodan.io/search?query=hostname:$$TARGET$$"
+  },
+  {
+    "name": "Skymem",
+    "summary": "Look up e-mail addresses on Skymem.",
+    "website": "http://www.skymem.info/",
+    "description": "Find email addresses of companies and people.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_skymem",
+    "category": "other",
+    "query_url": "http://www.skymem.info/"
+  },
+  {
+    "name": "SlideShare",
+    "summary": "Gather name and location from SlideShare profiles.",
+    "website": "https://www.slideshare.net",
+    "description": "LinkedIn SlideShare is an American hosting service for professional content including",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_slideshare",
+    "category": "other",
+    "query_url": "https://www.slideshare.net"
+  },
+  {
+    "name": "Snov",
+    "summary": "Gather available email IDs from identified domains",
+    "website": "https://snov.io/",
+    "description": "Snov.io API allows to get a list of all emails from a particular domain,",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_snov",
+    "category": "other",
+    "query_url": "https://snov.io/"
+  },
+  {
+    "name": "Social Media Profile Finder",
+    "summary": "Tries to discover the social media profiles for human names identified.",
+    "website": "https://developers.google.com/custom-search",
+    "description": "Google Custom Search enables you to create a search engine for your website, your blog, or a collection of websites.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_socialprofiles",
+    "category": "socialMedia",
+    "query_url": "https://developers.google.com/custom-search?q=$$TARGET$$"
+  },
+  {
+    "name": "SORBS",
+    "summary": "Query the SORBS database for open relays, open proxies, vulnerable servers, etc.",
+    "website": "http://www.sorbs.net/",
+    "description": "The Spam and Open Relay Blocking System (SORBS) was conceived as an anti-spam project",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_sorbs",
+    "category": "other",
+    "query_url": "http://www.sorbs.net/"
+  },
+  {
+    "name": "SpamCop",
+    "summary": "Check if a netblock or IP address is in the SpamCop database.",
+    "website": "https://www.spamcop.net/",
+    "description": "SpamCop is the premier service for reporting spam.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_spamcop",
+    "category": "other",
+    "query_url": "https://www.spamcop.net/"
+  },
+  {
+    "name": "Spamhaus Zen",
+    "summary": "Check if a netblock or IP address is in the Spamhaus Zen database.",
+    "website": "https://www.spamhaus.org/",
+    "description": "The Spamhaus Project is an international nonprofit organization that",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_spamhaus",
+    "category": "other",
+    "query_url": "https://www.spamhaus.org/"
+  },
+  {
+    "name": "SpyOnWeb",
+    "summary": "Search SpyOnWeb for hosts sharing the same IP address, Google Analytics code, or Google Adsense code.",
+    "website": "http://spyonweb.com/",
+    "description": "We take the information from public sources, then structure it for your quick and convenient search",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_spyonweb",
+    "category": "other",
+    "query_url": "http://spyonweb.com/"
+  },
+  {
+    "name": "StackOverflow",
+    "summary": "Search StackOverflow for any mentions of a target domain. Returns potentially related information.",
+    "website": "https://www.stackexchange.com",
+    "description": "StackOverflow is a knowledge sharing public platform for IT professionals",
+    "model": "FREE_NOAUTH_LIMITED",
+    "module": "sfp_stackoverflow",
+    "category": "other",
+    "query_url": "https://www.stackexchange.com"
+  },
+  {
+    "name": "Steven Black Hosts",
+    "summary": "Check if a domain is malicious (malware or adware) according to Steven Black Hosts list.",
+    "website": "https://github.com/StevenBlack/hosts",
+    "description": "Consolidating and extending hosts files (for malware and adware)",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_stevenblack_hosts",
+    "category": "other",
+    "query_url": "https://github.com/StevenBlack/hosts"
+  },
+  {
+    "name": "SURBL",
+    "summary": "Check if a netblock, IP address or domain is in the SURBL blacklist.",
+    "website": "http://www.surbl.org/",
+    "description": "SURBLs are lists of web sites that have appeared in unsolicited messages.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_surbl",
+    "category": "other",
+    "query_url": "http://www.surbl.org/"
+  },
+  {
+    "name": "Talos Intelligence",
+    "summary": "Check if a netblock or IP address is malicious according to TalosIntelligence.",
+    "website": "https://talosintelligence.com/",
+    "description": "Cisco Talos Incident Response provides a full suite of proactive and reactive services",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_talosintel",
+    "category": "other",
+    "query_url": "https://talosintelligence.com/"
+  },
+  {
+    "name": "Template Module",
+    "summary": "This is an example module to help developers create their own SpiderFoot modules.",
+    "website": "https://tool.org",
+    "description": "Detailed descriptive text about the tool",
+    "model": "FREE_NOAUTH_LIMITED",
+    "module": "sfp_template",
+    "category": "other",
+    "query_url": "https://tool.org"
+  },
+  {
+    "name": "ThreatCrowd",
+    "summary": "Obtain information from ThreatCrowd about identified IP addresses, domains and e-mail addresses.",
+    "website": "https://www.threatcrowd.org",
+    "description": "The ThreatCrowd API allows you to quickly identify related infrastructure and malware.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_threatcrowd",
+    "category": "threatIntelligence",
+    "query_url": "https://www.threatcrowd.org"
+  },
+  {
+    "name": "ThreatFox",
+    "summary": "Check if an IP address is malicious according to ThreatFox.",
+    "website": "https://threatfox.abuse.ch",
+    "description": "ThreatFox is a free platform from abuse.ch with the goal of sharing",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_threatfox",
+    "category": "threatIntelligence",
+    "query_url": "https://threatfox.abuse.ch"
+  },
+  {
+    "name": "Threat Jammer",
+    "summary": "Check if an IP address is malicious according to ThreatJammer.com",
+    "website": "https://threatjammer.com",
+    "description": "Threat Jammer is a service to access high-quality threat intelligence",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_threatjammer",
+    "category": "threatIntelligence",
+    "query_url": "https://threatjammer.com"
+  },
+  {
+    "name": "ThreatMiner",
+    "summary": "Obtain information from ThreatMiner",
+    "website": "https://www.threatminer.org/",
+    "description": "ThreatMiner is a threat intelligence portal designed to enable analysts to research under a single interface.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_threatminer",
+    "category": "threatIntelligence",
+    "query_url": "https://www.threatminer.org/"
+  },
+  {
+    "name": "TORCH",
+    "summary": "Search Tor ",
+    "website": "https://torchsearch.wordpress.com/",
+    "description": "Torch or TorSearch is the best search engine",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_torch",
+    "category": "darkWeb",
+    "query_url": "http://torchdeedp3i2jigzjdmfpn5ttjhthh5wbmda2rr3jvqjg5p77c54dqd.onion/search?query=$$TARGET$$"
+  },
+  {
+    "name": "TOR Exit Nodes",
+    "summary": "Check if an IP adddress or netblock appears on the Tor Metrics exit node list.",
+    "website": "https://metrics.torproject.org/",
+    "description": "The relay search tool displays data about single relays and bridges in the Tor network.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_torexits",
+    "category": "darkWeb",
+    "query_url": "https://metrics.torproject.org/"
+  },
+  {
+    "name": "Trashpanda",
+    "summary": "Queries Trashpanda to gather intelligence about mentions of target in pastesites",
+    "website": "https://got-hacked.wtf",
+    "description": "The bot searches different paste sites for leaked credentials.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_trashpanda",
+    "category": "other",
+    "query_url": "https://got-hacked.wtf"
+  },
+  {
+    "name": "Trumail",
+    "summary": "Check whether an email is disposable",
+    "website": "https://trumail.io/",
+    "description": "Trumail is a product that was built with the intention of providing",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_trumail",
+    "category": "emails",
+    "query_url": "https://trumail.io/"
+  },
+  {
+    "name": "Twilio",
+    "summary": "Obtain information from Twilio about phone numbers. Ensure you have the Caller Name add-on installed in Twilio.",
+    "website": "https://www.twilio.com/",
+    "description": "Twilio is a cloud communications platform as a service company based in San Francisco, California.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_twilio",
+    "category": "other",
+    "query_url": "https://www.twilio.com/"
+  },
+  {
+    "name": "Twitter",
+    "summary": "Gather name and location from Twitter profiles.",
+    "website": "https://twitter.com/",
+    "description": "Twitter is an American microblogging and social networking service",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_twitter",
+    "category": "socialMedia",
+    "query_url": "https://twitter.com/"
+  },
+  {
+    "name": "UCEPROTECT",
+    "summary": "Check if a netblock or IP address is in the UCEPROTECT database.",
+    "website": "http://www.uceprotect.net/",
+    "description": "UCEPROTECT is a DNS blacklisting service whose mission is to stop mail abuse globally.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_uceprotect",
+    "category": "other",
+    "query_url": "http://www.uceprotect.net/"
+  },
+  {
+    "name": "URLScan.io",
+    "summary": "Search URLScan.io cache for domain information.",
+    "website": "https://urlscan.io/",
+    "description": "urlscan.io is a service to scan and analyse websites.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_urlscan",
+    "category": "other",
+    "query_url": "https://urlscan.io/"
+  },
+  {
+    "name": "Venmo",
+    "summary": "Gather user information from Venmo API.",
+    "website": "https://venmo.com/",
+    "description": "Venmo is a digital wallet that allows you to send money and make purchases at approved merchants.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_venmo",
+    "category": "other",
+    "query_url": "https://venmo.com/"
+  },
+  {
+    "name": "ViewDNS.info",
+    "summary": "Identify co-hosted websites and perform reverse Whois lookups using ViewDNS.info.",
+    "website": "https://viewdns.info/",
+    "description": "The ViewDNS.info API allows webmasters to integrate the tools provided by ViewDNS.info",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_viewdns",
+    "category": "subdomains",
+    "query_url": "https://viewdns.info/"
+  },
+  {
+    "name": "VirusTotal",
+    "summary": "Obtain information from VirusTotal about identified IP addresses.",
+    "website": "https://www.virustotal.com/",
+    "description": "Analyze suspicious files and URLs to detect types of malware,",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_virustotal",
+    "category": "other",
+    "query_url": "https://www.virustotal.com/gui/domain/$$TARGET$$"
+  },
+  {
+    "name": "VoIP Blacklist (VoIPBL)",
+    "summary": "Check if an IP address or netblock is malicious according to VoIP Blacklist (VoIPBL).",
+    "website": "https://voipbl.org/",
+    "description": "VoIPBL is a distributed VoIP blacklist that is aimed to protect against",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_voipbl",
+    "category": "ipAddresses",
+    "query_url": "https://voipbl.org/"
+  },
+  {
+    "name": "VXVault.net",
+    "summary": "Check if a domain or IP address is malicious according to VXVault.net.",
+    "website": "http://vxvault.net/",
+    "description": "VxVault is a malware management program to automatically download and classify malware samples.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_vxvault",
+    "category": "other",
+    "query_url": "http://vxvault.net/"
+  },
+  {
+    "name": "WhatCMS",
+    "summary": "Check web technology using WhatCMS.org API.",
+    "website": "https://whatcms.org/",
+    "description": "Detect what CMS a site is using.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_whatcms",
+    "category": "other",
+    "query_url": "https://whatcms.org/"
+  },
+  {
+    "name": "WiGLE",
+    "summary": "Query WiGLE to identify nearby WiFi access points.",
+    "website": "https://wigle.net/",
+    "description": "We consolidate location and information of wireless networks world-wide to a central database,",
+    "model": "FREE_AUTH_UNLIMITED",
+    "module": "sfp_wigle",
+    "category": "other",
+    "query_url": "https://wigle.net/"
+  },
+  {
+    "name": "Wikileaks",
+    "summary": "Search Wikileaks for mentions of domain names and e-mail addresses.",
+    "website": "https://wikileaks.org/",
+    "description": "WikiLeaks specializes in the analysis and publication of large datasets of censored",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_wikileaks",
+    "category": "dataBreaches",
+    "query_url": "https://wikileaks.org/"
+  },
+  {
+    "name": "Wikipedia Edits",
+    "summary": "Identify edits to Wikipedia articles made from a given IP address or username.",
+    "website": "https://www.wikipedia.org/",
+    "description": "Wikipedia is a multilingual online encyclopedia created and maintained as an",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_wikipediaedits",
+    "category": "ipAddresses",
+    "query_url": "https://www.wikipedia.org/"
+  },
+  {
+    "name": "XForce Exchange",
+    "summary": "Obtain IP reputation and passive DNS information from IBM X-Force Exchange.",
+    "website": "https://exchange.xforce.ibmcloud.com/",
+    "description": "IBM\u00ae X-Force Exchange is a cloud-based, threat intelligence sharing platform that you can use",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_xforce",
+    "category": "other",
+    "query_url": "https://exchange.xforce.ibmcloud.com/"
+  },
+  {
+    "name": "Yandex DNS",
+    "summary": "Check if a host would be blocked by Yandex DNS.",
+    "website": "https://yandex.com/",
+    "description": "Yandex.DNS is a free, recursive DNS service.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_yandexdns",
+    "category": "subdomains",
+    "query_url": "https://yandex.com/"
+  },
+  {
+    "name": "ZoneFile.io",
+    "summary": "Search ZoneFiles.io Domain query API for domain information.",
+    "website": "",
+    "description": "Search ZoneFiles.io Domain query API for domain information.",
+    "model": "FREE_AUTH_LIMITED",
+    "module": "sfp_zonefiles",
+    "category": "other",
+    "query_url": ""
+  },
+  {
+    "name": "Zone-H Defacement Check",
+    "summary": "Check if a hostname/domain appears on the zone-h.org ",
+    "website": "https://zone-h.org/",
+    "description": "Once a defaced website is submitted to Zone-H, it is mirrored on the Zone-H servers.",
+    "model": "FREE_NOAUTH_UNLIMITED",
+    "module": "sfp_zoneh",
+    "category": "other",
+    "query_url": "https://zone-h.org/"
+  }
+]

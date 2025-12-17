@@ -18,3 +18,6 @@ Thumbs.db
 # Ignore all markdown files
 *.md
 
+# SpiderFoot source repository
+osint_tool/sources/
+
