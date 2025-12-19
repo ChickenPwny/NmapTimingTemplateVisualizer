@@ -138,6 +138,47 @@
             line-height: 1.8;
         }
 
+        .category-section {
+            margin-bottom: 50px;
+        }
+
+        .category-title {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .post-link {
+            display: block;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+
+        .post-link:hover {
+            background: #e7f3ff;
+            transform: translateX(5px);
+            border-left-color: #764ba2;
+        }
+
+        .post-link h3 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 1.3em;
+        }
+
+        .post-link .post-excerpt {
+            color: #666;
+            font-size: 0.95em;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 30px 20px;
@@ -178,10 +219,12 @@
         <p class="subtitle">Personal thoughts and insights</p>
         
         <div class="blog-content">
-            <div class="empty-state">
-                <h2>Welcome to My Blog</h2>
-                <p>This is your space to share thoughts, insights, and experiences about security tools, techniques, and more.</p>
-                <p style="margin-top: 20px;">Start writing your first post whenever you're ready!</p>
+            <div class="category-section" id="gcp">
+                <h2 class="category-title">GCP</h2>
+                <a href="gcp-elasticsearch-setup.html" class="post-link">
+                    <h3>Elasticsearch Setup</h3>
+                    <p class="post-excerpt">Complete guide to setting up Elasticsearch with GCP using Metricbeat and Filebeat for monitoring and log collection.</p>
+                </a>
             </div>
         </div>
     </div>

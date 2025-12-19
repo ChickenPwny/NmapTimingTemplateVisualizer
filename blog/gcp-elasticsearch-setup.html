@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GCP Elasticsearch Setup - Blog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px;
+            color: #333;
+        }
+
+        .navigation-bar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .tool-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tool-selector-label {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.9em;
+        }
+
+        .tool-btn {
+            padding: 8px 16px;
+            background: #f0f0f0;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .tool-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .tool-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 50px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 20px;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 2.5em;
+        }
+
+        .post-meta {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .blog-content {
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+
+        .blog-content h2 {
+            color: #667eea;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .blog-content h2:first-of-type {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 0;
+        }
+
+        .blog-content h3 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .blog-content p {
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        .blog-content ul, .blog-content ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        .blog-content li {
+            margin-bottom: 10px;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        .code-block code {
+            color: #f8f8f2;
+            white-space: pre;
+        }
+
+        .code-inline {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #d63384;
+        }
+
+        .note {
+            background: #e7f3ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .navigation-bar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .tool-selector {
+                justify-content: center;
+            }
+
+            .code-block {
+                font-size: 0.8em;
+                padding: 15px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="../css/font-size-control.css">
+</head>
+<body>
+    <nav class="navigation-bar">
+        <div class="tool-selector">
+            <span class="tool-selector-label">TOOL:</span>
+            <a href="../index.html" class="tool-btn">Home</a>
+            <a href="index.html" class="tool-btn active">Blog</a>
+            <a href="../hashcat_generator/index.html" class="tool-btn">HashCat</a>
+            <a href="../nmap_generator/index.html" class="tool-btn">Nmap</a>
+            <a href="../DaSignatureParser/index.html" class="tool-btn">SIEM Parser</a>
+            <a href="../powershell_dashboard/index.html" class="tool-btn">PowerShell</a>
+        </div>
+        <div class="font-size-control-container"></div>
+    </nav>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Blog</a> > <a href="index.html#gcp">GCP</a> > Elasticsearch Setup
+        </div>
+
+        <h1>GCP Elasticsearch Setup</h1>
+        <div class="post-meta">
+            Category: GCP > Elasticsearch Setup
+        </div>
+
+        <div class="blog-content">
+            <h2>Cloud Shell</h2>
+            <p>In active cloud shell, go to the search input field and enter <span class="code-inline">activate cloud shell</span>, which will search the GCP actions and provide related items to the query. This will include other actions. Go through the flow enabling the service 'active cloud shell' which will give us direct 'command line' control over the GCP environment.</p>
+
+            <h3>You can use the following command line interface</h3>
+            <div class="code-block"><code>gcloud auth list</code></div>
+            <p>Retrieves a list of authorized <span class="code-inline">Accounts</span> within the tenant.</p>
+
+            <div class="code-block"><code>gcloud config list project</code></div>
+            <p>Retrieves a list of the 'project list'.</p>
+
+            <h2>Lab setup for GCP labs:</h2>
+
+            <h3>Task 1 Creating an elastic deployment</h3>
+            <p>We will be using our personal Gmail account to create this lab. We can append <span class="code-inline">+gcplab</span> to our personal email like so <span class="code-inline">charlesmcgowen+gcplab@gmail.com</span>. This will allow us to have a new email address that won't affect our main email address and extend the free tier. It may be more convenient to use your email address.</p>
+
+            <p>Navigate to <strong>Menu > IAM & Admin > Service Accounts</strong>.</p>
+
+            <p>Click on 'Create Service Account' and name the new service <span class="code-inline">gcp-monitor</span>. Click 'create and continue' and add the below roles. We can skip 'grant user access' to the newly created service.</p>
+            <ul>
+                <li><span class="code-inline">compute viewer</span></li>
+                <li><span class="code-inline">monitoring viewer</span></li>
+                <li><span class="code-inline">Pub/Sub Admin</span></li>
+                <li><span class="code-inline">Service Usage Consumer</span></li>
+            </ul>
+
+            <p>To use the newly created service account, click on the three vertical dots and select 'Manage keys'.</p>
+
+            <p>Click on 'Add Key' > 'Create new key'. Next, select JSON as the type and 'create'. A credential file should be downloaded - store somewhere safe for use later.</p>
+
+            <h2>Download and install metricbeat</h2>
+            <div class="code-block"><code>curl -L -O https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-9.2.0-linux-x86_64.tar.gz
+tar xzvf metricbeat-9.2.0-linux-x86_64.tar.gz
+cd metricbeat-9.2.0-linux-x86_64/</code></div>
+
+            <div class="note">
+                <strong>Note:</strong> Before continuing, substitute your cloud ID and an admin 'username:password' in this command.
+            </div>
+
+            <div class="code-block"><code>./metricbeat setup -e -E 'cloud.id=YOUR_DEPLOYMENT_CLOUD_ID' -E 'cloud.auth=elastic:YOUR_SUPER_SECRET_PASS'</code></div>
+
+            <p>Next, we will store the cloud ID in GCP keystore using the command below.</p>
+            <div class="code-block"><code>./metricbeat keystore create
+echo -n "&lt;Your Deployment Cloud ID&gt;" | ./metricbeat keystore add CLOUD_ID --stdin</code></div>
+
+            <h3>To store metrics in elastic with minimal permissions create an api key send data to metrics</h3>
+            <p>Find the 'open' hyperlink, click on 'developer tools'. Developer tools is hidden in the <span class="code-inline">&lt;/&gt;</span>. We can send a request using the below format. The response will provide the <span class="code-inline">api_key</span> and <span class="code-inline">id</span> field needed for metric keystore, formatted like so <span class="code-inline">id:api_key</span>.</p>
+
+            <div class="code-block"><code>POST /_security/api_key
+{
+  "name": "metricbeat-monitor", 
+  "role_descriptors": {
+    "metricbeat_writer": { 
+      "cluster": ["monitor", "read_ilm", "read_pipeline"],
+      "index": [
+        {
+          "names": ["metricbeat-*"],
+          "privileges": ["view_index_metadata", "create_doc", "auto_configure"]
+        }
+      ]
+    }
+  }
+}</code></div>
+
+            <div class="code-block"><code>echo -n "&lt;API ID&gt;:&lt;API KEY&gt;" | ./metricbeat keystore add ES_API_KEY --stdin</code></div>
+
+            <p>To validate the keys were properly stored, use the following command.</p>
+            <div class="code-block"><code>./metricbeat keystore list</code></div>
+
+            <p>We will need to edit the YAML file to configure Metricbeat for Elasticsearch in the following manner:</p>
+            <div class="code-block"><code>cloud.id: ${CLOUD_ID}
+output.elasticsearch:
+  api_key: ${ES_API_KEY}</code></div>
+
+            <p>Next, to verify the credentials work, we will run the below command:</p>
+            <div class="code-block"><code>./metricbeat test output</code></div>
+
+            <h2>Next we will be working on google cloud use the google cloud platform module</h2>
+            <p>The module we built will fetch monitoring metrics from Google Cloud Platform using Cloud Monitoring API. From the Cloud Shell toolbar, locate the three vertical dots. Next, we will upload the credential file from earlier by using the 'upload' feature.</p>
+
+            <div class="code-block"><code>./metricbeat modules enable gcp</code></div>
+
+            <p>Next, we need to modify the GCP YAML file and replace its content with <span class="code-inline">project_id</span> and our credential file path:</p>
+            <div class="code-block"><code>- module: gcp
+  metricsets:
+    - compute
+  region: Region
+  project_id: "your-project-id"
+  credentials_file_path: "your-credentials-file-path"
+  exclude_labels: false
+  period: 1m</code></div>
+
+            <p>Next, we will validate Metricbeat is properly working using the below commands:</p>
+            <div class="code-block"><code>./metricbeat test modules gcp
+./metricbeat -e</code></div>
+
+            <div class="note">
+                <strong>Tip:</strong> Within Metricbeat GCP, search for 'compute overview' to view your metrics.
+            </div>
+
+            <h2>Next we will install metricbeat, then make sure it works and is running</h2>
+            <p>Filebeat comes with predefined parsing and indexing.</p>
+
+            <div class="code-block"><code>curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-9.2.0-linux-x86_64.tar.gz
+tar xzvf filebeat-9.2.0-linux-x86_64.tar.gz
+cd filebeat-9.2.0-linux-x86_64</code></div>
+
+            <div class="code-block"><code>./filebeat setup -e -E 'cloud.id=YOUR_DEPLOYMENT_CLOUD_ID' -E 'cloud.auth=elastic:YOUR_SUPER_SECRET_PASS'</code></div>
+
+            <p>Next, we will store the cloud ID in the keystore:</p>
+            <div class="code-block"><code>./filebeat keystore create
+echo -n "&lt;Your Deployment Cloud ID&gt;" | ./filebeat keystore add CLOUD_ID --stdin</code></div>
+
+            <p>Next, we need to go into developer tools again and send the following request:</p>
+            <div class="code-block"><code>POST /_security/api_key
+{
+  "name": "filebeat-monitor-gcp",
+  "role_descriptors": {
+    "filebeat_writer": {
+      "cluster": [
+        "monitor",
+        "read_ilm",
+        "cluster:admin/ingest/pipeline/get",
+        "cluster:admin/ingest/pipeline/put"
+      ],
+      "index": [
+        {
+          "names": ["filebeat-*"],
+          "privileges": ["view_index_metadata", "create_doc"]
+        }
+      ]
+    }
+  }
+}</code></div>
+
+            <p>Next, we will store the credential in this format <span class="code-inline">id:api_key</span>. We can check credentials by running the following command:</p>
+            <div class="code-block"><code>./filebeat keystore list</code></div>
+
+            <p>We may need to configure Filebeat Elasticsearch service - edit the YAML file for Filebeat:</p>
+            <div class="code-block"><code>cloud.id: ${CLOUD_ID}
+output.elasticsearch:
+  api_key: ${ES_API_KEY}</code></div>
+
+            <div class="code-block"><code>./filebeat test output</code></div>
+
+            <h2>Google cloud platform module</h2>
+            <p>We will set it up to periodically perform fetches to the logs, Cloud Logging Pub/Sub topic sink. There are three filesets: <span class="code-inline">audit</span>, <span class="code-inline">vpcflow</span>, <span class="code-inline">firewall</span>.</p>
+
+            <p>Use the search 'log router' page in logging. We will configure Google Cloud to export logs to a Pub/Sub topic. We will create a 'create sink' and set the name to <span class="code-inline">monitor-gcp-audit-sink</span>. Click on 'next'. Then, under sink service 'Cloud Pub/Sub topic', under select a Cloud Pub/Sub topic, create a topic <span class="code-inline">monitor-gcp-audit</span> as a topic ID, click on 'create a topic'. Choose logs to include in sink, add <span class="code-inline">logName:"cloudaudit.googleapis.com"</span>.</p>
+
+            <p>To enable Filebeat 'modules.d/gcp.yml' file, we need to update the <span class="code-inline">var.project_id</span> and <span class="code-inline">var.credentials_file</span> with the below values:</p>
+            <div class="code-block"><code>- module: gcp
+  vpcflow:
+    enabled: false
+  firewall:
+    enabled: false
+  audit:
+    enabled: true
+    var.project_id: "your-project-id"
+    var.topic: "monitor-gcp-audit"
+    var.subscription_name: "monitor-gcp-audit-sub"
+    var.credentials_file: "your-credentials-file-path"</code></div>
+
+            <div class="code-block"><code>./filebeat -e</code></div>
+
+            <a href="index.html" class="back-link">← Back to Blog</a>
+        </div>
+    </div>
+    <script src="../js/font-size-control.js"></script>
+</body>
+</html>
