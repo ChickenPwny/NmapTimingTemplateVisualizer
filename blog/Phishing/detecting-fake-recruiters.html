@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detecting Fake Recruiters and Phishing Scams - Blog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px;
+            color: #333;
+        }
+
+        .navigation-bar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .tool-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tool-selector-label {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.9em;
+        }
+
+        .tool-btn {
+            padding: 8px 16px;
+            background: #f0f0f0;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .tool-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .tool-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 50px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 20px;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 2.5em;
+        }
+
+        .post-meta {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .blog-content {
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+
+        .blog-content h2 {
+            color: #667eea;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .blog-content h2:first-of-type {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 0;
+        }
+
+        .blog-content h3 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .blog-content p {
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        .blog-content ul, .blog-content ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        .blog-content li {
+            margin-bottom: 10px;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        .code-block code {
+            color: #f8f8f2;
+            white-space: pre;
+        }
+
+        .code-inline {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #d63384;
+        }
+
+        .note {
+            background: #e7f3ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .danger {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .blog-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .image-caption {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            font-style: italic;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .navigation-bar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .tool-selector {
+                justify-content: center;
+            }
+
+            .code-block {
+                font-size: 0.8em;
+                padding: 15px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="../../css/font-size-control.css">
+</head>
+<body>
+    <nav class="navigation-bar">
+        <div class="tool-selector">
+            <span class="tool-selector-label">TOOL:</span>
+            <a href="../../index.html" class="tool-btn">Home</a>
+            <a href="../index.html" class="tool-btn active">Blog</a>
+            <a href="../../hashcat_generator/index.html" class="tool-btn">HashCat</a>
+            <a href="../../nmap_generator/index.html" class="tool-btn">Nmap</a>
+            <a href="../../DaSignatureParser/index.html" class="tool-btn">SIEM Parser</a>
+            <a href="../../powershell_dashboard/index.html" class="tool-btn">PowerShell</a>
+        </div>
+        <div class="font-size-control-container"></div>
+    </nav>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">Blog</a> > <a href="../index.html#phishing">Phishing</a> > Detecting Fake Recruiters
+        </div>
+
+        <h1>Detecting Fake Recruiters and Phishing Scams</h1>
+        <div class="post-meta">
+            Category: Phishing > Detecting Fake Recruiters
+        </div>
+
+        <div class="blog-content">
+            <h2>Executive Summary</h2>
+            <p>In the wake of shifting economic landscapes, job seekers have become primary targets for sophisticated phishing operations. This report details the methodology used by fraudulent actors to harvest personally identifiable information (PII) and provides a comprehensive guide for identifying these threats. By analyzing domain authenticity, cross-platform inconsistencies, and technical metadata, individuals can effectively insulate themselves from identity theft and extortion attempts.</p>
+
+            <h2>1. Domain Validation and the Economy of Scams</h2>
+            <p>The first line of defense in vetting a recruiter is the examination of their email domain. Professional organizations invest in custom domains to establish a "rubber stamp" of institutional authority and brand consistency. For a legitimate business, the cost of maintaining a domain is a negligible overhead, but for a scammer, it is a significant friction point. Because scam accounts are frequently flagged and banned, these actors rely on free providers like Gmail or Yahoo to maintain a high volume of outreach at zero cost. A "global recruitment lead" reaching out from a generic personal address is the primary indicator of a low-cost, high-volume fraudulent operation.</p>
+
+            <div class="warning">
+                <strong>Key Indicator:</strong> Legitimate companies use custom email domains (e.g., <span class="code-inline">@companyname.com</span>). Free email services like Gmail, Yahoo, or Outlook are red flags for professional recruiters.
+            </div>
+
+            <p>Figure 1 demonstrates examples of email addresses from suspicious recruiters using free email services. Notice how these differ from legitimate corporate domains.</p>
+
+            <img src="2025-12-17_11-44.png" alt="Comparison between official corporate domain and generic free-tier email addresses used in scams">
+            <p class="image-caption"><strong>Figure 1:</strong> Comparison between an official corporate domain and a generic free-tier email address used in a scam.</p>
+
+            <h2>2. Cross-Platform Discrepancies and "Sloppy" Execution</h2>
+            <p>Scammers often leverage the public nature of LinkedIn to scrape real names and professional titles, creating a veneer of legitimacy. However, their execution frequently suffers from critical inconsistencies. In one specific case study, a scammer operating under the name "Terry Jeff Snodgrass" provided a link to a profile that did not match the sender's persona. While the name provided was masculine, the associated LinkedIn profile belonged to a female professional in a different region. This mismatch suggests that scammers are managing hundreds of identities simultaneously and often lose track of the specific personas they are projecting to individual targets.</p>
+
+            <img src="MaleFemale.png" alt="Email showing Terry Jeff Snodgrass with male image, but LinkedIn profile shows a female">
+            <p class="image-caption"><strong>Figure 2:</strong> Identifying discrepancies between claimed identity and verified professional profiles. The email signature shows a male image, while the LinkedIn profile clearly belongs to a female professional.</p>
+
+            <div class="danger">
+                <strong>Major Red Flag:</strong> The first giveaway was a recruitment firm using <span class="code-inline">Gmail</span> and "Terry Jeff Snodgrass" was a man, but their LinkedIn profile shows a female. This is a clear indication of identity theft and impersonation.
+            </div>
+
+            <h3>What to Do When You Find Impersonation</h3>
+            <p>Do not feel intimidated to reach out and converse with the individual being impersonated. They are probably aware of scammers using their likeness to commit fraud. Many professionals appreciate being notified when their identity is being used in scams, as it helps them take action to protect their reputation and warn others.</p>
+
+            <h2>3. Social Media Presence and "Ghost" Profiles</h2>
+            <p>A genuine recruiter's success depends on visibility and networking; therefore, they typically maintain a "data-rich" social media presence characterized by years of activity, endorsements, and mutual connections. Fraudulent profiles, by contrast, are often "ghosts" created within days of the initial contact. These profiles usually lack a personalized URL, have no professional history, and utilize the default "grey silhouette" avatar. Furthermore, these actors often employ high-pressure communication styles, demanding immediate action to prevent the victim from having the time to conduct the due diligence outlined in this report.</p>
+
+            <p>In one case, a recruiter's email bounced back as undeliverable, indicating the account was quickly deleted after initial contact:</p>
+
+            <img src="2025-12-17_11-52.png" alt="Email bounce back showing address not found">
+            <p class="image-caption"><strong>Figure 3:</strong> Mail delivery failure indicating the email address no longer exists - a common pattern with disposable scam accounts.</p>
+
+            <h2>4. Advanced Investigation: The Power of Reverse Image Search</h2>
+            <p>Visual assets provided by recruiters—such as profile pictures or company banners—offer a wealth of information when subjected to a reverse image search. By using tools like Google Lens, we can trace the origin of an image across the web. During our investigation, an image of a purported real estate agent named "Robert" was found to be a widely used stock photo appearing on various unrelated websites, including a legal firm in Switzerland and a property group in Miami. This widespread, contradictory usage confirms the identity as a fabricated asset intended to build unearned trust.</p>
+
+            <img src="reverse_image.png" alt="Google reverse image search results showing the same image used across multiple unrelated profiles">
+            <p class="image-caption"><strong>Figure 4:</strong> Using Google Lens to expose the use of stock photography in fraudulent personas. The same image appears across multiple unrelated profiles and websites.</p>
+
+            <img src="reverse_image1.png" alt="Additional reverse image search results showing image reuse">
+            <p class="image-caption"><strong>Figure 5:</strong> Additional reverse image search results demonstrating how scammers reuse the same images across different fake identities.</p>
+
+            <p>Another investigation revealed a profile picture being used on adult content sites and retail websites, further confirming it was stolen or generated content:</p>
+
+            <img src="reverse_image4.png" alt="Image search showing profile picture used on unrelated websites">
+            <p class="image-caption"><strong>Figure 6:</strong> Profile images found on unrelated websites, indicating stolen or stock photography used in fraudulent profiles.</p>
+
+            <h2>5. Identifying the "Information Harvest"</h2>
+            <p>The ultimate goal of these interactions is almost always the collection of sensitive data under the guise of "pre-employment screening." It is critical to understand that legitimate hiring processes do not require a Social Security Number (SSN), exact Date of Birth, or banking details during the initial outreach or interview phase. Scammers often request these details alongside "expected salary rates" to make the request seem like a standard HR procedure. Any request for PII before a face-to-face (or video) interview and a formal, verifiable offer letter should be treated as an attempt at identity theft.</p>
+
+            <div class="danger">
+                <strong>Critical Warning:</strong> Legitimate employers never request SSN, full DOB, or banking information during initial contact or before a formal offer. These requests are red flags for identity theft.
+            </div>
+
+            <p>Figure 7-9 demonstrate examples of phishing forms designed to harvest sensitive personal information:</p>
+
+            <img src="ssn_scam1.png" alt="Phishing form requesting SSN and personal information">
+            <p class="image-caption"><strong>Figure 7:</strong> Example of a phishing form requesting sensitive information including SSN digits, full legal name, and address.</p>
+
+            <img src="ssn_scam2.png" alt="Additional phishing form fields for personal data collection">
+            <p class="image-caption"><strong>Figure 8:</strong> Continuation of the phishing form showing requests for contact information, work authorization details, and references.</p>
+
+            <img src="ssn_scam3.png" alt="Complete phishing form with all requested personal information fields">
+            <p class="image-caption"><strong>Figure 9:</strong> Complete view of the information harvest form. Notice the request for "Last 4 digits of SSN" - a common tactic to make the request seem less invasive while still collecting valuable identity theft data.</p>
+
+            <h2>6. Technical Forensics: AI Generation and Disposable Domains</h2>
+            <p>As technology evolves, scammers have begun using AI to generate human faces that do not exist in reality, effectively bypassing traditional reverse image searches. Tools like "Sightengine" can analyze these images for "Face Manipulation" or "Stable Diffusion" artifacts. In my analysis, a profile image was flagged with a 99% probability of being AI-generated, showing clear signs of GAN (Generative Adversarial Network) architecture.</p>
+
+            <img src="2025-12-11_15-46.png" alt="AI image detection tool showing profile picture is likely AI-generated">
+            <p class="image-caption"><strong>Figure 10:</strong> Technical analysis of a profile picture revealing AI-generated artifacts. The image shows 99% probability of being AI-generated using Stable Diffusion.</p>
+
+            <img src="2025-12-11_18-38.png" alt="Sightengine analysis showing AI generation detection">
+            <p class="image-caption"><strong>Figure 11:</strong> Detailed AI detection analysis showing the specific model used (Stable Diffusion at 98% confidence) and other technical indicators.</p>
+
+            <p>Additionally, the use of disposable domains like <span class="code-inline">@mbox.re</span> serves as a major red flag. By performing a WHOIS lookup, we can often see that these domains were registered mere days before the scam campaign began, confirming their status as "throwaway" infrastructure.</p>
+
+            <img src="2025-12-17_11-45.png" alt="Search results showing disposable email domain information">
+            <p class="image-caption"><strong>Figure 12:</strong> Research on disposable email domains. The domain <span class="code-inline">@mbox.re</span> is identified as a high-risk disposable email service used for temporary, anonymous addresses.</p>
+
+            <img src="2025-12-17_11-48.png" alt="Additional disposable domain analysis">
+            <p class="image-caption"><strong>Figure 13:</strong> Further analysis of disposable email domains showing their classification as temporary, high-risk addresses used for spam and malicious activities.</p>
+
+            <img src="2025-12-17_11-51.png" alt="IP address analysis showing VPN and proxy usage">
+            <p class="image-caption"><strong>Figure 14:</strong> IP address analysis revealing the use of VPNs, proxies, and data center IPs - common indicators of scammer infrastructure designed to hide true location.</p>
+
+            <h2>Conclusion</h2>
+            <p>Vulnerability in the job market is the scammer's greatest asset. By replacing urgency with investigation, job seekers can flip the script on these actors. The combination of domain verification, image forensics, and a strict refusal to share PII before an offer is finalized creates a robust defense against even the most sophisticated modern recruitment scams.</p>
+
+            <div class="note">
+                <strong>Key Takeaways:</strong>
+                <ul>
+                    <li>Always verify email domains - legitimate companies use custom domains, not free email services</li>
+                    <li>Cross-reference LinkedIn profiles and social media for consistency</li>
+                    <li>Use reverse image search to verify profile pictures</li>
+                    <li>Never provide SSN, full DOB, or banking information before a formal offer</li>
+                    <li>Be suspicious of high-pressure tactics and urgent requests</li>
+                    <li>Use AI detection tools to identify generated profile images</li>
+                    <li>Research disposable domains and check IP addresses for VPN/proxy usage</li>
+                </ul>
+            </div>
+
+            <a href="../index.html" class="back-link">← Back to Blog</a>
+        </div>
+    </div>
+    <script src="../../js/font-size-control.js"></script>
+</body>
+</html>
+
